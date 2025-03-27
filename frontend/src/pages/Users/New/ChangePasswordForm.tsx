@@ -4,7 +4,7 @@ import { FormikProps } from "formik";
 
 interface ChangePasswordFormValues {
   newPassword: string;
-  confirmPassword: string;
+  newPassword_confirmation: string;
 }
 
 interface Props {
@@ -26,11 +26,11 @@ const ChangePasswordForm = ({ formik }: Props) => {
       />
 
       <FormInputField
-        name="confirmPassword"
+        name="newPassword_confirmation"
         label="Passwort bestätigen"
         type="password"
         required
-        value={values.confirmPassword}
+        value={values.newPassword_confirmation}
         onChange={handleChange}
       />
     </Box>

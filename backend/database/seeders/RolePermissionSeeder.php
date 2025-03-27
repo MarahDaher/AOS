@@ -11,11 +11,11 @@ use Spatie\Permission\Models\Role;
 class RolePermissionSeeder extends Seeder
 {
     public function run(): void
-{
-    $this->createAllPermissions();
-    $this->createAllRoles();
-    $this->assignPermissionsToRoles();
-}
+    {
+        $this->createAllPermissions();
+        $this->createAllRoles();
+        $this->assignPermissionsToRoles();
+    }
 
     private function createAllPermissions(): void
     {
@@ -88,8 +88,10 @@ class RolePermissionSeeder extends Seeder
             PermissionConstants::UPDATE_PROCESS_SHEET,
 
             PermissionConstants::VIEW_USERS,
+            PermissionConstants::VIEW_USER,
             PermissionConstants::CREATE_USER,
             PermissionConstants::UPDATE_USER,
+            PermissionConstants::DELETE_USER,
             PermissionConstants::CHANGE_USER_PASSWORD,
 
             PermissionConstants::VIEW_ROLES,
@@ -121,6 +123,9 @@ class RolePermissionSeeder extends Seeder
             PermissionConstants::UPDATE_DRAWERING,
 
             PermissionConstants::VIEW_PROCESS_SHEET,
+
+            PermissionConstants::VIEW_USER,
+
         ];
     }
 
@@ -137,6 +142,9 @@ class RolePermissionSeeder extends Seeder
 
             PermissionConstants::VIEW_PROCESS_SHEET,
             PermissionConstants::UPDATE_PROCESS_SHEET,
+
+
+            PermissionConstants::VIEW_USER,
         ];
     }
 }

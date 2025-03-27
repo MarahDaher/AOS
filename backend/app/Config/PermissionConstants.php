@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Config;
 
 use ReflectionClass;
@@ -41,8 +42,10 @@ class PermissionConstants
 
     // Users Page
     public const VIEW_USERS = 'view_users';
+    public const VIEW_USER = 'view_user';
     public const CREATE_USER = 'create_user';
     public const UPDATE_USER = 'update_user';
+    public const DELETE_USER = 'delete_user';
     public const CHANGE_USER_PASSWORD = 'change_user_password';
 
     // Roles
