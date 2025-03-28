@@ -2,6 +2,7 @@
 
 use App\Config\PermissionConstants;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 // Controllers
@@ -9,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 // Auth
 Route::post('login', [AuthController::class, 'login']);
 Route::get('user-profile', [AuthController::class, 'profile'])->middleware('auth:api');
+Route::get('/get-user-permissions', [PermissionController::class, 'getUserPermissions']);
 
 // Routes
 Route::middleware(['auth:api'])->group(function () {
