@@ -10,6 +10,7 @@ import {
   TextField,
   Box,
   InputAdornment,
+  CircularProgress,
 } from "@mui/material";
 import { GridSearchIcon } from "@mui/x-data-grid";
 import { useState } from "react";
@@ -21,6 +22,7 @@ export function MTable<T>({
   rowsPerPageOptions = [10, 14, 20],
   actions,
   searchableField,
+  loading = false,
 }: Props<T>) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(rowsPerPageOptions[0]);
@@ -85,16 +87,38 @@ export function MTable<T>({
               </TableRow>
             </TableHead>
             <TableBody>
-              {paginated.map((row, i) => (
-                <TableRow key={i}>
-                  {columns.map((col, j) => (
-                    <TableCell key={j}>{col.render(row)}</TableCell>
-                  ))}
-                  {actions && (
-                    <TableCell align="right">{actions(row)}</TableCell>
-                  )}
+              {loading ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length + (actions ? 1 : 0)}
+                    align="center"
+                  >
+                    <Box py={3}>
+                      <CircularProgress size={28} />
+                    </Box>
+                  </TableCell>
                 </TableRow>
-              ))}
+              ) : paginated.length === 0 ? (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length + (actions ? 1 : 0)}
+                    align="center"
+                  >
+                    Keine Daten vorhanden
+                  </TableCell>
+                </TableRow>
+              ) : (
+                paginated.map((row, i) => (
+                  <TableRow key={i}>
+                    {columns.map((col, j) => (
+                      <TableCell key={j}>{col.render(row)}</TableCell>
+                    ))}
+                    {actions && (
+                      <TableCell align="right">{actions(row)}</TableCell>
+                    )}
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
         </TableContainer>

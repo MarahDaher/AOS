@@ -1,45 +1,49 @@
-import BaseDialog from "@components/BaseDialog";
-import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import BaseDialog from "@components/BaseDialog";
 import UserForm from "./UserForm";
-import { Roles } from "@enums/Roles.enum";
 import { Box, Button } from "@mui/material";
+import { Form, Formik } from "formik";
 import { FormMode } from "@enums/FormMode";
+import { UsersApi } from "@api/users";
+import { enqueueSnackbar } from "notistack";
 
 export interface UserFormValues {
-  username: string;
-  password?: string;
+  id?: number;
+  name: string;
+  password: string;
   email: string;
-  role: string;
+  role_id: number;
 }
 
 interface Props {
   open: boolean;
   onClose: () => void;
-  onSubmit: (values: UserFormValues) => void;
   initialValues?: UserFormValues;
   mode?: FormMode;
+  onSuccess: () => void;
 }
 
 const UserFormModal = ({
   open,
   onClose,
-  onSubmit,
   initialValues = {
-    username: "",
+    name: "",
     email: "",
     password: "",
-    role: Roles.ADMIN,
+    role_id: 1,
   },
   mode = FormMode.CREATE,
+  onSuccess,
 }: Props) => {
   const getValidationSchema = (mode: FormMode) =>
     Yup.object({
-      username: Yup.string().required("Benutzername ist erforderlich"),
+      name: Yup.string().required("Benutzername ist erforderlich"),
       email: Yup.string()
         .email("Ungültige E-Mail")
         .required("E-Mail ist erforderlich"),
-      role: Yup.string().required("Rolle ist erforderlich"),
+      role_id: Yup.number()
+        .typeError("Rolle ist erforderlich")
+        .required("Rolle ist erforderlich"),
       ...(mode === FormMode.CREATE && {
         password: Yup.string()
           .min(6, "Passwort muss mindestens 6 Zeichen lang sein")
@@ -47,16 +51,37 @@ const UserFormModal = ({
       }),
     });
 
+  const handleFormSubmit = async (values: UserFormValues, actions: any) => {
+    try {
+      if (mode === FormMode.EDIT && values.id != null) {
+        const { password, ...rest } = values;
+        const updateData = password ? { ...rest, password } : rest;
+        await UsersApi.updateUser(values.id, updateData);
+        enqueueSnackbar("Benutzer erfolgreich aktualisiert", {
+          variant: "success",
+        });
+      } else {
+        await UsersApi.createUser(values);
+        enqueueSnackbar("Benutzer erfolgreich erstellt", {
+          variant: "success",
+        });
+      }
+
+      actions.resetForm();
+      actions.setSubmitting(false);
+      onSuccess();
+      onClose();
+    } catch (error) {
+      actions.setSubmitting(false);
+    }
+  };
+
   return (
     <Formik
       enableReinitialize
       initialValues={initialValues}
-      validationSchema={getValidationSchema}
-      onSubmit={(values, actions) => {
-        onSubmit(values);
-        actions.setSubmitting(false);
-        onClose();
-      }}
+      validationSchema={getValidationSchema(mode)}
+      onSubmit={handleFormSubmit}
     >
       {(formik) => (
         <Form>
@@ -73,7 +98,14 @@ const UserFormModal = ({
           >
             <UserForm formik={formik} mode={mode} />
             <Box mt={2} display="flex" justifyContent="flex-end" gap={1}>
-              <Button onClick={onClose}>Abbrechen</Button>
+              <Button
+                onClick={() => {
+                  formik.resetForm();
+                  onClose();
+                }}
+              >
+                Abbrechen
+              </Button>
               <Button
                 type="submit"
                 onClick={formik.submitForm}

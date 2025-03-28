@@ -4,7 +4,7 @@ import {
   UpdateUserModel,
   UserModel,
 } from "@interfaces/User.model";
-import { handleRequest } from "api/handler/handleRequest";
+import { handleRequest } from "@api/handler/handleRequest";
 
 export class UsersApi {
   static async getAllUsers() {
@@ -29,7 +29,10 @@ export class UsersApi {
     });
   }
 
-  static async updateUser(userId: string, user: UpdateUserModel) {
+  static async updateUser(
+    userId: number,
+    user: Partial<UpdateUserModel> & { password?: string }
+  ) {
     return await handleRequest<UpdateUserModel>({
       method: "PUT",
       endpoint: `users/${userId}`,
@@ -37,11 +40,18 @@ export class UsersApi {
     });
   }
 
-  static async changePassword(newpassword: ChangePasswordModel) {
+  static async deleteUser(userId: number) {
     return await handleRequest<UserModel>({
-      method: "PUT",
+      method: "DELETE",
+      endpoint: `users/${userId}`,
+    });
+  }
+
+  static async changePassword(data: ChangePasswordModel) {
+    return await handleRequest<any>({
+      method: "POST",
       endpoint: `users/change-password`,
-      data: { newpassword },
+      data,
     });
   }
 }

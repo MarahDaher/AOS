@@ -9,4 +9,5 @@ export type Props<T> = {
   rowsPerPageOptions?: number[];
   actions?: (row: T) => React.ReactNode;
   searchableField?: keyof T;
+  loading?: boolean;
 };

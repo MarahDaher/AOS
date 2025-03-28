@@ -6,7 +6,7 @@ import ChangePasswordForm from "./ChangePasswordForm";
 
 export interface ChangePasswordFormValues {
   newPassword: string;
-  confirmPassword: string;
+  newPassword_confirmation: string;
 }
 
 interface Props {
@@ -17,24 +17,23 @@ interface Props {
 
 const initialValues: ChangePasswordFormValues = {
   newPassword: "",
-  confirmPassword: "",
+  newPassword_confirmation: "",
 };
 
-const validationSchema = Yup.object({
+export const ChangePasswordSchema = Yup.object().shape({
   newPassword: Yup.string()
     .min(6, "Passwort muss mindestens 6 Zeichen lang sein")
-    .required("Neues Passwort ist erforderlich"),
-  confirmPassword: Yup.string()
-    .oneOf([Yup.ref("newPassword")], "Passwörter stimmen nicht überein")
-    .required("Passwort bestätigen ist erforderlich"),
+    .required("Passwort ist erforderlich"),
+  newPassword_confirmation: Yup.string()
+    .oneOf([Yup.ref("newPassword")], "Die Passwörter stimmen nicht überein")
+    .required("Passwortbestätigung ist erforderlich"),
 });
-
 const ChangePasswordModal = ({ open, onClose, onSubmit }: Props) => {
   return (
     <Formik
       enableReinitialize
       initialValues={initialValues}
-      validationSchema={validationSchema}
+      validationSchema={ChangePasswordSchema}
       onSubmit={(values, actions) => {
         onSubmit(values);
         actions.setSubmitting(false);

@@ -35,9 +35,9 @@ class UserRepository
         return $user->delete();
     }
 
-    public function changePassword(int $id, array $data)
+    public function changePassword(int $userId, array $data)
     {
-        $user = $this->find($id);
+        $user = User::findOrFail($userId);
         $user->password = bcrypt($data['newPassword']);
         $user->save();
 

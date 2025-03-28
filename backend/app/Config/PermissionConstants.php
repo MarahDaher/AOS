@@ -50,6 +50,7 @@ class PermissionConstants
 
     // Roles
     public const VIEW_ROLES = 'view_roles';
+    public const VIEW_ROLE = 'view_role';
     public const CREATE_ROLE = 'create_role';
     public const UPDATE_ROLE = 'update_role';
     public const DELETE_ROLE = 'delete_role';

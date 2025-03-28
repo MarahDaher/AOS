@@ -15,7 +15,7 @@ class CreateUserRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -26,10 +26,26 @@ class CreateUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255|unique:users,name',
+            'name' => 'required|string|max:255',
             'email' => 'required|string|max:255|unique:users,email',
             'password' => 'required',
             'role_id' => 'required|exists:roles,id',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'name.required' => 'Benutzername ist erforderlich.',
+            'name.string' => 'Benutzername muss ein Text sein.',
+            'name.max' => 'Benutzername darf maximal :max Zeichen lang sein.',
+
+            'email.required' => 'E-Mail ist erforderlich.',
+            'email.string' => 'E-Mail muss ein Text sein.',
+            'email.unique' => 'Ein Benutzer mit dieser E-Mail existiert bereits.',
+
+            'password.required' => 'Passwort ist erforderlich.',
+
         ];
     }
 
@@ -37,7 +53,7 @@ class CreateUserRequest extends FormRequest
     {
         throw new HttpResponseException(response()->json([
             'status' => false,
-            'message' => 'Validation Error',
+            'message' => 'Validierungsfehler',
             'data' => $validator->errors(),
         ], 422));
     }

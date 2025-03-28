@@ -4,6 +4,7 @@ use App\Config\PermissionConstants;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\RoleController;
 use Illuminate\Support\Facades\Route;
 // Controllers
 
@@ -23,5 +24,11 @@ Route::middleware(['auth:api'])->group(function () {
         Route::put('{id}', [UserController::class, 'update'])->middleware('check.permission:' . PermissionConstants::UPDATE_USER);
         Route::delete('{id}', [UserController::class, 'destroy'])->middleware('check.permission:' . PermissionConstants::DELETE_USER);
         Route::post('/change-password', [UserController::class, 'changePassword'])->middleware('check.permission:' . PermissionConstants::CHANGE_USER_PASSWORD);
+    });
+
+    // Roles
+    Route::prefix('roles')->group(function () {
+        Route::get('/', [RoleController::class, 'index'])->middleware('check.permission:' . PermissionConstants::VIEW_ROLES);
+        Route::get('{id}', [RoleController::class, 'show'])->middleware('check.permission:' . PermissionConstants::VIEW_ROLE);
     });
 });

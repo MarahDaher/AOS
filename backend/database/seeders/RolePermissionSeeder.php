@@ -95,6 +95,7 @@ class RolePermissionSeeder extends Seeder
             PermissionConstants::CHANGE_USER_PASSWORD,
 
             PermissionConstants::VIEW_ROLES,
+            PermissionConstants::VIEW_ROLE,
             PermissionConstants::CREATE_ROLE,
             PermissionConstants::UPDATE_ROLE,
             PermissionConstants::DELETE_ROLE,

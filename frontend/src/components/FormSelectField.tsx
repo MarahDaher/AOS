@@ -12,7 +12,7 @@ import {
 interface FormSelectFieldProps {
   name: string;
   label: string;
-  options: { label: string; value: string }[];
+  options: { label: string; value: number }[];
   required?: boolean;
   disabled?: boolean;
   onChange?: (event: SelectChangeEvent<any>) => void;

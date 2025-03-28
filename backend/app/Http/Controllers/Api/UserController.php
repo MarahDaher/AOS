@@ -55,7 +55,7 @@ class UserController extends BaseController
     public function destroy(int $id)
     {
         $this->userService->deleteUser($id);
-        return ApiResponse::success(['message' => 'User deleted successfully'], 200);
+        return ApiResponse::success(['message' => 'Benutzer wurde erfolgreich gelöscht'], 200);
     }
 
 
@@ -66,7 +66,7 @@ class UserController extends BaseController
         $updatedUser = $this->userService->changePassword($userId, $request->validated());
 
         return ApiResponse::success([
-            'message' => 'Password updated successfully',
+            'message' => 'Passwort wurde erfolgreich aktualisiert.',
             'user' => new UserResource($updatedUser),
         ]);
     }

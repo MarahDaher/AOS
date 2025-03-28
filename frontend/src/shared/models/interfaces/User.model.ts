@@ -1,8 +1,10 @@
+import { BasicModel } from "./Basic.model";
+
 export interface UserModel {
   id: number;
-  username: string;
+  name: string;
   email: string;
-  role: string;
+  role: BasicModel;
 }
 
 export interface UserProdileModel extends UserModel {
@@ -13,7 +15,7 @@ type BaseUserInput = Omit<UserModel, "id" | "role">;
 
 export interface CreateUserModel extends BaseUserInput {
   password: string;
-  role_id: string;
+  role_id: number;
 }
 
 export type UpdateUserModel = Omit<CreateUserModel, "password">;
