@@ -32,11 +32,21 @@ class LoginRequest extends FormRequest
         ];
     }
 
+    public function messages()
+    {
+        return [
+            'email.exists' => 'Benutzer wurde nicht gefunden',
+            'email.required' => 'E-Mail ist erforderlich',
+            'password.required' => 'Passwort ist erforderlich',
+            'password.min' => 'Das Passwort muss mindestens :min Zeichen lang sein',
+        ];
+    }
+
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([
             'status' => false,
-            'message' => "Validation Error",
+            'message' => "Validierungsfehler",
             'data' => $validator->errors(),
         ], 422));
     }

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 // Auth
 Route::post('login', [AuthController::class, 'login']);
 Route::get('user-profile', [AuthController::class, 'profile'])->middleware('auth:api');
+Route::get('me', [AuthController::class, 'me'])->middleware('auth:api');
 Route::get('/get-user-permissions', [PermissionController::class, 'getUserPermissions']);
 
 // Routes

@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { SidebarItems } from "./SidebarItems";
 import AOSLogo from "../../assets/aos-logo.png";
 import { useState } from "react";
+import { useAuth } from "@contexts/AuthProvider";
 
 const MIN_WIDTH = 80;
 const MAX_WIDTH = 220;
@@ -33,6 +34,7 @@ const Sidebar = ({
   onTemporaryClose,
 }: Props) => {
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   // Manage mini/full sidebar toggle for permanent variant
   const [collapsed, setCollapsed] = useState(true);
@@ -142,6 +144,7 @@ const Sidebar = ({
         <Tooltip title={collapsed ? "Abmelden" : ""} placement="right">
           <ListItemButton
             onClick={() => {
+              logout();
               navigate("/anmelden");
               if (!isPermanent) onTemporaryClose?.();
             }}

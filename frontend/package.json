@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@casl/ability": "^6.7.3",
+    "@casl/react": "^5.0.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@fontsource/roboto": "^5.2.5",
@@ -17,9 +19,12 @@
     "@mui/material": "^6.4.8",
     "@mui/x-data-grid": "^7.28.0",
     "@mui/x-date-pickers": "^7.28.0",
+    "axios": "^1.8.4",
     "date-fns": "^4.1.0",
     "formik": "^2.4.6",
+    "notistack": "^3.0.2",
     "react": "^19.0.0",
+    "react-cookie": "^8.0.1",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.4.0",
     "yup": "^1.6.1"

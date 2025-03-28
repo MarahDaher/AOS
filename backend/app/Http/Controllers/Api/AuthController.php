@@ -5,19 +5,23 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Resources\ApiResponse;
+use App\Http\Resources\PermissionResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Services\AuthService;
+use App\Services\PermissionService;
 use Illuminate\Http\Response;
 
 class AuthController extends BaseController
 {
     private AuthService $authService;
+    private PermissionService $permissionService;
 
 
-    public function __construct(AuthService $authService)
+    public function __construct(AuthService $authService, PermissionService $permissionService)
     {
         $this->authService = $authService;
+        $this->permissionService = $permissionService;
     }
 
     public function login(LoginRequest $request)
@@ -54,6 +58,18 @@ class AuthController extends BaseController
         $user = $this->authService->getUserProfile();
 
         return ApiResponse::success(new UserResource($user->load('role')));
+    }
+
+
+    public function me()
+    {
+        $user = $this->authService->getUserProfile();
+
+        $userPermissions = $this->permissionService->getUserPermissions($user);
+        return ApiResponse::success([
+            'user' => new UserResource($user->load('role')),
+            'permissions' => PermissionResource::collection($userPermissions),
+        ]);
     }
 
     /**

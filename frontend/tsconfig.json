@@ -12,7 +12,12 @@
       "@enums/*": ["shared/enums/*"],
       "@components/*": ["components/*"],
       "@pages/*": ["pages/*"],
-      "@utils/*": ["shared/utils/*"]
+      "@utils/*": ["shared/utils/*"],
+      "@contexts/*": ["shared/contexts/*"],
+      "@api/*": ["api/*"],
+      "@hooks/*": ["shared/hooks/*"],
+      "@styles/*": ["styles/*"],
+      "@assets/*": ["assets/*"]
     }
   }
 }

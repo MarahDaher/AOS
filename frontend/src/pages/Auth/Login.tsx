@@ -1,10 +1,10 @@
 import * as Yup from "yup";
 import AOSLog from "../../assets/aos-logo.png";
 import LoginForm from "./LoginForm";
-import { Alert, Box, Paper, Typography } from "@mui/material";
+import { Box, Paper, Typography } from "@mui/material";
 import { Form, Formik } from "formik";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useAuth } from "@contexts/AuthProvider";
 
 interface LoginFormValues {
   email: string;
@@ -27,23 +27,18 @@ const validationSchema = Yup.object({
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const [errorMessage, setErrorMessage] = useState("");
+  const { login } = useAuth();
 
-  const handleSubmit = (values: LoginFormValues, { setSubmitting }: any) => {
-    // Simulate login
-    setErrorMessage("");
-
-    setTimeout(() => {
-      if (
-        values.email === "admin@example.com" &&
-        values.password === "123123"
-      ) {
-        navigate("/");
-      } else {
-        setErrorMessage("Ungültige E-Mail oder Passwort");
-        setSubmitting(false);
-      }
-    }, 1000);
+  const handleSubmit = async (
+    values: LoginFormValues,
+    { setSubmitting }: any
+  ) => {
+    try {
+      await login(values.email, values.password);
+      navigate("/");
+    } catch (error) {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -62,12 +57,6 @@ const LoginPage = () => {
         <Typography variant="h5" fontWeight={600} gutterBottom>
           Anmelden
         </Typography>
-
-        {errorMessage && (
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {errorMessage}
-          </Alert>
-        )}
 
         <Formik
           initialValues={initialValues}

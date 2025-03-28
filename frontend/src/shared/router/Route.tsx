@@ -3,21 +3,34 @@ import { Offers, NewOffer, Users } from "./LazyRouter";
 // Components
 import LoginPage from "@pages/Auth/Login";
 import Layout from "@components/Layout/Layout";
+import ProtectedRoute from "./ProtectedRoute";
 
 export const RoutePages = [
   {
     path: "/",
-    element: <Offers />,
+    element: (
+      <ProtectedRoute>
+        <Offers />
+      </ProtectedRoute>
+    ),
     label: "Angebote/Aufträge",
   },
   {
     path: "/angebote/neu", //new offer
-    element: <NewOffer />,
+    element: (
+      <ProtectedRoute>
+        <NewOffer />
+      </ProtectedRoute>
+    ),
     label: "Neuen Angebot erstellen",
   },
   {
     path: "/benutzer", // users
-    element: <Users />,
+    element: (
+      <ProtectedRoute>
+        <Users />
+      </ProtectedRoute>
+    ),
     label: "Benutzer",
   },
 ];
