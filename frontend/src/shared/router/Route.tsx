@@ -3,35 +3,43 @@ import { Offers, NewOffer, Users } from "./LazyRouter";
 // Components
 import LoginPage from "@pages/Auth/Login";
 import Layout from "@components/Layout/Layout";
-import ProtectedRoute from "./ProtectedRoute";
+import UnauthorizedPage from "@pages/Errors/UnauthorizedPage";
+import ProtectedPermissionRoute from "@components/ProtectedPermissionRoute";
+import GenericErrorPage from "@pages/Errors/GenericErrorPage";
+import NotFoundPage from "@pages/Errors/NotFoundPage";
 
 export const RoutePages = [
   {
     path: "/",
     element: (
-      <ProtectedRoute>
+      <ProtectedPermissionRoute action="view" subject="offers">
         <Offers />
-      </ProtectedRoute>
+      </ProtectedPermissionRoute>
     ),
     label: "Angebote/Aufträge",
   },
   {
     path: "/angebote/neu", //new offer
     element: (
-      <ProtectedRoute>
+      <ProtectedPermissionRoute action="create" subject="offer">
         <NewOffer />
-      </ProtectedRoute>
+      </ProtectedPermissionRoute>
     ),
     label: "Neuen Angebot erstellen",
   },
   {
     path: "/benutzer", // users
     element: (
-      <ProtectedRoute>
+      <ProtectedPermissionRoute action="view" subject="users">
         <Users />
-      </ProtectedRoute>
+      </ProtectedPermissionRoute>
     ),
     label: "Benutzer",
+  },
+  {
+    path: "/unauthorized",
+    element: <UnauthorizedPage />,
+    label: "Unauthorized",
   },
 ];
 
@@ -39,11 +47,15 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
+    errorElement: <GenericErrorPage />,
     children: RoutePages,
   },
   {
     path: "/anmelden",
     element: <LoginPage />,
   },
-  // { path: "*", element: <NotFoundPage /> },
+  {
+    path: "*",
+    element: <NotFoundPage />,
+  },
 ]);

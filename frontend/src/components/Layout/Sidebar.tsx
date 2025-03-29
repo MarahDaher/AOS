@@ -18,6 +18,7 @@ import { SidebarItems } from "./SidebarItems";
 import AOSLogo from "../../assets/aos-logo.png";
 import { useState } from "react";
 import { useAuth } from "@contexts/AuthProvider";
+import { SidebarLink } from "./SidebarLink";
 
 const MIN_WIDTH = 80;
 const MAX_WIDTH = 220;
@@ -109,31 +110,13 @@ const Sidebar = ({
 
       <Box sx={{ flex: 1, overflowY: "auto" }}>
         <List>
-          {SidebarItems.map(({ path, label, icon: IconComponent }) => (
-            <Tooltip
-              key={path}
-              title={collapsed ? label : ""}
-              placement="right"
-            >
-              <ListItemButton
-                onClick={() => handleNav(path)}
-                sx={{
-                  justifyContent: collapsed ? "center" : "flex-start",
-                  px: collapsed ? 2 : 3,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: "unset",
-                    justifyContent: "center",
-                    mr: collapsed ? 0 : 2,
-                  }}
-                >
-                  <IconComponent />
-                </ListItemIcon>
-                {!collapsed && <ListItemText primary={label} />}
-              </ListItemButton>
-            </Tooltip>
+          {SidebarItems.map((item) => (
+            <SidebarLink
+              key={item.path}
+              {...item}
+              collapsed={collapsed}
+              onClick={handleNav}
+            />
           ))}
         </List>
       </Box>

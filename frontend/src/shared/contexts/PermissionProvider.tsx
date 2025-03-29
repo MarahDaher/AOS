@@ -17,8 +17,8 @@ export const PermissionProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const hasRole = (roles: string | string[]) => {
     if (!user) return false;
-    if (Array.isArray(roles)) return roles.includes(user.role);
-    return user.role === roles;
+    if (Array.isArray(roles)) return roles.includes(user.role.name);
+    return user.role.name === roles;
   };
 
   return (
