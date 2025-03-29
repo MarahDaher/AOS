@@ -66,6 +66,10 @@ class Offer extends Model
         'pricing_annual_requirement'
     ];
 
+    protected $casts = [
+        'general_creation_date' => 'datetime',
+    ];
+
     public function rawMaterials()
     {
         return $this->belongsToMany(RawMaterial::class, 'offers_raw_materials')

@@ -2,6 +2,7 @@
 
 use App\Config\PermissionConstants;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\OfferController;
 use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\RoleController;
@@ -30,5 +31,10 @@ Route::middleware(['auth:api'])->group(function () {
     Route::prefix('roles')->group(function () {
         Route::get('/', [RoleController::class, 'index'])->middleware('check.permission:' . PermissionConstants::VIEW_ROLES);
         Route::get('{id}', [RoleController::class, 'show'])->middleware('check.permission:' . PermissionConstants::VIEW_ROLE);
+    });
+
+    //Offers
+    Route::prefix('offers')->group(function () {
+        Route::get('/', [OfferController::class, 'index'])->middleware('check.permission:' . PermissionConstants::VIEW_OFFERS);
     });
 });
