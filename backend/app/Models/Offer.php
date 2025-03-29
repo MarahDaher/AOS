@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Offer extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'general_status',
         'general_offer_number',
@@ -24,30 +26,9 @@ class Offer extends Model
         'general_customer_article_number',
         'general_request_date',
         'general_request_number',
-        'general_raw_materialA_id',
-        'general_raw_materialB_id',
-        'general_raw_materialC_id',
-        'general_raw_materialD_id',
-        'general_raw_materialA_supplier',
-        'general_raw_materialB_supplier',
-        'general_raw_materialC_supplier',
-        'general_raw_materialD_supplier',
-        'general_raw_materialA_share',
-        'general_raw_materialB_share',
-        'general_raw_materialC_share',
-        'general_raw_materialD_share',
         'general_raw_material_price_total_overwritten',
         'general_raw_material_purchase_discount',
         'general_comments',
-        'calculation_quantityA',
-        'calculation_quantityB',
-        'calculation_quantityC',
-        'calculation_quantityD',
-        'calculation_quantityE',
-        'calculation_rawmaterialA_absolute_demand',
-        'calculation_rawmaterialB_absolute_demand',
-        'calculation_rawmaterialC_absolute_demand',
-        'calculation_rawmaterialD_absolute_demand',
         'calculation_processing_lfm_hourly_rate',
         'calculation_processing_piece_hourly_rate',
         'calculation_processing_lfm_runtime',
@@ -81,27 +62,18 @@ class Offer extends Model
         'calculation_working_additional_costs',
         'calculation_working_commission',
         'calculation_working_profit',
-        'calculation_working_discount'
-
+        'calculation_working_discount',
+        'pricing_annual_requirement'
     ];
 
-    public function rawMaterialA()
+    public function rawMaterials()
     {
-        return $this->belongsTo(RawMaterial::class, 'general_raw_materialA_id');
+        return $this->belongsToMany(RawMaterial::class, 'offers_raw_materials')
+            ->withPivot('absolut_demand', 'share', 'supplier');
     }
 
-    public function rawMaterialB()
+    public function drawings()
     {
-        return $this->belongsTo(RawMaterial::class, 'general_raw_materialB_id');
-    }
-
-    public function rawMaterialC()
-    {
-        return $this->belongsTo(RawMaterial::class, 'general_raw_materialC_id');
-    }
-
-    public function rawMaterialD()
-    {
-        return $this->belongsTo(RawMaterial::class, 'general_raw_materialD_id');
+        return $this->hasMany(OfferDrawing::class);
     }
 }

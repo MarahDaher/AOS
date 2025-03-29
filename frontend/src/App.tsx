@@ -8,31 +8,36 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { PermissionProvider } from "@contexts/PermissionProvider";
 import { CASLProvider } from "@contexts/AbilityProvider";
 import { SnackbarProvider } from "notistack";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 function App() {
   return (
     <>
-      <SnackbarProvider
-        maxSnack={3}
-        autoHideDuration={2000}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      >
-        <AuthProvider>
-          <PermissionProvider>
-            <CASLProvider>
-              <LocalizationProvider
-                dateAdapter={AdapterDateFns}
-                adapterLocale={de}
-              >
-                <ThemeProvider theme={theme}>
-                  <CssBaseline />
-                  <AppRouter />
-                </ThemeProvider>
-              </LocalizationProvider>
-            </CASLProvider>
-          </PermissionProvider>
-        </AuthProvider>
-      </SnackbarProvider>
+      <QueryClientProvider client={queryClient}>
+        <SnackbarProvider
+          maxSnack={3}
+          autoHideDuration={2000}
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        >
+          <AuthProvider>
+            <PermissionProvider>
+              <CASLProvider>
+                <LocalizationProvider
+                  dateAdapter={AdapterDateFns}
+                  adapterLocale={de}
+                >
+                  <ThemeProvider theme={theme}>
+                    <CssBaseline />
+                    <AppRouter />
+                  </ThemeProvider>
+                </LocalizationProvider>
+              </CASLProvider>
+            </PermissionProvider>
+          </AuthProvider>
+        </SnackbarProvider>
+      </QueryClientProvider>
     </>
   );
 }

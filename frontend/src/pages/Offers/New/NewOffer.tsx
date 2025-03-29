@@ -1,11 +1,11 @@
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, useState } from "react";
 import CardBox from "../../../components/CardBox";
 import BasicDataTab from "./Tabs/BasicData";
 import CalculationTab from "./Tabs/Calculation";
 import PricesTab from "./Tabs/Prices";
 import DrawingTab from "./Tabs/Drawing";
 import ProcessSheetTab from "./Tabs/ProcessSheet";
-import { Box, debounce, Tab, Tabs } from "@mui/material";
+import { Box, Tab, Tabs } from "@mui/material";
 import { FormikProvider, useFormik } from "formik";
 import { initialValues } from "./Index";
 
@@ -26,20 +26,6 @@ const NewOffer: FunctionComponent<NewOfferProps> = () => {
     initialValues,
     onSubmit: () => {},
   });
-
-  // Debounced save function
-  const debouncedSave = debounce(async (values: typeof initialValues) => {
-    try {
-      console.log(values);
-    } catch (err) {
-      console.error("Auto-save error", err);
-    }
-  }, 800);
-
-  // Auto-sync when form values change
-  useEffect(() => {
-    debouncedSave(formik.values);
-  }, [formik.values]);
 
   return (
     <FormikProvider value={formik}>

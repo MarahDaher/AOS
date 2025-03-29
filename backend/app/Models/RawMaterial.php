@@ -2,18 +2,20 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 
 class RawMaterial extends Model
 {
-    protected $table = 'raw_material';
 
-    protected $fillable = [
-        'name',
-        'type',
-        'price_per_kg',
-        'price_per_piece',
-        'price_date',
-    ];
+    use HasFactory;
+
+    protected $fillable = ['name', 'type', 'density', 'price', 'price_date'];
+
+    public function offers()
+    {
+        return $this->belongsToMany(Offer::class, 'offers_raw_materials')
+            ->withPivot('absolut_demand', 'share', 'supplier');
+    }
 }

@@ -1,5 +1,5 @@
 import Grid from "@mui/material/Grid2";
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent } from "react";
 
 import OfferCard from "../FormSections/BasicData/OfferCard";
 import CustomerCard from "../FormSections/BasicData/CustomerCard";
@@ -7,18 +7,12 @@ import HistoryCard from "../FormSections/BasicData/HistoryCard";
 import RawMaterialPricesTable from "../FormSections/BasicData/RawMaterialPrices";
 import CardBox from "@components/CardBox";
 import FormInputField from "@components/FormInputField";
+import { useCalculatedValues } from "@hooks/useCalculatedValues";
 
 type BasicDataTabProps = object;
 
 const BasicDataTab: FunctionComponent<BasicDataTabProps> = () => {
-  const [rawMaterials, setRawMaterials] = useState([]);
-
-  // LifeCycle
-  useEffect(() => {
-    // axios.get("/api/raw-materials").then((res) => {
-    //   setRawMaterials(res.data);
-    // });
-  }, []);
+  useCalculatedValues();
 
   return (
     <>

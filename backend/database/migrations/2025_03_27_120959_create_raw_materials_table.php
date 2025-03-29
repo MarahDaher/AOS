@@ -7,12 +7,12 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('raw_material', function (Blueprint $table) {
+        Schema::create('raw_materials', function (Blueprint $table) {
             $table->id();
             $table->string('name', 127)->nullable();
             $table->string('type', 63)->nullable();
-            $table->float('price_per_kg')->nullable();
-            $table->float('price_per_piece')->nullable();
+            $table->float('density')->default(0);
+            $table->float('price')->nullable();
             $table->date('price_date')->nullable();
             $table->timestamps();
         });
@@ -20,6 +20,6 @@ return new class extends Migration {
 
     public function down(): void
     {
-        Schema::dropIfExists('raw_material');
+        Schema::dropIfExists('raw_materials');
     }
 };

@@ -4,15 +4,13 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
-    /**
-     * Run the migrations.
-     */
+return new class extends Migration {
     public function up(): void
     {
         Schema::create('offers', function (Blueprint $table) {
             $table->id();
+
+            // General Info
             $table->enum('general_status', ['Vorkalkulation', 'Angebot', 'Auftrag', 'Produziert', 'Versandt'])->nullable();
             $table->string('general_offer_number', 63)->nullable();
             $table->string('general_material', 63)->nullable();
@@ -31,16 +29,11 @@ return new class extends Migration
             $table->date('general_request_date')->nullable();
             $table->integer('general_request_number')->nullable();
 
-            foreach (['A', 'B', 'C', 'D'] as $key) {
-                $table->foreignId("general_raw_material{$key}_id")->nullable()->constrained('raw_material')->restrictOnDelete()->cascadeOnUpdate();
-                $table->integer("general_raw_material{$key}_supplier")->nullable();
-                $table->integer("general_raw_material{$key}_share")->nullable();
-            }
-
             $table->float('general_raw_material_price_total_overwritten')->nullable();
             $table->float('general_raw_material_purchase_discount')->nullable();
             $table->text('general_comments')->nullable();
 
+            // Quantities
             foreach (['A', 'B', 'C', 'D', 'E'] as $key) {
                 $table->integer("calculation_quantity{$key}")->nullable();
             }
@@ -49,6 +42,7 @@ return new class extends Migration
                 $table->integer("calculation_rawmaterial{$key}_absolute_demand")->nullable();
             }
 
+            // Processing
             $table->float('calculation_processing_lfm_hourly_rate')->nullable();
             $table->float('calculation_processing_piece_hourly_rate')->nullable();
             $table->float('calculation_processing_lfm_runtime')->nullable();
@@ -60,6 +54,7 @@ return new class extends Migration
             $table->integer('calculation_processing_lfm_packing_time_factor')->nullable();
             $table->integer('calculation_processing_piece_packing_time_factor')->nullable();
 
+            // Additional
             $table->integer('calculation_additional_setup_time')->nullable();
             $table->float('calculation_additional_hourly_rate')->nullable();
             $table->float('calculation_additional_transport_costs_total')->nullable();
@@ -69,6 +64,7 @@ return new class extends Migration
             $table->float('calculation_additional_single_print')->nullable();
             $table->float('calculation_additional_single_print_price')->nullable();
 
+            // Working
             $table->integer('calculation_working_setup_quantity')->nullable();
             $table->float('calculation_working_extrusion_speed')->nullable();
             $table->integer('calculation_working_annual_requirement_estimated')->nullable();
@@ -86,13 +82,12 @@ return new class extends Migration
             $table->float('calculation_working_profit')->nullable();
             $table->float('calculation_working_discount')->nullable();
 
+            $table->integer('pricing_annual_requirement')->default(0);
+
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('offers');
