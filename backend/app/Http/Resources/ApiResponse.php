@@ -12,11 +12,12 @@ class ApiResponse extends JsonResource
      *
      * @return array<string, mixed>
      */
-      public static function success($data, $statusCode = 200)
+    public static function success(mixed $data, string $message = 'Success', int $statusCode = 200)
     {
         return response()->json([
             'status' => true,
-            'data' => $data
+            'message' => $message,
+            'data' => $data,
         ], $statusCode);
     }
 

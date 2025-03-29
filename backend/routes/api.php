@@ -36,5 +36,7 @@ Route::middleware(['auth:api'])->group(function () {
     //Offers
     Route::prefix('offers')->group(function () {
         Route::get('/', [OfferController::class, 'index'])->middleware('check.permission:' . PermissionConstants::VIEW_OFFERS);
+        Route::post('/', [OfferController::class, 'store'])->middleware('check.permission:' . PermissionConstants::CREATE_OFFER);
+        Route::patch('{id}', [OfferController::class, 'update'])->middleware('check.permission:' . PermissionConstants::UPDATE_OFFER);
     });
 });

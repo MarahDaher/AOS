@@ -9,6 +9,7 @@ import { PermissionProvider } from "@contexts/PermissionProvider";
 import { CASLProvider } from "@contexts/AbilityProvider";
 import { SnackbarProvider } from "notistack";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { OfferProvider } from "@contexts/OfferProvider";
 
 const queryClient = new QueryClient();
 
@@ -28,10 +29,12 @@ function App() {
                   dateAdapter={AdapterDateFns}
                   adapterLocale={de}
                 >
-                  <ThemeProvider theme={theme}>
-                    <CssBaseline />
-                    <AppRouter />
-                  </ThemeProvider>
+                  <OfferProvider>
+                    <ThemeProvider theme={theme}>
+                      <CssBaseline />
+                      <AppRouter />
+                    </ThemeProvider>
+                  </OfferProvider>
                 </LocalizationProvider>
               </CASLProvider>
             </PermissionProvider>

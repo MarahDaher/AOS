@@ -8,4 +8,23 @@ export class OffersApi {
       endpoint: "offers",
     });
   }
+
+  static async createOffer(data: any) {
+    return await handleRequest<any>({
+      method: "POST",
+      endpoint: "offers",
+      data,
+    });
+  }
+
+  static async UpdateOffer(
+    offerId: number,
+    offer: { field: string; value: any }
+  ) {
+    return await handleRequest<any>({
+      method: "PATCH",
+      endpoint: `offers/${offerId}`,
+      data: offer,
+    });
+  }
 }

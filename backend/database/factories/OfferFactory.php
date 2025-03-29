@@ -16,7 +16,6 @@ class OfferFactory extends Factory
             'general_offer_number' => $this->faker->unique()->bothify('O-#####'),
             'general_material' => $this->faker->word,
             'general_profile_description' => $this->faker->randomNumber(),
-            'general_creation_date' => now(),
             'general_created_by_user_id' => 1, // adjust as needed
             'general_color' => $this->faker->safeColorName(),
             'general_packaging' => $this->faker->randomDigitNotZero(),

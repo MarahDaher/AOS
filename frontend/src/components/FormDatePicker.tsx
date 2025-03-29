@@ -1,7 +1,8 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useState } from "react";
 import { useField, useFormikContext } from "formik";
 import { FormControl } from "@mui/material";
 import { DatePicker, DatePickerProps } from "@mui/x-date-pickers/DatePicker";
+import { useSaveFieldMutation } from "@hooks/useSaveFieldMutation";
 
 interface FormDatePickerProps {
   name: string;
@@ -23,17 +24,37 @@ const FormDatePicker: FunctionComponent<FormDatePickerProps> = ({
 }) => {
   const [field, meta] = useField(name);
   const { setFieldValue } = useFormikContext();
+  const mutation = useSaveFieldMutation();
+  const [justSaved, setJustSaved] = useState(false);
 
   const currentError = meta.touched && meta.error ? meta.error : "";
+
+  const handleSave = (isoString: string | null) => {
+    if (isoString) {
+      mutation.mutate(
+        { name, value: isoString },
+        {
+          onSuccess: () => {
+            setJustSaved(true);
+            setTimeout(() => setJustSaved(false), 2000);
+          },
+        }
+      );
+    }
+  };
+
+  const handleChange = (date: Date | null) => {
+    const isoString = date ? date.toISOString() : null;
+    setFieldValue(name, isoString);
+    handleSave(isoString);
+  };
 
   return (
     <FormControl fullWidth>
       <DatePicker
         label={label}
         value={field.value ? new Date(field.value) : null}
-        onChange={(date) => {
-          setFieldValue(name, date ? date.toISOString() : null);
-        }}
+        onChange={handleChange}
         disabled={disabled}
         views={views}
         format={format}
