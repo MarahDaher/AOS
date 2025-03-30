@@ -17,6 +17,11 @@ class OfferRepository
         ])->get();
     }
 
+    public function getOfferById(int $id): Offer
+    {
+        return Offer::findOrFail($id);
+    }
+
 
     public function createOffer(array $data): Offer
     {

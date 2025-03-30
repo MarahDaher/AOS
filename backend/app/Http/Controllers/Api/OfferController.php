@@ -20,6 +20,11 @@ class OfferController extends Controller
         return ApiResponse::success(new OfferCollection($this->service->getAllSummary()));
     }
 
+    public function show(int $id)
+    {
+        return ApiResponse::success($this->service->getOfferById($id));
+    }
+
     /**
      * First blur: create offer with single field
      */
@@ -40,7 +45,12 @@ class OfferController extends Controller
                 $userId
             );
 
-            return ApiResponse::success(['id' => $offer->id], 'Offer created');
+            $updated_offer = $this->service->getOfferById($offer->id);
+
+            return ApiResponse::success([
+                'id' => $offer->id,
+                'offer' => $updated_offer->fresh()
+            ], 'Offer created');
         } catch (\InvalidArgumentException $e) {
             return ApiResponse::error($e->getMessage(), 422);
         }
@@ -60,7 +70,12 @@ class OfferController extends Controller
                 $request->input('value')
             );
 
-            return ApiResponse::success(true, 'Field updated');
+            $updated_offer = $this->service->getOfferById($offer->id);
+
+            return ApiResponse::success([
+                'id' => $offer->id,
+                'offer' => $updated_offer->fresh()
+            ], 'Field updated');
         } catch (\InvalidArgumentException $e) {
             return ApiResponse::error($e->getMessage(), 422);
         }

@@ -9,6 +9,13 @@ export class OffersApi {
     });
   }
 
+  static async getOfferById(offerId: number) {
+    return await handleRequest<any>({
+      method: "GET",
+      endpoint: `offers/${offerId}`,
+    });
+  }
+
   static async createOffer(data: any) {
     return await handleRequest<any>({
       method: "POST",

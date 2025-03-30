@@ -3,24 +3,24 @@ import { useOfferContext } from "@contexts/OfferProvider";
 import { useMutation } from "@tanstack/react-query";
 
 export const useSaveFieldMutation = () => {
-  const { offerId, setOfferId } = useOfferContext();
+  const { offerId, setOfferData, setOfferId } = useOfferContext();
 
   return useMutation({
     mutationFn: async ({ name, value }: { name: string; value: any }) => {
-      const currentOfferId = offerId;
-
-      if (!currentOfferId) {
-        // First field → create offer
+      if (!offerId) {
         const res = await OffersApi.createOffer({ field: name, value });
+        const newId = res.id;
 
-        console.log(res);
+        setOfferId(newId);
+        setOfferData(res.offer);
 
-        setOfferId(res.id); // Set offerId globally
-
-        console.log(offerId, "offerId");
+        console.log("Created offer with ID:", newId);
       } else {
-        // Update field
-        await OffersApi.UpdateOffer(currentOfferId, { field: name, value });
+        const res = await OffersApi.UpdateOffer(offerId, {
+          field: name,
+          value,
+        });
+        setOfferData(res.offer);
       }
     },
   });

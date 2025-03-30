@@ -14,6 +14,11 @@ class OfferService
         return $this->repository->getAllSummarized();
     }
 
+    public function getOfferById(int $id): Offer
+    {
+        return $this->repository->getOfferById($id);
+    }
+
 
     public function createOfferFromField(string $field, mixed $value, int $userId): Offer
     {
