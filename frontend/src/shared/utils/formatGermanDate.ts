@@ -1,5 +1,5 @@
 // src/utils/formatGermanDate.ts
-import { format, Locale } from "date-fns";
+import { format } from "date-fns";
 import { de } from "date-fns/locale";
 
 /**

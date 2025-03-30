@@ -1,5 +1,9 @@
 import { UserModel } from "@interfaces/User.model";
-import type { Column } from "@types/Table";
+
+export type Column<T> = {
+  label: string;
+  render: (row: T) => React.ReactNode;
+};
 
 export const UserColumns: Column<UserModel>[] = [
   { label: "Name", render: (row) => row.name },

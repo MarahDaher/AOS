@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
 
 type OfferContextType = {
   offerId: number | null;
@@ -28,6 +28,7 @@ export const OfferProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useOfferContext = () => {
   const context = useContext(OfferContext);
   if (!context)

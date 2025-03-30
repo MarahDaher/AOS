@@ -28,7 +28,7 @@ const CustomerCard: FunctionComponent = () => {
       ...(offerDetails ? mapOfferToCustomerInitialValues(offerDetails) : {}),
     },
     enableReinitialize: true,
-    onSubmit: (values) => {},
+    onSubmit: () => {},
   });
 
   return (

@@ -11,9 +11,7 @@ type Subjects = string;
 export type AppAbility = MongoAbility<[Actions, Subjects]>;
 
 export function defineAbilitiesFor(permissions: string[]): AppAbility {
-  const { can, cannot, build } = new AbilityBuilder<AppAbility>(
-    createMongoAbility
-  );
+  const { can, build } = new AbilityBuilder<AppAbility>(createMongoAbility);
 
   permissions.forEach((permission) => {
     const [action, subject] = permission.split("_");
@@ -21,6 +19,6 @@ export function defineAbilitiesFor(permissions: string[]): AppAbility {
   });
 
   return build({
-    detectSubjectType: (object) => object.type,
+    detectSubjectType: (object: any) => object.type,
   });
 }

@@ -18,6 +18,8 @@
       "@hooks/*": ["shared/hooks/*"],
       "@styles/*": ["styles/*"],
       "@assets/*": ["assets/*"]
-    }
+    },
+    "noUnusedLocals": false,
+    "noUnusedParameters": false
   }
 }

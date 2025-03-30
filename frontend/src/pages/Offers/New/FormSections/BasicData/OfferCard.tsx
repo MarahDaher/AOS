@@ -46,7 +46,7 @@ const OfferCard: FunctionComponent = () => {
       ...(offerDetails ? mapOfferToOfferCardInitialValues(offerDetails) : {}),
     },
     enableReinitialize: true, //
-    onSubmit: (values) => {},
+    onSubmit: () => {},
   });
 
   return (

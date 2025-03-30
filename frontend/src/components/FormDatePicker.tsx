@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import { FunctionComponent } from "react";
 import { useField, useFormikContext } from "formik";
 import { FormControl } from "@mui/material";
 import { DatePicker, DatePickerProps } from "@mui/x-date-pickers/DatePicker";
@@ -25,7 +25,6 @@ const FormDatePicker: FunctionComponent<FormDatePickerProps> = ({
   const [field, meta] = useField(name);
   const { setFieldValue } = useFormikContext();
   const mutation = useSaveFieldMutation();
-  const [justSaved, setJustSaved] = useState(false);
 
   const currentError = meta.touched && meta.error ? meta.error : "";
 
@@ -34,10 +33,7 @@ const FormDatePicker: FunctionComponent<FormDatePickerProps> = ({
       mutation.mutate(
         { name, value: isoString },
         {
-          onSuccess: () => {
-            setJustSaved(true);
-            setTimeout(() => setJustSaved(false), 2000);
-          },
+          onSuccess: () => {},
         }
       );
     }
