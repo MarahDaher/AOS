@@ -8,11 +8,14 @@ import RawMaterialPricesTable from "../FormSections/BasicData/RawMaterialPrices"
 import CardBox from "@components/CardBox";
 import FormInputField from "@components/FormInputField";
 import { useCalculatedValues } from "@hooks/useCalculatedValues";
+import { useOfferContext } from "@contexts/OfferProvider";
 
 type BasicDataTabProps = object;
 
 const BasicDataTab: FunctionComponent<BasicDataTabProps> = () => {
   useCalculatedValues();
+
+  const { offerDetails } = useOfferContext();
 
   return (
     <>
@@ -24,7 +27,8 @@ const BasicDataTab: FunctionComponent<BasicDataTabProps> = () => {
           <CustomerCard />
         </Grid>
         <Grid size={{ xs: 12, md: 2 }}>
-          <HistoryCard />
+          {offerDetails.general_creation_date &&
+            offerDetails.created_by_user && <HistoryCard />}
         </Grid>
       </Grid>
 

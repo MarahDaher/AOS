@@ -19,7 +19,7 @@ class OfferRepository
 
     public function getOfferById(int $id): Offer
     {
-        return Offer::findOrFail($id);
+        return Offer::with('createdByUser')->findOrFail($id);
     }
 
 

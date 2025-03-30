@@ -80,4 +80,9 @@ class Offer extends Model
     {
         return $this->hasMany(OfferDrawing::class);
     }
+
+    public function createdByUser()
+    {
+        return $this->belongsTo(User::class, 'general_created_by_user_id');
+    }
 }

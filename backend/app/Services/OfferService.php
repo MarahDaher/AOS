@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Offer;
 use App\Repositories\OfferRepository;
+use Illuminate\Support\Str;
 
 class OfferService
 {
@@ -43,6 +44,11 @@ class OfferService
 
         if (!in_array($field, $allowedFields)) {
             throw new \InvalidArgumentException('Invalid field: ' . $field);
+        }
+
+        // Handle date formatting for date fields
+        if (Str::endsWith($field, '_date') && !empty($value)) {
+            $value = date('Y-m-d', strtotime($value)); // Convert ISO to Y-m-d
         }
 
         return $this->repository->updateSingleField($offer, $field, $value);

@@ -49,7 +49,7 @@ class OfferController extends Controller
 
             return ApiResponse::success([
                 'id' => $offer->id,
-                'offer' => $updated_offer->fresh()
+                'offer' => $updated_offer->fresh(['createdByUser']),
             ], 'Offer created');
         } catch (\InvalidArgumentException $e) {
             return ApiResponse::error($e->getMessage(), 422);
@@ -74,7 +74,7 @@ class OfferController extends Controller
 
             return ApiResponse::success([
                 'id' => $offer->id,
-                'offer' => $updated_offer->fresh()
+                'offer' => $updated_offer
             ], 'Field updated');
         } catch (\InvalidArgumentException $e) {
             return ApiResponse::error($e->getMessage(), 422);

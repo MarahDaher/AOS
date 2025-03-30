@@ -11,6 +11,7 @@ import { OffersApi } from "@api/offers";
 import { OffersModel } from "@interfaces/Offers.model";
 import { useApiErrorHandler } from "@hooks/useApiErrorHandler";
 import { useNavigate } from "react-router-dom";
+import { useOfferContext } from "@contexts/OfferProvider";
 
 type OffersPageProps = object;
 
@@ -18,12 +19,14 @@ const OffersPage: FunctionComponent<OffersPageProps> = () => {
   // Hooks
   const navigate = useNavigate();
   const { showError } = useApiErrorHandler();
+  const { resetOffer } = useOfferContext();
 
   // State
   const [offers, setOffers] = useState<OffersModel[]>([]);
   const [loading, setLoading] = useState(false);
 
   const handleAdd = () => {
+    resetOffer();
     navigate("/angebote/neu");
   };
 
