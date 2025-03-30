@@ -21,6 +21,7 @@ import { useApiErrorHandler } from "@hooks/useApiErrorHandler";
 import { useEffect, useState } from "react";
 import { useOfferContext } from "@contexts/OfferProvider";
 import { OfferRawMaterialCalculatedApi } from "@api/offer-raw-material";
+import FormInputField from "@components/FormInputField";
 
 const RawMaterialPricesTable = () => {
   const { values, setFieldValue } = useFormikContext<any>();
@@ -119,6 +120,18 @@ const RawMaterialPricesTable = () => {
     fetchRawMaterials();
     fetchOfferRawMaterials();
   }, [offerDetails?.id]);
+
+  useEffect(() => {
+    const totalPriceShare = rawMaterialRows.reduce(
+      (sum, row) => sum + (parseFloat(row._price_share) || 0),
+      0
+    );
+
+    setFieldValue(
+      "general_raw_material_price_total_calculated",
+      totalPriceShare.toFixed(2)
+    );
+  }, [rawMaterialRows, setFieldValue]);
 
   return (
     <FormikProvider value={formik}>
@@ -318,10 +331,11 @@ const RawMaterialPricesTable = () => {
           </Grid>
 
           <Grid size={{ xs: 3, md: 2 }}>
-            <FormInputSaveField
+            <FormInputField
               name="general_raw_material_price_total_calculated"
-              label="Rohstoffpreis gesamt [€]"
+              label="Rohstoffpreis gesamt / kg [€]"
               value={values.general_raw_material_price_total_calculated || ""}
+              disabled
             />
             <Typography variant="caption">(berechnet)</Typography>
           </Grid>
