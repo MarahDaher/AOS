@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Offer extends Model
 {
     use HasFactory;
+
     protected $fillable = [
+        // General Info
         'general_status',
         'general_offer_number',
         'general_material',
@@ -29,6 +31,15 @@ class Offer extends Model
         'general_raw_material_price_total_overwritten',
         'general_raw_material_purchase_discount',
         'general_comments',
+
+        // Quantities
+        'calculation_quantityA',
+        'calculation_quantityB',
+        'calculation_quantityC',
+        'calculation_quantityD',
+        'calculation_quantityE',
+
+        // Processing
         'calculation_processing_lfm_hourly_rate',
         'calculation_processing_piece_hourly_rate',
         'calculation_processing_lfm_runtime',
@@ -39,6 +50,8 @@ class Offer extends Model
         'calculation_processing_piece_packing_time',
         'calculation_processing_lfm_packing_time_factor',
         'calculation_processing_piece_packing_time_factor',
+
+        // Additional
         'calculation_additional_setup_time',
         'calculation_additional_hourly_rate',
         'calculation_additional_transport_costs_total',
@@ -47,6 +60,8 @@ class Offer extends Model
         'calculation_additional_box_price_flat_additional',
         'calculation_additional_single_print',
         'calculation_additional_single_print_price',
+
+        // Working
         'calculation_working_setup_quantity',
         'calculation_working_extrusion_speed',
         'calculation_working_annual_requirement_estimated',
@@ -63,13 +78,17 @@ class Offer extends Model
         'calculation_working_commission',
         'calculation_working_profit',
         'calculation_working_discount',
-        'pricing_annual_requirement'
+
+        // Pricing
+        'pricing_annual_requirement',
     ];
 
     protected $casts = [
         'general_creation_date' => 'datetime',
+        'general_request_date' => 'date',
     ];
 
+    // Relationships
     public function rawMaterials()
     {
         return $this->belongsToMany(RawMaterial::class, 'offers_raw_materials')

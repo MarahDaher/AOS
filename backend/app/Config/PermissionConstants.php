@@ -62,6 +62,20 @@ class PermissionConstants
     public const UPDATE_PERMISSION = 'update_permission';
     public const DELETE_PERMISSION = 'delete_permission';
 
+    // Raw Materials
+    public const VIEW_RAW_MATERIALS = 'view_raw_materials';
+    public const VIEW_RAW_MATERIAL = 'view_raw_material';
+    public const CREATE_RAW_MATERIAL = 'create_raw_material';
+    public const UPDATE_RAW_MATERIAL = 'update_raw_material';
+    public const DELETE_RAW_MATERIAL = 'delete_raw_material';
+
+    // Offers Raw Materials
+    public const VIEW_OFFER_RAW_MATERIALS = 'view_offer_raw_materials';
+    public const VIEW_OFFER_RAW_MATERIAL = 'view_offer_raw_material';
+    public const CREATE_OFFER_RAW_MATERIAL = 'create_offer_raw_material';
+    public const UPDATE_OFFER_RAW_MATERIAL = 'update_offer_raw_material';
+    public const DELETE_OFFER_RAW_MATERIAL = 'delete_offer_raw_material';
+
 
     public static function toArray(): array
     {

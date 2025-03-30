@@ -74,7 +74,7 @@ const OffersPage: FunctionComponent<OffersPageProps> = () => {
 
                 <IconAction
                   tooltip="Bearbeiten"
-                  onClick={() => console.log("Edit")}
+                  onClick={() => navigate(`/angebote/${row.id}`)}
                 >
                   <Edit fontSize="small" />
                 </IconAction>

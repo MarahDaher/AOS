@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import { Offers, NewOffer, Users } from "./LazyRouter";
+import { Offers, OfferForm, Users } from "./LazyRouter";
 // Components
 import LoginPage from "@pages/Auth/Login";
 import Layout from "@components/Layout/Layout";
@@ -22,7 +22,16 @@ export const RoutePages = [
     path: "/angebote/neu", //new offer
     element: (
       <ProtectedPermissionRoute action="create" subject="offer">
-        <NewOffer />
+        <OfferForm />
+      </ProtectedPermissionRoute>
+    ),
+    label: "Neuen Angebot erstellen",
+  },
+  {
+    path: "/angebote/:id", // offer detials
+    element: (
+      <ProtectedPermissionRoute action="create" subject="offer">
+        <OfferForm />
       </ProtectedPermissionRoute>
     ),
     label: "Neuen Angebot erstellen",

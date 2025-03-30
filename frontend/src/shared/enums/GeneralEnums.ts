@@ -12,10 +12,10 @@ export enum DeliveryType {
 }
 
 export enum MaterialOptions {
-  HPVC = "H-PVC",
   ALUMINIUM = "Aluminium",
+  KUNSTSTOFF = "Kunststoff",
+  EDELSTAHL = "Edelstahl",
 }
-
 // Status
 export const GeneralStatusLabels = {
   [GeneralStatus.VORKALKULATION]: "Vorkalkulation",
@@ -31,6 +31,7 @@ export const DeliveryTypeLabels = {
 };
 
 export const MaterialOptionsLabels = {
-  [MaterialOptions.HPVC]: "H-PVC",
   [MaterialOptions.ALUMINIUM]: "Aluminium",
+  [MaterialOptions.KUNSTSTOFF]: "Kunststoff",
+  [MaterialOptions.EDELSTAHL]: "Edelstahl",
 };

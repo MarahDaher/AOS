@@ -15,7 +15,9 @@ class OfferCollection extends ResourceCollection
                 'general_offer_number' => $offer->general_offer_number,
                 'general_customer' => $offer->general_customer,
                 'general_profile_description' => $offer->general_profile_description,
-                'general_creation_date' => $offer->general_creation_date->format('d.m.Y'),
+                'general_creation_date' => $offer->general_creation_date
+                    ? $offer->general_creation_date->format('d.m.Y')
+                    : null,
             ];
         })->toArray();
     }

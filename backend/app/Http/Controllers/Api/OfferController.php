@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Http\Resources\ApiResponse;
 use App\Http\Collections\OfferCollection;
+use App\Http\Controllers\BaseController;
 use App\Http\Requests\Offer\UpdateOfferFieldRequest;
 use App\Models\Offer;
 use App\Services\OfferService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class OfferController extends Controller
+class OfferController extends BaseController
 {
     public function __construct(private OfferService $service) {}
 

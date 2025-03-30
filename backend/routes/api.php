@@ -3,7 +3,9 @@
 use App\Config\PermissionConstants;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\OfferController;
+use App\Http\Controllers\Api\OfferRawMaterialCalculatedController;
 use App\Http\Controllers\Api\PermissionController;
+use App\Http\Controllers\Api\RawMaterialController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\RoleController;
 use Illuminate\Support\Facades\Route;
@@ -39,5 +41,16 @@ Route::middleware(['auth:api'])->group(function () {
         Route::get('{id}', [OfferController::class, 'show'])->middleware('check.permission:' . PermissionConstants::VIEW_OFFER);
         Route::post('/', [OfferController::class, 'store'])->middleware('check.permission:' . PermissionConstants::CREATE_OFFER);
         Route::patch('{id}', [OfferController::class, 'update'])->middleware('check.permission:' . PermissionConstants::UPDATE_OFFER);
+        // Offer Raw Materials calculated
+        Route::get('{id}/raw-materials-calculated', [OfferRawMaterialCalculatedController::class, 'index'])->middleware('check.permission:' . PermissionConstants::VIEW_OFFER_RAW_MATERIAL);
+        Route::patch('{offerId}/raw-materials/{rawMaterialId}', [OfferRawMaterialCalculatedController::class, 'update'])->middleware('check.permission:' . PermissionConstants::UPDATE_OFFER_RAW_MATERIAL);;
+    });
+
+    // Raw Materials
+    Route::prefix('raw-materials')->group(function () {
+        Route::get('/', [RawMaterialController::class, 'index'])->middleware('check.permission:' . PermissionConstants::VIEW_RAW_MATERIALS);
+        Route::get('{id}', [RawMaterialController::class, 'show'])->middleware('check.permission:' . PermissionConstants::VIEW_RAW_MATERIAL);
+        Route::post('/', [RawMaterialController::class, 'store'])->middleware('check.permission:' . PermissionConstants::CREATE_RAW_MATERIAL);
+        Route::patch('{id}', [RawMaterialController::class, 'update'])->middleware('check.permission:' . PermissionConstants::UPDATE_RAW_MATERIAL);
     });
 });

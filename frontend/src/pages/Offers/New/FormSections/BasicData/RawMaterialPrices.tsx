@@ -1,4 +1,10 @@
+import CardBox from "@components/CardBox";
+import FormInputSaveField from "@components/FormInputSaveField";
+import Grid from "@mui/material/Grid2";
+import { FormikProvider, useFormik, useFormikContext } from "formik";
 import {
+  MenuItem,
+  Paper,
   Table,
   TableBody,
   TableCell,
@@ -6,147 +12,189 @@ import {
   TableHead,
   TableRow,
   TextField,
-  MenuItem,
   Typography,
-  Paper,
 } from "@mui/material";
-import { useFormikContext } from "formik";
-import { useEffect } from "react";
-import Grid from "@mui/material/Grid2";
-import CardBox from "@components/CardBox";
-import FormInputField from "@components/FormInputField";
-import FormDatePicker from "@components/FormDatePicker";
-
-const mockRawMaterials = [
-  {
-    id: 1,
-    name: "Rohstoff A",
-    type: "1592-533",
-    price_per_kg: 24,
-    price_date: "2024-11-01",
-  },
-  {
-    id: 2,
-    name: "Rohstoff B",
-    type: "237-5316",
-    price_per_kg: 37,
-    price_date: "2024-11-01",
-  },
-  {
-    id: 3,
-    name: "Rohstoff C",
-    type: "2624-545",
-    price_per_kg: 24,
-    price_date: "2025-01-01",
-  },
-  {
-    id: 4,
-    name: "Rohstoff D",
-    type: "3035-8750",
-    price_per_kg: 67,
-    price_date: "2025-01-01",
-  },
-];
-
-const rows = ["A", "B", "C", "D"];
+import { RawMaterialApi } from "@api/raw-materials";
+import { RawMaterialModel } from "@interfaces/RawMaterial.model";
+import { RawMaterialPricesTableInitialValues } from "../../Index";
+import { useApiErrorHandler } from "@hooks/useApiErrorHandler";
+import { useEffect, useState } from "react";
+import { useOfferContext } from "@contexts/OfferProvider";
+import { OfferRawMaterialCalculatedApi } from "@api/offer-raw-material";
 
 const RawMaterialPricesTable = () => {
   const { values, setFieldValue } = useFormikContext<any>();
+  const { showError } = useApiErrorHandler();
+  const { offerDetails } = useOfferContext();
 
-  const getMaterialData = (id: number) =>
-    mockRawMaterials.find((m) => m.id === id);
+  const [baseMaterials, setRawMaterials] = useState<RawMaterialModel[]>([]);
+  const [rawMaterialRows, setRawMaterialRows] = useState<any[]>([]);
+
+  const fetchOfferRawMaterials = async () => {
+    if (!offerDetails?.id) return;
+    try {
+      const response =
+        await OfferRawMaterialCalculatedApi.getRawMaterialCalculatedByOfferId(
+          offerDetails.id
+        );
+      setRawMaterialRows(response);
+    } catch (error) {
+      showError(error);
+    }
+  };
+
+  const fetchRawMaterials = async () => {
+    try {
+      const res = await RawMaterialApi.getAllOffers();
+      setRawMaterials(res);
+    } catch (error) {
+      showError(error);
+    }
+  };
+
+  const handleUpdateField = async (
+    row: any,
+    field: string,
+    value: string | number
+  ) => {
+    try {
+      await OfferRawMaterialCalculatedApi.update(
+        row.offer_id,
+        row.raw_material_id,
+        {
+          [field]: value,
+        }
+      );
+      fetchOfferRawMaterials();
+    } catch (error) {
+      showError(error);
+    }
+  };
+
+  const handleUpdateRawMaterial = async (
+    rawMaterialId: number,
+    field: string,
+    value: string | number
+  ) => {
+    try {
+      await RawMaterialApi.updateRawMaterial(rawMaterialId, { [field]: value });
+      fetchOfferRawMaterials();
+    } catch (error) {
+      showError(error);
+    }
+  };
+
+  const handleChangeMaterial = async (row: any, newMaterialId: number) => {
+    try {
+      await OfferRawMaterialCalculatedApi.update(
+        row.offer_id,
+        row.raw_material_id,
+        {
+          raw_material_id: newMaterialId,
+        }
+      );
+      fetchOfferRawMaterials();
+    } catch (error) {
+      showError(error);
+    }
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      ...RawMaterialPricesTableInitialValues,
+      ...(offerDetails
+        ? {
+            general_raw_material_price_total_overwritten:
+              offerDetails.general_raw_material_price_total_overwritten ?? "",
+            general_raw_material_purchase_discount:
+              offerDetails.general_raw_material_purchase_discount ?? "",
+          }
+        : {}),
+    },
+    enableReinitialize: true,
+    onSubmit: () => {},
+  });
+
+  useEffect(() => {
+    fetchRawMaterials();
+    fetchOfferRawMaterials();
+  }, [offerDetails?.id]);
 
   return (
-    <CardBox label="Rohstoffpreise">
-      {/* Inputs before table */}
-      <Grid
-        container
-        spacing={2}
-        alignItems="center"
-        justifyContent="end"
-        mb={2}
-      >
-        <Grid size={{ xs: 2, md: 1.5 }}>
-          <FormInputField
-            name="general_profile_description"
-            label="Skonto [%]"
-            value={values.general_raw_material_purchase_discount || ""}
-            onChange={(e) =>
-              setFieldValue(
-                "general_raw_material_purchase_discount",
-                Number(e.target.value)
-              )
-            }
-          />
+    <FormikProvider value={formik}>
+      <CardBox label="Rohstoffpreise">
+        <Grid
+          container
+          spacing={2}
+          alignItems="center"
+          justifyContent="end"
+          mb={2}
+        >
+          <Grid size={{ xs: 2, md: 1.5 }}>
+            <FormInputSaveField
+              name="general_raw_material_purchase_discount"
+              label="Skonto [%]"
+            />
+          </Grid>
         </Grid>
-      </Grid>
 
-      <TableContainer component={Paper}>
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell width="250px">Rohstoff</TableCell>
-              <TableCell width="150px">Typ</TableCell>
-              <TableCell width="150px">Lieferant</TableCell>
-              <TableCell width="150px">Anteil [%]</TableCell>
-              <TableCell>Preisstand</TableCell>
-              <TableCell>Preis [€]</TableCell>
-              <TableCell>Preis - Sko [€]</TableCell>
-              <TableCell>Preis (anteilig) [€]</TableCell>
-              <TableCell>Preis - Sko (anteilig) [€]</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((letter) => {
-              const idField = `general_raw_material${letter}_id`;
-              const supplierField = `general_raw_material${letter}_supplier`;
-              const shareField = `general_raw_material${letter}_share`;
-              const priceField = `raw_material_${letter.toLowerCase()}_price`;
-              const priceDateField = `raw_material_${letter.toLowerCase()}_price_date`;
-              const discountPriceField = `raw_material_${letter.toLowerCase()}_discount_price`;
-              const sharePriceField = `raw_material_${letter.toLowerCase()}_share_price`;
-              const discountSharePriceField = `raw_material_${letter.toLowerCase()}_discount_share_price`;
-
-              const material = getMaterialData(values[idField]);
-
-              useEffect(() => {
-                if (material) {
-                  setFieldValue(priceField, material.price_per_kg);
-                  setFieldValue(priceDateField, material.price_date);
-                }
-              }, [values[idField]]);
-
-              return (
-                <TableRow key={letter}>
+        <TableContainer component={Paper}>
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell width="250px">Rohstoff</TableCell>
+                <TableCell width="150px">Typ</TableCell>
+                <TableCell width="150px">Lieferant</TableCell>
+                <TableCell width="150px">Anteil [%]</TableCell>
+                <TableCell>Preisstand</TableCell>
+                <TableCell>Preis [€]</TableCell>
+                <TableCell>Preis - Sko [€]</TableCell>
+                <TableCell>Preis (anteilig) [€]</TableCell>
+                <TableCell>Preis - Sko (anteilig) [€]</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rawMaterialRows.map((row, index) => (
+                <TableRow key={index}>
                   <TableCell>
                     <TextField
                       select
                       fullWidth
                       variant="standard"
-                      value={values[idField] || ""}
+                      value={row.raw_material_id || ""}
                       onChange={(e) =>
-                        setFieldValue(idField, Number(e.target.value))
+                        handleChangeMaterial(row, Number(e.target.value))
                       }
                     >
-                      {mockRawMaterials.map((m) => (
+                      {baseMaterials.map((m) => (
                         <MenuItem key={m.id} value={m.id}>
-                          {m.name} ({m.type})
+                          {m.name}
                         </MenuItem>
                       ))}
                     </TextField>
                   </TableCell>
 
                   <TableCell>
-                    <Typography>{material?.type || "-"}</Typography>
+                    <Typography>{row.type || "-"}</Typography>
                   </TableCell>
 
                   <TableCell>
                     <TextField
                       fullWidth
                       variant="standard"
-                      value={values[supplierField] || ""}
+                      value={row.supplier || ""}
                       onChange={(e) =>
-                        setFieldValue(supplierField, e.target.value)
+                        setRawMaterialRows((prev) =>
+                          prev.map((r) =>
+                            r.offer_id === row.offer_id &&
+                            r.raw_material_id === row.raw_material_id
+                              ? { ...r, supplier: e.target.value }
+                              : r
+                          )
+                        )
+                      }
+                      onBlur={(e) =>
+                        handleUpdateField(row, "supplier", e.target.value)
                       }
                     />
                   </TableCell>
@@ -156,9 +204,19 @@ const RawMaterialPricesTable = () => {
                       fullWidth
                       type="number"
                       variant="standard"
-                      value={values[shareField] || ""}
+                      value={row.share}
                       onChange={(e) =>
-                        setFieldValue(shareField, Number(e.target.value))
+                        setRawMaterialRows((prev) =>
+                          prev.map((r) =>
+                            r.offer_id === row.offer_id &&
+                            r.raw_material_id === row.raw_material_id
+                              ? { ...r, share: Number(e.target.value) }
+                              : r
+                          )
+                        )
+                      }
+                      onBlur={(e) =>
+                        handleUpdateField(row, "share", Number(e.target.value))
                       }
                     />
                   </TableCell>
@@ -169,113 +227,107 @@ const RawMaterialPricesTable = () => {
                       fullWidth
                       variant="standard"
                       value={
-                        values[priceDateField]
-                          ? values[priceDateField].slice(0, 7)
+                        row.price_date
+                          ? (() => {
+                              if (row.price_date.includes(".")) {
+                                // صيغة مثل "01.07.2025"
+                                const parts = row.price_date.split(".");
+                                if (parts.length === 3) {
+                                  return `${parts[2]}-${parts[1]}`; // "YYYY-MM"
+                                }
+                              } else if (row.price_date.includes("-")) {
+                                // صيغة مثل "2025-07-01"
+                                return row.price_date.slice(0, 7); // "YYYY-MM"
+                              }
+                              return "";
+                            })()
                           : ""
                       }
-                      onChange={(e) => {
-                        const selectedDate = new Date(`${e.target.value}-01`);
-                        setFieldValue(
-                          priceDateField,
-                          selectedDate.toISOString()
-                        );
-                      }}
-                      InputProps={{
-                        disableUnderline: true,
-                        sx: {
-                          padding: 0,
-                          fontWeight: 400,
-                          fontSize: "0.875rem",
-                          background: "transparent",
-                        },
-                      }}
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
+                      onChange={(e) =>
+                        setRawMaterialRows((prev) => {
+                          const updated = [...prev];
+                          updated[index].price_date = `${e.target.value}-01`;
+                          return updated;
+                        })
+                      }
+                      onBlur={(e) =>
+                        handleUpdateRawMaterial(
+                          row.raw_material_id,
+                          "price_date",
+                          `${e.target.value}-01`
+                        )
+                      }
                     />
                   </TableCell>
 
                   <TableCell>
                     <TextField
                       fullWidth
-                      variant="standard"
                       type="number"
-                      value={values[priceField] || ""}
+                      variant="standard"
+                      value={row.price}
                       onChange={(e) =>
-                        setFieldValue(priceField, Number(e.target.value))
+                        setRawMaterialRows((prev) => {
+                          const updated = [...prev];
+                          updated[index].price = e.target.value;
+                          return updated;
+                        })
+                      }
+                      onBlur={(e) =>
+                        handleUpdateRawMaterial(
+                          row.raw_material_id,
+                          "price",
+                          Number(e.target.value)
+                        )
                       }
                     />
                   </TableCell>
 
                   <TableCell>
-                    <Typography>{values[discountPriceField] || "-"}</Typography>
+                    <Typography>{row._price_minus_discount ?? "-"}</Typography>
                   </TableCell>
+
                   <TableCell>
-                    <Typography>{values[sharePriceField] || "-"}</Typography>
+                    <Typography>{row._price_share ?? "-"}</Typography>
                   </TableCell>
+
                   <TableCell>
                     <Typography>
-                      {values[discountSharePriceField] || "-"}
+                      {row._price_minus_discount_share ?? "-"}
                     </Typography>
                   </TableCell>
                 </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-      {/* Inputs after table */}
-      <Grid
-        container
-        spacing={2}
-        alignItems="center"
-        justifyContent="end"
-        mt={2}
-      >
-        <Grid
-          size={{ xs: 3, md: 2 }}
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          <FormInputField
-            name="general_raw_material_price_total_overwritten"
-            label="Rohstoffpreis gesamt [€]"
-            value={values.general_raw_material_price_total_overwritten || ""}
-            onChange={(e) =>
-              setFieldValue(
-                "general_raw_material_price_total_overwritten",
-                Number(e.target.value)
-              )
-            }
-          />
-          <Typography variant="caption">(überschrieben)</Typography>
-        </Grid>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
 
         <Grid
-          size={{ xs: 3, md: 2 }}
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-          }}
+          container
+          spacing={2}
+          alignItems="center"
+          justifyContent="end"
+          mt={2}
         >
-          <FormInputField
-            name="general_raw_material_price_total_calculated"
-            label="Rohstoffpreis gesamt [€]"
-            value={values.general_raw_material_price_total_calculated || ""}
-            onChange={(e) =>
-              setFieldValue(
-                "general_raw_material_price_total_calculated",
-                Number(e.target.value)
-              )
-            }
-          />
-          <Typography variant="caption">(berechnet)</Typography>
+          <Grid size={{ xs: 3, md: 2 }}>
+            <FormInputSaveField
+              name="general_raw_material_price_total_overwritten"
+              label="Rohstoffpreis gesamt [€]"
+            />
+            <Typography variant="caption">(überschrieben)</Typography>
+          </Grid>
+
+          <Grid size={{ xs: 3, md: 2 }}>
+            <FormInputSaveField
+              name="general_raw_material_price_total_calculated"
+              label="Rohstoffpreis gesamt [€]"
+              value={values.general_raw_material_price_total_calculated || ""}
+            />
+            <Typography variant="caption">(berechnet)</Typography>
+          </Grid>
         </Grid>
-      </Grid>
-    </CardBox>
+      </CardBox>
+    </FormikProvider>
   );
 };
 

@@ -38,9 +38,10 @@ return new class extends Migration {
                 $table->integer("calculation_quantity{$key}")->nullable();
             }
 
-            foreach (['A', 'B', 'C', 'D'] as $key) {
-                $table->integer("calculation_rawmaterial{$key}_absolute_demand")->nullable();
-            }
+
+            // foreach (['A', 'B', 'C', 'D'] as $key) {
+            //     $table->integer("calculation_rawmaterial{$key}_absolute_demand")->nullable();
+            // }
 
             // Processing
             $table->float('calculation_processing_lfm_hourly_rate')->nullable();

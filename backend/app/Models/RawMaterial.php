@@ -13,6 +13,10 @@ class RawMaterial extends Model
 
     protected $fillable = ['name', 'type', 'density', 'price', 'price_date'];
 
+    protected $casts = [
+        'price_date' => 'date',
+    ];
+
     public function offers()
     {
         return $this->belongsToMany(Offer::class, 'offers_raw_materials')

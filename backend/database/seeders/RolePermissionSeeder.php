@@ -24,7 +24,7 @@ class RolePermissionSeeder extends Seeder
                 'name' => $permission,
                 'guard_name' => 'api',
             ]);
-            info("Permission created or found: {$created->name}");
+            // info("Permission created or found: {$created->name}");
         }
     }
 
@@ -105,6 +105,18 @@ class RolePermissionSeeder extends Seeder
             PermissionConstants::CREATE_PERMISSION,
             PermissionConstants::UPDATE_PERMISSION,
             PermissionConstants::DELETE_PERMISSION,
+
+            PermissionConstants::VIEW_RAW_MATERIALS,
+            PermissionConstants::VIEW_RAW_MATERIAL,
+            PermissionConstants::CREATE_RAW_MATERIAL,
+            PermissionConstants::UPDATE_RAW_MATERIAL,
+            PermissionConstants::DELETE_RAW_MATERIAL,
+
+            PermissionConstants::VIEW_OFFER_RAW_MATERIALS,
+            PermissionConstants::VIEW_OFFER_RAW_MATERIAL,
+            PermissionConstants::CREATE_OFFER_RAW_MATERIAL,
+            PermissionConstants::UPDATE_OFFER_RAW_MATERIAL,
+            PermissionConstants::DELETE_OFFER_RAW_MATERIAL,
         ];
     }
 
@@ -127,6 +139,9 @@ class RolePermissionSeeder extends Seeder
 
             PermissionConstants::VIEW_USER,
 
+            PermissionConstants::VIEW_RAW_MATERIALS,
+            PermissionConstants::VIEW_RAW_MATERIAL,
+
         ];
     }
 
@@ -144,8 +159,10 @@ class RolePermissionSeeder extends Seeder
             PermissionConstants::VIEW_PROCESS_SHEET,
             PermissionConstants::UPDATE_PROCESS_SHEET,
 
-
             PermissionConstants::VIEW_USER,
+
+            PermissionConstants::VIEW_RAW_MATERIALS,
+            PermissionConstants::VIEW_RAW_MATERIAL,
         ];
     }
 }

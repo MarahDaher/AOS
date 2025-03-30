@@ -2,24 +2,47 @@
 
 namespace Database\Seeders;
 
-use App\Config\RoleConstants;
 use App\Models\User;
-use App\Enums\UserRole;
 use Illuminate\Database\Seeder;
 
 class AdminSeeder extends Seeder
 {
     public function run()
     {
-        $user = User::updateOrCreate(
-            ['email' => 'admin@aos.com'],
+        $users = [
             [
+                'id' => 1,
                 'name' => 'AOS Admin',
+                'email' => 'admin@aos.com',
                 'password' => bcrypt('123123'),
-                'role_id' => 1
-            ]
-        );
+                'role_id' => 1,
+                'role' => 'admin',
+            ],
+            [
+                'id' => 2,
+                'name' => 'Sales Manager',
+                'email' => 'sales@aos.com',
+                'password' => bcrypt('123123'),
+                'role_id' => 2,
+                'role' => 'sales',
+            ],
+            [
+                'id' => 3,
+                'name' => 'Production Head',
+                'email' => 'production@aos.com',
+                'password' => bcrypt('123123'),
+                'role_id' => 3,
+                'role' => 'production',
+            ],
+        ];
 
-        $user->assignRole(RoleConstants::ADMIN_ROLE);
+        foreach ($users as $data) {
+            $user = User::updateOrCreate(
+                ['id' => $data['id']],
+                collect($data)->except('role')->toArray()
+            );
+
+            $user->assignRole($data['role']);
+        }
     }
 }

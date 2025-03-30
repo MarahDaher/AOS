@@ -25,23 +25,11 @@ export const HistoryCardInitialValues = {
 };
 
 export const RawMaterialPricesTableInitialValues = {
-  general_raw_materialA_id: "",
-  general_raw_materialB_id: "",
-  general_raw_materialC_id: "",
-  general_raw_materialD_id: "",
-
-  general_raw_materialA_supplier: "",
-  general_raw_materialB_supplier: "",
-  general_raw_materialC_supplier: "",
-  general_raw_materialD_supplier: "",
-
-  general_raw_materialA_share: "",
-  general_raw_materialB_share: "",
-  general_raw_materialC_share: "",
-  general_raw_materialD_share: "",
-
+  // Offers Table
   general_raw_material_price_total_overwritten: "",
   general_raw_material_purchase_discount: "",
+
+  // Raw Materials Table
 };
 
 export const initialValues = {

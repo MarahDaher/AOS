@@ -1,4 +1,4 @@
-export interface RawMaterial {
+export interface RawMaterialModel {
   id: number;
   name: string;
   type: string;

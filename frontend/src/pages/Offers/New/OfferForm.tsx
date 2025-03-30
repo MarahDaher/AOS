@@ -1,4 +1,4 @@
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import CardBox from "../../../components/CardBox";
 import BasicDataTab from "./Tabs/BasicData";
 import CalculationTab from "./Tabs/Calculation";
@@ -8,8 +8,11 @@ import ProcessSheetTab from "./Tabs/ProcessSheet";
 import { Box, Tab, Tabs } from "@mui/material";
 import { FormikProvider, useFormik } from "formik";
 import { initialValues } from "./Index";
+import { useParams } from "react-router-dom";
+import { useOfferContext } from "@contexts/OfferProvider";
+import { OffersApi } from "@api/offers";
 
-type NewOfferProps = object;
+type OfferFormProps = object;
 
 const tabs = [
   { label: "Grunddaten", component: <BasicDataTab /> },
@@ -19,13 +22,35 @@ const tabs = [
   { label: "Laufkarte", component: <ProcessSheetTab /> },
 ];
 
-const NewOffer: FunctionComponent<NewOfferProps> = () => {
+const OfferForm: FunctionComponent<OfferFormProps> = () => {
+  const { id } = useParams();
+  const { setOfferId, setOfferData, resetOffer } = useOfferContext();
+
   const [selectedTab, setSelectedTab] = useState(0);
 
   const formik = useFormik({
     initialValues,
     onSubmit: () => {},
   });
+
+  // Functions
+  const loadOffer = async () => {
+    try {
+      if (id) {
+        const res = await OffersApi.getOfferById(Number(id));
+        setOfferId(res.id);
+        setOfferData(res);
+      } else {
+        resetOffer();
+      }
+    } catch (err) {
+      console.error("Failed to load offer", err);
+    }
+  };
+
+  useEffect(() => {
+    loadOffer();
+  }, [id]);
 
   return (
     <FormikProvider value={formik}>
@@ -48,4 +73,4 @@ const NewOffer: FunctionComponent<NewOfferProps> = () => {
   );
 };
 
-export default NewOffer;
+export default OfferForm;
