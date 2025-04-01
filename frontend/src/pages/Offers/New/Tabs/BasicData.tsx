@@ -1,12 +1,12 @@
-import Grid from "@mui/material/Grid2";
-import { FunctionComponent } from "react";
-
-import OfferCard from "../FormSections/BasicData/OfferCard";
-import CustomerCard from "../FormSections/BasicData/CustomerCard";
-import HistoryCard from "../FormSections/BasicData/HistoryCard";
-import RawMaterialPricesTable from "../FormSections/BasicData/RawMaterialPrices";
 import CardBox from "@components/CardBox";
-import FormInputField from "@components/FormInputField";
+import CustomerCard from "../FormSections/BasicData/CustomerCard";
+import FormInputSaveField from "@components/FormInputSaveField";
+import Grid from "@mui/material/Grid2";
+import HistoryCard from "../FormSections/BasicData/HistoryCard";
+import OfferCard from "../FormSections/BasicData/OfferCard";
+import RawMaterialPricesTable from "../FormSections/BasicData/RawMaterialPrices";
+import { FormikProvider, useFormik } from "formik";
+import { FunctionComponent } from "react";
 import { useCalculatedValues } from "@hooks/useCalculatedValues";
 import { useOfferContext } from "@contexts/OfferProvider";
 
@@ -16,6 +16,13 @@ const BasicDataTab: FunctionComponent<BasicDataTabProps> = () => {
   useCalculatedValues();
 
   const { offerDetails } = useOfferContext();
+
+  const formik = useFormik({
+    initialValues: {
+      general_comments: offerDetails.general_comments ?? "",
+    },
+    onSubmit: () => {},
+  });
 
   return (
     <>
@@ -42,14 +49,16 @@ const BasicDataTab: FunctionComponent<BasicDataTabProps> = () => {
       {/* Bemerkungen */}
       <Grid container spacing={1}>
         <Grid size={{ xs: 12, md: 12 }}>
-          <CardBox label="">
-            <FormInputField
-              name="general_comments"
-              label="Bemerkungen"
-              multiline
-              rows={5}
-            />
-          </CardBox>
+          <FormikProvider value={formik}>
+            <CardBox label="">
+              <FormInputSaveField
+                name="general_comments"
+                label="Bemerkungen"
+                multiline
+                rows={5}
+              />
+            </CardBox>
+          </FormikProvider>
         </Grid>
       </Grid>
     </>

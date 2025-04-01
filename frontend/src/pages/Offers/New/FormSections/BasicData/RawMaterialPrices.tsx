@@ -1,4 +1,5 @@
 import CardBox from "@components/CardBox";
+import FormInputField from "@components/FormInputField";
 import FormInputSaveField from "@components/FormInputSaveField";
 import Grid from "@mui/material/Grid2";
 import { FormikProvider, useFormik, useFormikContext } from "formik";
@@ -14,14 +15,13 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { OfferRawMaterialCalculatedApi } from "@api/offer-raw-material";
 import { RawMaterialApi } from "@api/raw-materials";
 import { RawMaterialModel } from "@interfaces/RawMaterial.model";
 import { RawMaterialPricesTableInitialValues } from "../../Index";
 import { useApiErrorHandler } from "@hooks/useApiErrorHandler";
 import { useEffect, useState } from "react";
 import { useOfferContext } from "@contexts/OfferProvider";
-import { OfferRawMaterialCalculatedApi } from "@api/offer-raw-material";
-import FormInputField from "@components/FormInputField";
 
 const RawMaterialPricesTable = () => {
   const { values, setFieldValue } = useFormikContext<any>();
@@ -147,6 +147,7 @@ const RawMaterialPricesTable = () => {
             <FormInputSaveField
               name="general_raw_material_purchase_discount"
               label="Skonto [%]"
+              type="number"
             />
           </Grid>
         </Grid>
@@ -326,6 +327,7 @@ const RawMaterialPricesTable = () => {
             <FormInputSaveField
               name="general_raw_material_price_total_overwritten"
               label="Rohstoffpreis gesamt [€]"
+              type="number"
             />
             <Typography variant="caption">(überschrieben)</Typography>
           </Grid>

@@ -28,6 +28,7 @@ class Offer extends Model
         'general_customer_article_number',
         'general_request_date',
         'general_request_number',
+
         'general_raw_material_price_total_overwritten',
         'general_raw_material_purchase_discount',
         'general_comments',

@@ -29,6 +29,7 @@ return new class extends Migration {
             $table->date('general_request_date')->nullable();
             $table->integer('general_request_number')->nullable();
 
+            //Raw material
             $table->float('general_raw_material_price_total_overwritten')->nullable();
             $table->float('general_raw_material_purchase_discount')->nullable();
             $table->text('general_comments')->nullable();
