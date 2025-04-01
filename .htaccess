@@ -1,0 +1,19 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /aos/
+
+    # ✅ Laravel API requests
+    RewriteCond %{REQUEST_URI} ^/aos/api/ [NC]
+    RewriteRule ^api/(.*)$ index.php [QSA,L]
+
+    # ✅ Allow Laravel to handle other backend routes like /clear
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} ^/aos/(clear|login|register|password|logout) [NC]
+    RewriteRule ^ index.php [QSA,L]
+
+    # ✅ React SPA fallback
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.html [L]
+</IfModule>

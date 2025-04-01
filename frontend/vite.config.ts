@@ -4,6 +4,8 @@ import path from "path";
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: "/aos/",
+
   plugins: [react()],
   resolve: {
     alias: {

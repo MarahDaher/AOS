@@ -52,19 +52,24 @@ export const RoutePages = [
   },
 ];
 
-export const router = createBrowserRouter([
+export const router = createBrowserRouter(
+  [
+    {
+      path: "/",
+      element: <Layout />,
+      errorElement: <GenericErrorPage />,
+      children: RoutePages,
+    },
+    {
+      path: "/anmelden",
+      element: <LoginPage />,
+    },
+    {
+      path: "*",
+      element: <NotFoundPage />,
+    },
+  ],
   {
-    path: "/",
-    element: <Layout />,
-    errorElement: <GenericErrorPage />,
-    children: RoutePages,
-  },
-  {
-    path: "/anmelden",
-    element: <LoginPage />,
-  },
-  {
-    path: "*",
-    element: <NotFoundPage />,
-  },
-]);
+    basename: "/aos",
+  }
+);

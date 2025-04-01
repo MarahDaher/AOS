@@ -32,3 +32,26 @@ return [
     'supports_credentials' => true,
 
 ];
+
+
+
+#production
+// return [
+
+//     'paths' => ['api/*', 'sanctum/csrf-cookie'],
+
+//     'allowed_methods' => ['*'],
+
+//     // 'allowed_origins' => ['*'], // enable in production
+
+//     'allowed_origins_patterns' => [],
+
+//     'allowed_headers' => ['*'],
+
+//     'exposed_headers' => ['Content-Type', 'Authorization'],
+
+//     'max_age' => 0,
+
+//     'supports_credentials' => false,
+
+// ];
