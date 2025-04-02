@@ -103,6 +103,21 @@ class OfferService
             "calculation_processing_piece_packing_time_factor",
             "_calculation_processing_piece_expense",
             "_calculation_processing_piece_costs",
+
+            // AdditionalPrintCard
+            "calculation_additional_setup_time",
+            "calculation_additional_hourly_rate",
+            "calculation_additional_transport_costs_total",
+            "calculation_additional_box_count",
+            "calculation_additional_box_price_per_piece",
+            "calculation_additional_box_price_flat_additional",
+            "calculation_additional_single_print",
+            "calculation_additional_single_print_price",
+            "_calculation_additional_setup_costs_total",
+            "_calculation_additional_setup_costs_lfm",
+            "_calculation_additional_transport_costs_lfm",
+            "_calculation_additional_box_costs_lfm",
+            "_calculation_additional_single_print_lfm",
         ];
     }
 }
