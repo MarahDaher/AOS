@@ -13,7 +13,6 @@ class Offer extends Model
         // General Info
         'general_status',
         'general_offer_number',
-        'general_material',
         'general_profile_description',
         'general_creation_date',
         'general_created_by_user_id',

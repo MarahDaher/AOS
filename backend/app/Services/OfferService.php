@@ -62,7 +62,6 @@ class OfferService
             'general_status',
             'general_profile_description',
             'general_color',
-            'general_material',
             'general_packaging',
             'general_article_number',
             'general_tool_number',

@@ -13,7 +13,6 @@ return new class extends Migration {
             // General Info
             $table->enum('general_status', ['Vorkalkulation', 'Angebot', 'Auftrag', 'Produziert', 'Versandt'])->nullable();
             $table->string('general_offer_number', 63)->nullable();
-            $table->string('general_material', 63)->nullable();
             $table->integer('general_profile_description')->nullable();
             $table->dateTime('general_creation_date')->nullable();
             $table->foreignId('general_created_by_user_id')->constrained('users');

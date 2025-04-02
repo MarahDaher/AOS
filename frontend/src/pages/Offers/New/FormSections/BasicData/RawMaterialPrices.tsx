@@ -9,12 +9,17 @@ import { Table, TableContainer, TableBody, Paper } from "@mui/material";
 import RawMaterialTableHead from "./RawMaterialSection/RawMaterialTableHead";
 import RawMaterialRow from "./RawMaterialSection/RawMaterialRow";
 import { useRawMaterialPricesTable } from "./RawMaterialSection/useRawMaterialPricesTable";
+import AdditiveModal from "./RawMaterialSection/AdditiveModal";
 
 const RawMaterialPrices = () => {
   const {
     formik,
     baseMaterials,
+    selectedMaterial,
+    openModal,
+    setOpenModal,
     rawMaterialRows,
+    handleOpenModal,
     handleChangeMaterial,
     handleUpdateField,
     handleUpdateRawMaterial,
@@ -54,6 +59,7 @@ const RawMaterialPrices = () => {
                   onUpdateField={handleUpdateField}
                   onUpdateRawMaterial={handleUpdateRawMaterial}
                   setRawMaterialRows={setRawMaterialRows}
+                  onOpenModal={handleOpenModal}
                 />
               ))}
             </TableBody>
@@ -89,6 +95,17 @@ const RawMaterialPrices = () => {
           </Grid>
         </Grid>
       </CardBox>
+
+      <AdditiveModal
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        onSubmit={(values) => {
+          console.log("Saving additives:", values);
+          setOpenModal(false);
+        }}
+        materialName={selectedMaterial?.name || ""}
+        initialValues={selectedMaterial?.additives || []}
+      />
     </FormikProvider>
   );
 };

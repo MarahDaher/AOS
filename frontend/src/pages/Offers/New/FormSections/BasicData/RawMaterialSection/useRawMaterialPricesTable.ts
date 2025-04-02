@@ -14,6 +14,9 @@ export const useRawMaterialPricesTable = () => {
   const [baseMaterials, setRawMaterials] = useState<BaseMaterial[]>([]);
   const [rawMaterialRows, setRawMaterialRows] = useState<RawMaterialRow[]>([]);
 
+  const [selectedMaterial, setSelectedMaterial] = useState<any | null>(null);
+  const [openModal, setOpenModal] = useState(false);
+
   const fetchOfferRawMaterials = async () => {
     if (!offerDetails?.id) return;
     try {
@@ -84,6 +87,11 @@ export const useRawMaterialPricesTable = () => {
     }
   };
 
+  const handleOpenModal = (row: any) => {
+    setSelectedMaterial(row);
+    setOpenModal(true);
+  };
+
   const formik = useFormik<any>({
     initialValues: {
       ...RawMaterialPricesTableInitialValues,
@@ -123,6 +131,11 @@ export const useRawMaterialPricesTable = () => {
     formik,
     baseMaterials,
     rawMaterialRows,
+    selectedMaterial,
+    openModal,
+    setOpenModal,
+    handleOpenModal,
+    setSelectedMaterial,
     handleChangeMaterial,
     handleUpdateField,
     handleUpdateRawMaterial,

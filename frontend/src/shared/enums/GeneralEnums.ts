@@ -11,11 +11,6 @@ export enum DeliveryType {
   UNFREI = "unfrei",
 }
 
-export enum MaterialOptions {
-  ALUMINIUM = "Aluminium",
-  KUNSTSTOFF = "Kunststoff",
-  EDELSTAHL = "Edelstahl",
-}
 // Status
 export const GeneralStatusLabels = {
   [GeneralStatus.VORKALKULATION]: "Vorkalkulation",
@@ -28,10 +23,4 @@ export const GeneralStatusLabels = {
 export const DeliveryTypeLabels = {
   [DeliveryType.FREI]: "Frei",
   [DeliveryType.UNFREI]: "Unfrei",
-};
-
-export const MaterialOptionsLabels = {
-  [MaterialOptions.ALUMINIUM]: "Aluminium",
-  [MaterialOptions.KUNSTSTOFF]: "Kunststoff",
-  [MaterialOptions.EDELSTAHL]: "Edelstahl",
 };

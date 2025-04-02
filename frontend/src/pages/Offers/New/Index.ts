@@ -1,7 +1,6 @@
 export const OfferCardInitialValues = {
   general_offer_number: "",
   general_status: "",
-  general_material: "",
   general_profile_description: "",
   general_color: "",
   general_packaging: "",

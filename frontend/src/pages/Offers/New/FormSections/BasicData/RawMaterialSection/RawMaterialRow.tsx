@@ -1,5 +1,6 @@
 // 📁 RawMaterialRow.tsx
 import {
+  IconButton,
   MenuItem,
   TableCell,
   TableRow,
@@ -7,9 +8,10 @@ import {
   Typography,
 } from "@mui/material";
 import {
-  BaseMaterial,
   RawMaterialRow as RawMaterialRowType,
+  BaseMaterial,
 } from "@interfaces/RawMaterial.model";
+import { PlaylistAdd } from "@mui/icons-material";
 
 interface RawMaterialRowProps {
   row: RawMaterialRowType;
@@ -22,13 +24,14 @@ interface RawMaterialRowProps {
     value: string | number
   ) => void;
   onUpdateRawMaterial: (
-    rawMaterialId: number,
+    id: number,
     field: keyof RawMaterialRowType,
     value: string | number
   ) => void;
   setRawMaterialRows: React.Dispatch<
     React.SetStateAction<RawMaterialRowType[]>
   >;
+  onOpenModal: (row: RawMaterialRowType) => void;
 }
 
 const RawMaterialRow = ({
@@ -39,6 +42,7 @@ const RawMaterialRow = ({
   onUpdateField,
   onUpdateRawMaterial,
   setRawMaterialRows,
+  onOpenModal,
 }: RawMaterialRowProps) => (
   <TableRow>
     <TableCell>
@@ -135,13 +139,63 @@ const RawMaterialRow = ({
     </TableCell>
 
     <TableCell>
+      <TextField
+        fullWidth
+        variant="standard"
+        value={row.additive || ""}
+        onChange={(e) =>
+          updateRowField(setRawMaterialRows, row, "additive", e.target.value)
+        }
+        onBlur={(e) =>
+          onUpdateRawMaterial(row.raw_material_id, "additive", e.target.value)
+        }
+      />
+    </TableCell>
+
+    <TableCell>
+      <TextField
+        fullWidth
+        type="number"
+        variant="standard"
+        value={row.price_additive || ""}
+        onChange={(e) =>
+          updateRowField(
+            setRawMaterialRows,
+            row,
+            "price_additive",
+            e.target.value
+          )
+        }
+        onBlur={(e) =>
+          onUpdateRawMaterial(
+            row.raw_material_id,
+            "price_additive",
+            Number(e.target.value)
+          )
+        }
+      />
+    </TableCell>
+
+    <TableCell>
+      <Typography>{row.price_total ?? "-"}</Typography>
+    </TableCell>
+
+    <TableCell>
       <Typography>{row._price_minus_discount ?? "-"}</Typography>
     </TableCell>
+
     <TableCell>
       <Typography>{row._price_share ?? "-"}</Typography>
     </TableCell>
+
     <TableCell>
       <Typography>{row._price_minus_discount_share ?? "-"}</Typography>
+    </TableCell>
+
+    <TableCell>
+      <IconButton onClick={() => onOpenModal(row)}>
+        <PlaylistAdd />
+      </IconButton>
     </TableCell>
   </TableRow>
 );
