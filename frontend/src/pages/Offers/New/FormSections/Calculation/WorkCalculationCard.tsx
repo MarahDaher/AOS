@@ -3,80 +3,137 @@ import CardBox from "@components/CardBox";
 import Grid from "@mui/material/Grid2";
 import FormInputSaveField from "@components/FormInputSaveField";
 import { useTheme, useMediaQuery } from "@mui/material";
+import { FormikProvider, useFormik } from "formik";
+import { useOfferContext } from "@contexts/OfferProvider";
+import {
+  mapWorkCalculationInitialValues,
+  WorkCalculationInitialValues,
+} from "../../Index";
 
 const rows = [
   [
-    { name: "setup_percentage", label: "Einstellmenge [%]" },
-    { name: "extrusion_speed", label: "Extrusionsgeschw. [m/min]" },
-    { name: "setup_length", label: "Einstellmenge [m]" },
-    { name: "setup_time", label: "Einstellzeit [min]", disabled: true },
-    { name: "annual_demand", label: "Jahresbedarf (schätz) [m]" },
+    { name: "calculation_working_setup_quantity", label: "Einstellmenge [%]" },
+    {
+      name: "calculation_working_extrusion_speed",
+      label: "Extrusionsgeschw. [m/min]",
+    },
+    {
+      name: "_calculation_working_setup_quantity_lfm",
+      label: "Einstellmenge [m]",
+      disabled: true,
+    },
+    { name: "setup_time", label: "Einstellzeit [min]", disabled: true }, // calculated field
+    {
+      name: "calculation_working_annual_requirement_estimated",
+      label: "Jahresbedarf (schätz) [m]",
+    },
     null,
   ],
   [
-    { name: "tool_cost_total", label: "Werkzeugkosten gesamt [€]" },
-    { name: "tool_cost_customer", label: "Werkzeugkosten Kunde [€]" },
-    { name: "tool_cost_additional", label: "Umlagekosten zzgl. [€]" },
-    { name: "tool_lifetime_years", label: "Werkzeugumlager auf Jahre" },
     {
-      name: "cost_allocation_per_meter",
+      name: "calculation_working_tool_costs_total",
+      label: "Werkzeugkosten gesamt [€]",
+    },
+    {
+      name: "calculation_working_tool_costs_customer",
+      label: "Werkzeugkosten Kunde [€]",
+    },
+    {
+      name: "calculation_working_allocation_costs_additional",
+      label: "Umlagekosten zzgl. [€]",
+    },
+    {
+      name: "calculation_working_tool_costs_amortization_years",
+      label: "Werkzeugumlager auf Jahre",
+    },
+    {
+      name: "_calculation_working_allocation_costs_lfm",
       label: "Umlage / m [€]",
       disabled: true,
     },
     null,
   ],
   [
-    { name: "profile_cross_section", label: "Profilquerschnitt [mm²]" },
-    { name: "deviation_down", label: "Abweichung nach unten [%]" },
-    { name: "deviation_up", label: "Abweichung nach oben [%]" },
+    {
+      name: "calculation_working_profile_cross_section",
+      label: "Profilquerschnitt [mm²]",
+    },
+    {
+      name: "calculation_working_profile_cross_section_deviation_lower",
+      label: "Abweichung nach unten [%]",
+    },
+    {
+      name: "calculation_working_profile_cross_section_deviation_upper",
+      label: "Abweichung nach oben [%]",
+    },
     {
       name: "material_density",
       label: "Rohstoffdichte [gr./cm³]",
       disabled: true,
+    }, // maybe from raw material?
+    { name: "profile_weight", label: "Profilgewicht [gr./m]", disabled: true }, // calculated
+    null,
+  ],
+  [
+    {
+      name: "calculation_working_setup_quantity_additional",
+      label: "Einstellmenge Zusatz [%]",
     },
-    { name: "profile_weight", label: "Profilgewicht [gr./m]", disabled: true },
+    { name: "calculation_working_hourly_rate", label: "Stundensatz [€]" },
+    {
+      name: "calculation_working_additional_costs",
+      label: "Zusatzkosten / m [€]",
+    },
     null,
   ],
   [
-    { name: "setup_percentage_add", label: "Einstellmenge Zusatz [%]" },
-    { name: "hourly_rate", label: "Stundensatz [€]" },
-    { name: "additional_costs_per_meter", label: "Zusatzkosten / m [€]" },
-    null,
-  ],
-  [
-    { name: "commission", label: "Provision [%]" },
-    { name: "profit", label: "Gewinn [%]" },
-    { name: "discount", label: "Skonto [%]" },
+    { name: "calculation_working_commission", label: "Provision [%]" },
+    { name: "calculation_working_profit", label: "Gewinn [%]" },
+    { name: "calculation_working_discount", label: "Skonto [%]" },
   ],
 ];
 
 const WorkCalculationCard: FC = () => {
+  const { offerDetails } = useOfferContext();
+
   const theme = useTheme();
   const isMdUp = useMediaQuery(theme.breakpoints.up("md"));
+
+  const formik = useFormik({
+    initialValues: {
+      ...WorkCalculationInitialValues,
+      ...(offerDetails ? mapWorkCalculationInitialValues(offerDetails) : {}),
+    },
+    enableReinitialize: true,
+    onSubmit: () => {},
+  });
+
   return (
-    <CardBox label="Arbeiten">
-      {rows.map((row, rowIndex) => (
-        <Grid
-          key={rowIndex}
-          container
-          spacing={isMdUp ? 2 : 1}
-          pt={rowIndex > 0 ? 2 : 0}
-        >
-          {row.map((field, colIndex) => (
-            <Grid key={colIndex} size={{ xs: 2.3, md: 2 }} pb={1}>
-              {field ? (
-                <FormInputSaveField
-                  name={field.name}
-                  label={field.label}
-                  disabled={field.disabled}
-                  type="number"
-                />
-              ) : null}
-            </Grid>
-          ))}
-        </Grid>
-      ))}
-    </CardBox>
+    <FormikProvider value={formik}>
+      <CardBox label="Arbeiten">
+        {rows.map((row, rowIndex) => (
+          <Grid
+            key={rowIndex}
+            container
+            spacing={isMdUp ? 2 : 1}
+            pt={rowIndex > 0 ? 2 : 0}
+          >
+            {row.map((field, colIndex) => (
+              <Grid key={colIndex} size={{ xs: 2.3, md: 2 }} pb={1}>
+                {field ? (
+                  <FormInputSaveField
+                    name={field.name}
+                    label={field.label}
+                    disabled={field.disabled}
+                    type="number"
+                  />
+                ) : null}
+              </Grid>
+            ))}
+          </Grid>
+        ))}
+      </CardBox>
+    </FormikProvider>
   );
 };
 

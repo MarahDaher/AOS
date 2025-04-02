@@ -72,6 +72,7 @@ class OfferService
             'general_customer_article_number',
             'general_request_number',
             'general_request_date',
+            'general_profile_crosssection',
 
             // raw material
             'general_raw_material_price_total_overwritten',
@@ -118,6 +119,33 @@ class OfferService
             "_calculation_additional_transport_costs_lfm",
             "_calculation_additional_box_costs_lfm",
             "_calculation_additional_single_print_lfm",
+
+            // Working
+            "calculation_working_setup_quantity",
+            "calculation_working_extrusion_speed",
+            "_calculation_working_setup_quantity_lfm",
+            "setup_time",
+            "calculation_working_annual_requirement_estimated",
+
+            "calculation_working_tool_costs_total",
+            "calculation_working_tool_costs_customer",
+            "calculation_working_allocation_costs_additional",
+            "calculation_working_tool_costs_amortization_years",
+            "_calculation_working_allocation_costs_lfm",
+
+            "calculation_working_profile_cross_section",
+            "calculation_working_profile_cross_section_deviation_lower",
+            "calculation_working_profile_cross_section_deviation_upper",
+            "material_density",
+            "profile_weight",
+
+            "calculation_working_setup_quantity_additional",
+            "calculation_working_hourly_rate",
+            "calculation_working_additional_costs",
+
+            "calculation_working_commission",
+            "calculation_working_profit",
+            "calculation_working_discount",
         ];
     }
 }

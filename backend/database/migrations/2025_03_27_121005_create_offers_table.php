@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->string('general_offer_number', 63)->nullable();
             $table->integer('general_profile_description')->nullable();
             $table->dateTime('general_creation_date')->nullable();
+            $table->float('general_profile_crosssection')->nullable();
             $table->foreignId('general_created_by_user_id')->constrained('users');
             $table->string('general_color', 31)->nullable();
             $table->integer('general_packaging')->nullable();

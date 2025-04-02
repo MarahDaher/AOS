@@ -24,6 +24,7 @@ const OfferCard: FunctionComponent = () => {
   const mapOfferToOfferCardInitialValues = (offer: any) => ({
     general_offer_number: offer.general_offer_number ?? "",
     general_status: offer.general_status ?? "",
+    general_profile_crosssection: offer.general_profile_crosssection ?? "",
     general_profile_description: offer.general_profile_description ?? "",
     general_color: offer.general_color ?? "",
     general_packaging: offer.general_packaging ?? "",
@@ -80,7 +81,12 @@ const OfferCard: FunctionComponent = () => {
               options={statusOptions}
             />
           </Grid>
-          <Grid size={{ xs: 4, md: 4 }}></Grid>
+          <Grid size={{ xs: 4, md: 4 }}>
+            <FormInputSaveField
+              name="general_profile_crosssection"
+              label="Profilquerschnitt [mm²]"
+            />
+          </Grid>
 
           {/* Row 3 */}
           <Grid size={{ xs: 4, md: 4 }}>

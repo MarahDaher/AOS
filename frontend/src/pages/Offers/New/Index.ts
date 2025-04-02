@@ -1,6 +1,7 @@
 export const OfferCardInitialValues = {
   general_offer_number: "",
   general_status: "",
+  general_profile_crosssection: "",
   general_profile_description: "",
   general_color: "",
   general_packaging: "",
@@ -128,4 +129,42 @@ export const AdditionalCostInitialValues = Object.fromEntries(
 export const mapAdditionalCostsInitialValues = (offerDetails: any) =>
   Object.fromEntries(
     AdditionalCostsFields.map((field) => [field, offerDetails?.[field] ?? ""])
+  );
+
+//-------------------------------------------------
+export const WorkCalculationFields = [
+  "calculation_working_setup_quantity",
+  "calculation_working_extrusion_speed",
+  "setup_length",
+  "setup_time",
+  "calculation_working_annual_requirement_estimated",
+
+  "calculation_working_tool_costs_total",
+  "calculation_working_tool_costs_customer",
+  "calculation_working_allocation_costs_additional",
+  "calculation_working_tool_costs_amortization_years",
+  "_calculation_working_allocation_costs_lfm",
+
+  "calculation_working_profile_cross_section",
+  "calculation_working_profile_cross_section_deviation_lower",
+  "calculation_working_profile_cross_section_deviation_upper",
+  "material_density",
+  "profile_weight",
+
+  "calculation_working_setup_quantity_additional",
+  "calculation_working_hourly_rate",
+  "calculation_working_additional_costs",
+
+  "calculation_working_commission",
+  "calculation_working_profit",
+  "calculation_working_discount",
+];
+
+export const WorkCalculationInitialValues = Object.fromEntries(
+  WorkCalculationFields.map((field) => [field, ""])
+);
+
+export const mapWorkCalculationInitialValues = (offerDetails: any) =>
+  Object.fromEntries(
+    WorkCalculationFields.map((field) => [field, offerDetails?.[field] ?? ""])
   );
