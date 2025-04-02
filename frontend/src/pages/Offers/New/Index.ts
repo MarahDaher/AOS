@@ -58,3 +58,48 @@ export const RawMaterialDemandCardInitialValues = {
   calculation_rawmaterialC_absolute_demand: "",
   calculation_rawmaterialD_absolute_demand: "",
 };
+
+//----------Processing per Meter
+export const ProcessingPerMeterFields = [
+  "calculation_processing_lfm_hourly_rate",
+  "calculation_processing_lfm_runtime",
+  "calculation_processing_lfm_runtime_factor",
+  "calculation_processing_lfm_packing_time",
+  "calculation_processing_lfm_packing_time_factor",
+  "_calculation_processing_lfm_expense",
+  "_calculation_processing_lfm_costs",
+];
+
+export const ProcessingPerMeterInitialValues = Object.fromEntries(
+  ProcessingPerMeterFields.map((field) => [field, ""])
+);
+export const mapInitialValues = (offerDetails: any) =>
+  Object.fromEntries(
+    ProcessingPerMeterFields.map((field) => [
+      field,
+      offerDetails?.[field] ?? "",
+    ])
+  );
+
+//--------------------------------------------------------------------
+export const ProcessingPerPieceFields = [
+  "calculation_processing_piece_hourly_rate",
+  "calculation_processing_piece_runtime",
+  "calculation_processing_piece_runtime_factor",
+  "calculation_processing_piece_packing_time",
+  "calculation_processing_piece_packing_time_factor",
+  "_calculation_processing_piece_expense",
+  "_calculation_processing_piece_costs",
+];
+
+export const ProcessingPerPieceInitialValues = Object.fromEntries(
+  ProcessingPerPieceFields.map((field) => [field, ""])
+);
+
+export const mapPerPieceInitialValuesInitialValues = (offerDetails: any) =>
+  Object.fromEntries(
+    ProcessingPerPieceFields.map((field) => [
+      field,
+      offerDetails?.[field] ?? "",
+    ])
+  );

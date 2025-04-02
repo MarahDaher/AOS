@@ -15,17 +15,17 @@ const CalculationTab: FunctionComponent<CalculationTabProps> = () => {
       <Grid container spacing={1}>
         {/* Row 1 */}
         <Grid size={{ xs: 12, md: 12 }}>
-          <Grid container spacing={3}>
-            <Grid size={{ xs: 12, md: 3 }}>
+          <Grid container spacing={1}>
+            <Grid size={{ xs: 12, md: 2 }}>
               <QuantityStepsCard />
             </Grid>
             <Grid size={{ xs: 12, md: 3 }}>
               <RawMaterialDemandCard />
             </Grid>
-            <Grid size={{ xs: 12, md: 3 }}>
+            <Grid size={{ xs: 12, md: 3.5 }}>
               <ProcessingPerMeterCard />
             </Grid>
-            <Grid size={{ xs: 12, md: 3 }}>
+            <Grid size={{ xs: 12, md: 3.5 }}>
               <ProcessingPerPieceCard />
             </Grid>
           </Grid>

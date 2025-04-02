@@ -85,6 +85,24 @@ class OfferService
             'calculation_quantityC',
             'calculation_quantityD',
             'calculation_quantityE',
+
+            // ProcessingPerMeterCard
+            "calculation_processing_lfm_hourly_rate",
+            "calculation_processing_lfm_runtime",
+            "calculation_processing_lfm_runtime_factor",
+            "calculation_processing_lfm_packing_time",
+            "calculation_processing_lfm_packing_time_factor",
+            "_calculation_processing_lfm_expense",
+            "_calculation_processing_lfm_costs",
+
+            // ProcessingPerPieceCard
+            "calculation_processing_piece_hourly_rate",
+            "calculation_processing_piece_runtime",
+            "calculation_processing_piece_runtime_factor",
+            "calculation_processing_piece_packing_time",
+            "calculation_processing_piece_packing_time_factor",
+            "_calculation_processing_piece_expense",
+            "_calculation_processing_piece_costs",
         ];
     }
 }
