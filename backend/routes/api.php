@@ -3,6 +3,7 @@
 use App\Config\PermissionConstants;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\OfferController;
+use App\Http\Controllers\Api\OfferDrawingController;
 use App\Http\Controllers\Api\OfferRawMaterialCalculatedController;
 use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\RawMaterialController;
@@ -44,6 +45,10 @@ Route::middleware(['auth:api'])->group(function () {
         // Offer Raw Materials calculated
         Route::get('{id}/raw-materials-calculated', [OfferRawMaterialCalculatedController::class, 'index'])->middleware('check.permission:' . PermissionConstants::VIEW_OFFER_RAW_MATERIAL);
         Route::patch('{offerId}/raw-materials/{rawMaterialId}', [OfferRawMaterialCalculatedController::class, 'update'])->middleware('check.permission:' . PermissionConstants::UPDATE_OFFER_RAW_MATERIAL);;
+        Route::patch('{offerId}/raw-materials-demand/{rawMaterialId}', [OfferRawMaterialCalculatedController::class, 'updateDemand'])->middleware('check.permission:' . PermissionConstants::UPDATE_OFFER_RAW_MATERIAL);;
+        // Drawings
+        Route::get('{id}/drawing', [OfferDrawingController::class, 'show'])->middleware('check.permission:' . PermissionConstants::VIEW_DRAWERING);
+        Route::post('{id}/drawing', [OfferDrawingController::class, 'store'])->middleware('check.permission:' . PermissionConstants::CREATE_DRAWERING);
     });
 
     // Raw Materials

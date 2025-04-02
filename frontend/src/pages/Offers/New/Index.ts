@@ -25,13 +25,37 @@ export const HistoryCardInitialValues = {
 };
 
 export const RawMaterialPricesTableInitialValues = {
-  // Offers Table
   general_raw_material_price_total_overwritten: "",
   general_raw_material_purchase_discount: "",
-
-  // Raw Materials Table
 };
 
 export const initialValues = {
   general_comments: "",
+};
+
+// Calculation Tab
+const quantityFields = [
+  "calculation_quantityA",
+  "calculation_quantityB",
+  "calculation_quantityC",
+  "calculation_quantityD",
+  "calculation_quantityE",
+];
+
+// Initial empty values
+export const QuantityStepsCardInitialValues = Object.fromEntries(
+  quantityFields.map((field) => [field, ""])
+);
+
+// Map from offer
+export const mapOfferToQuantityStepsInitialValues = (offerDetails: any) =>
+  Object.fromEntries(
+    quantityFields.map((field) => [field, offerDetails?.[field] ?? ""])
+  );
+
+export const RawMaterialDemandCardInitialValues = {
+  calculation_rawmaterialA_absolute_demand: "",
+  calculation_rawmaterialB_absolute_demand: "",
+  calculation_rawmaterialC_absolute_demand: "",
+  calculation_rawmaterialD_absolute_demand: "",
 };

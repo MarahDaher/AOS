@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Offer;
+use App\Models\OfferCalculated;
 use App\Repositories\OfferRepository;
 use Illuminate\Support\Str;
 
@@ -15,9 +16,9 @@ class OfferService
         return $this->repository->getAllSummarized();
     }
 
-    public function getOfferById(int $id): Offer
+    public function getOfferById(int $id): OfferCalculated
     {
-        return $this->repository->getOfferById($id);
+        return OfferCalculated::with('createdByUser')->findOrFail($id);
     }
 
 
@@ -78,6 +79,13 @@ class OfferService
             'general_raw_material_purchase_discount',
             //
             'general_comments',
+
+            // Calculation
+            'calculation_quantityA',
+            'calculation_quantityB',
+            'calculation_quantityC',
+            'calculation_quantityD',
+            'calculation_quantityE',
         ];
     }
 }

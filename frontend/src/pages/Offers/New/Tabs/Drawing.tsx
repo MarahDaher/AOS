@@ -1,9 +1,14 @@
 import { FunctionComponent } from "react";
+import DrawingForm from "../FormSections/DrawingForm";
 
 interface DrawingTabProps {}
 
 const DrawingTab: FunctionComponent<DrawingTabProps> = () => {
-  return <>Drawing</>;
+  return (
+    <>
+      <DrawingForm />
+    </>
+  );
 };
 
 export default DrawingTab;

@@ -49,4 +49,18 @@ class OfferRawMaterialRepository
 
         return new OfferRawMaterialCalculatedResource($updated);
     }
+
+
+    public function updateRawMaterialDemand(array $data, int $offerId, int $rawMaterialId): OfferRawMaterialCalculatedResource
+    {
+        OfferRawMaterial::where('offer_id', $offerId)
+            ->where('raw_material_id', $rawMaterialId)
+            ->update($data);
+
+        $updated = OfferRawMaterialCalculated::where('offer_id', $offerId)
+            ->where('raw_material_id', $rawMaterialId)
+            ->first();
+
+        return new OfferRawMaterialCalculatedResource($updated);
+    }
 }

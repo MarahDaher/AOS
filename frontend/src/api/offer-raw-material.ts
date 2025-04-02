@@ -15,4 +15,16 @@ export class OfferRawMaterialCalculatedApi {
       data,
     });
   }
+
+  static async updateRawMaterialDemand(
+    offerId: number,
+    rawMaterialId: number,
+    data: any
+  ) {
+    return await handleRequest<any>({
+      method: "PATCH",
+      endpoint: `offers/${offerId}/raw-materials-demand/${rawMaterialId}`,
+      data,
+    });
+  }
 }

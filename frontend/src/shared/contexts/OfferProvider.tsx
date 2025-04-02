@@ -3,6 +3,8 @@ import { createContext, ReactNode, useContext, useState } from "react";
 type OfferContextType = {
   offerId: number | null;
   offerDetails: any;
+  drawingFile: File | null;
+  setDrawingFile: (file: File | null) => void;
   setOfferId: (id: number) => void;
   setOfferData: (data: any) => void;
   resetOffer: () => void;
@@ -13,6 +15,7 @@ const OfferContext = createContext<OfferContextType | undefined>(undefined);
 export const OfferProvider = ({ children }: { children: ReactNode }) => {
   const [offerId, setOfferId] = useState<number | null>(null);
   const [offerDetails, setOfferData] = useState<any>({});
+  const [drawingFile, setDrawingFile] = useState<File | null>(null);
 
   const resetOffer = () => {
     setOfferId(null);
@@ -21,7 +24,15 @@ export const OfferProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <OfferContext.Provider
-      value={{ offerId, offerDetails, setOfferData, setOfferId, resetOffer }}
+      value={{
+        offerId,
+        offerDetails,
+        drawingFile,
+        setDrawingFile,
+        setOfferData,
+        setOfferId,
+        resetOffer,
+      }}
     >
       {children}
     </OfferContext.Provider>

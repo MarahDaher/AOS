@@ -13,4 +13,9 @@ class OfferRawMaterialService
     {
         return $this->repository->updateRawMaterial($data, $offerId, $rawMaterialId);
     }
+
+    public function updateDemand(int $offerId, int $rawMaterialId, array $data): OfferRawMaterialCalculatedResource
+    {
+        return $this->repository->updateRawMaterialDemand($data, $offerId, $rawMaterialId);
+    }
 }
