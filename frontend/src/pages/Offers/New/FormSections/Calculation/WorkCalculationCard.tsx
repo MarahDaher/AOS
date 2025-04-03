@@ -9,6 +9,7 @@ import {
   mapWorkCalculationInitialValues,
   WorkCalculationInitialValues,
 } from "../../Index";
+import ProfileWeightTripleDisplay from "./ProfileWeightTripleDisplay";
 
 const rows = [
   [
@@ -22,7 +23,11 @@ const rows = [
       label: "Einstellmenge [m]",
       disabled: true,
     },
-    { name: "setup_time", label: "Einstellzeit [min]", disabled: true }, // calculated field
+    {
+      name: "_calculation_working_setup_time",
+      label: "Einstellzeit [min]",
+      disabled: true,
+    },
     {
       name: "calculation_working_annual_requirement_estimated",
       label: "Jahresbedarf (schätz) [m]",
@@ -67,11 +72,11 @@ const rows = [
       label: "Abweichung nach oben [%]",
     },
     {
-      name: "material_density",
+      name: "_calculation_working_density_total",
       label: "Rohstoffdichte [gr./cm³]",
       disabled: true,
-    }, // maybe from raw material?
-    { name: "profile_weight", label: "Profilgewicht [gr./m]", disabled: true }, // calculated
+    },
+    null,
     null,
   ],
   [
@@ -112,14 +117,9 @@ const WorkCalculationCard: FC = () => {
     <FormikProvider value={formik}>
       <CardBox label="Arbeiten">
         {rows.map((row, rowIndex) => (
-          <Grid
-            key={rowIndex}
-            container
-            spacing={isMdUp ? 2 : 1}
-            pt={rowIndex > 0 ? 2 : 0}
-          >
+          <Grid key={rowIndex} container spacing={1} pt={rowIndex > 0 ? 2 : 0}>
             {row.map((field, colIndex) => (
-              <Grid key={colIndex} size={{ xs: 2.3, md: 2 }} pb={1}>
+              <Grid key={colIndex} size={{ xs: 2.3, md: 2.3 }} pb={1}>
                 {field ? (
                   <FormInputSaveField
                     name={field.name}
@@ -127,6 +127,8 @@ const WorkCalculationCard: FC = () => {
                     disabled={field.disabled}
                     type="number"
                   />
+                ) : rowIndex === 2 && colIndex === 4 ? (
+                  <ProfileWeightTripleDisplay />
                 ) : null}
               </Grid>
             ))}

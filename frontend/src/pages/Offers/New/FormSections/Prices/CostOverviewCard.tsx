@@ -8,10 +8,18 @@ import { Box } from "@mui/material";
 // Left side fields (Kalkulationsmenge) - 3 columns per row (md=4)
 const kalkulationsmengeRows = [
   [
-    { name: "production_time", label: "Produktionszeit [h]", disabled: true },
+    {
+      name: "_pricing_production_time",
+      label: "Produktionszeit [h]",
+      disabled: true,
+    },
     null,
     null,
-    { name: "time_cost_total", label: "Zeitkosten gesamt [€]", disabled: true },
+    {
+      name: "_pricing_time_costs_for_calc_quantity",
+      label: "Zeitkosten gesamt [€]",
+      disabled: true,
+    },
   ],
   [
     {

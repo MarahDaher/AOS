@@ -135,8 +135,8 @@ export const mapAdditionalCostsInitialValues = (offerDetails: any) =>
 export const WorkCalculationFields = [
   "calculation_working_setup_quantity",
   "calculation_working_extrusion_speed",
-  "setup_length",
-  "setup_time",
+  "_calculation_working_setup_quantity_lfm",
+  "_calculation_working_setup_time",
   "calculation_working_annual_requirement_estimated",
 
   "calculation_working_tool_costs_total",
@@ -148,8 +148,10 @@ export const WorkCalculationFields = [
   "calculation_working_profile_cross_section",
   "calculation_working_profile_cross_section_deviation_lower",
   "calculation_working_profile_cross_section_deviation_upper",
-  "material_density",
-  "profile_weight",
+  "_calculation_working_density_total",
+  "_calculation_working_profile_weight_lowerborder",
+  "_calculation_working_profile_weight_average",
+  "_calculation_working_profile_weight_upperborder",
 
   "calculation_working_setup_quantity_additional",
   "calculation_working_hourly_rate",

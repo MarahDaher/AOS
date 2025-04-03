@@ -69,7 +69,14 @@ const FormInputSaveField: FunctionComponent<FormInputFieldProps> = ({
 
   return (
     <FormControl fullWidth variant="outlined">
-      <TextField {...configTextField} />
+      <TextField
+        {...configTextField}
+        sx={{
+          "& .MuiInputLabel-root. Mui-disabled": {
+            color: "black",
+          },
+        }}
+      />
     </FormControl>
   );
 };

@@ -2,6 +2,7 @@ import { FunctionComponent } from "react";
 import Grid from "@mui/material/Grid2";
 import DemandCard from "../FormSections/Prices/DemandCard";
 import CostOverviewCard from "../FormSections/Prices/CostOverviewCard";
+import FinalPriceContainer from "../FormSections/Prices/FinalPriceContainer";
 
 interface PricesTabProps {}
 
@@ -19,6 +20,13 @@ const PricesTab: FunctionComponent<PricesTabProps> = () => {
       <Grid container spacing={1}>
         <Grid size={{ xs: 12, md: 12 }}>
           <CostOverviewCard />
+        </Grid>
+      </Grid>
+
+      {/* Row 3 */}
+      <Grid container spacing={1}>
+        <Grid size={{ xs: 12, md: 12 }}>
+          <FinalPriceContainer />
         </Grid>
       </Grid>
     </>

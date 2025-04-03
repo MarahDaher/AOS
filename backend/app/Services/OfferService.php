@@ -121,10 +121,10 @@ class OfferService
             "_calculation_additional_single_print_lfm",
 
             // Working
-            "calculation_working_setup_quantity",
+            "calculation_working_setup_quantity_relative",
             "calculation_working_extrusion_speed",
             "_calculation_working_setup_quantity_lfm",
-            "setup_time",
+            "_calculation_working_setup_time",
             "calculation_working_annual_requirement_estimated",
 
             "calculation_working_tool_costs_total",
@@ -136,8 +136,10 @@ class OfferService
             "calculation_working_profile_cross_section",
             "calculation_working_profile_cross_section_deviation_lower",
             "calculation_working_profile_cross_section_deviation_upper",
-            "material_density",
-            "profile_weight",
+            "_calculation_working_density_total",
+            "_calculation_working_profile_weight_lowerborder",
+            "_calculation_working_profile_weight_average",
+            "_calculation_working_profile_weight_upperborder",
 
             "calculation_working_setup_quantity_additional",
             "calculation_working_hourly_rate",
@@ -146,6 +148,10 @@ class OfferService
             "calculation_working_commission",
             "calculation_working_profit",
             "calculation_working_discount",
+
+            //-----------------
+            "_pricing_production_time",
+            "_pricing_time_costs_for_calc_quantity"
         ];
     }
 }
