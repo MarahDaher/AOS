@@ -15,7 +15,7 @@ import { PlaylistAdd } from "@mui/icons-material";
 
 interface RawMaterialRowProps {
   row: RawMaterialRowType;
-  index: number;
+  index?: number;
   baseMaterials: BaseMaterial[];
   onChangeMaterial: (row: RawMaterialRowType, newMaterialId: number) => void;
   onUpdateField: (
@@ -36,7 +36,6 @@ interface RawMaterialRowProps {
 
 const RawMaterialRow = ({
   row,
-  index,
   baseMaterials,
   onChangeMaterial,
   onUpdateField,

@@ -16,9 +16,7 @@ interface FormValues {
 
 const RawMaterialDemandCard: FC = () => {
   const offerId = useOfferContext().offerId;
-  const { data, isLoading, updateRawMaterial, refetch } = useRawMaterials(
-    offerId!
-  );
+  const { data, updateRawMaterial, refetch } = useRawMaterials(offerId!);
   // Default 4 blank raw materials
   const defaultRawMaterials: OfferRawMaterialCalculatedModel[] = Array.from(
     { length: 4 },

@@ -19,9 +19,21 @@ use Illuminate\Support\Facades\Response;
 
 
 
-Route::get('/clear', function () {
-    Artisan::call('config:clear');
-    Artisan::call('route:clear');
-    Artisan::call('cache:clear');
-    return '✅ Laravel cache cleared';
-});
+// Route::get('/clear', function () {
+//     Artisan::call('config:clear');
+//     Artisan::call('route:clear');
+//     Artisan::call('cache:clear');
+
+//     Artisan::call('storage:link');
+//     $output11 = Artisan::output();
+
+//     // return '✅ Laravel cache cleared';
+
+//     Artisan::call('migrate:fresh', ['--force' => true]);
+//     $output1 = Artisan::output();
+
+//     Artisan::call('db:seed', ['--force' => true]);
+//     $output2 = Artisan::output();
+
+//     return nl2br("✅ Fresh migration complete!\n\n--- MIGRATE OUTPUT ---\n$output1\n\n--- SEED OUTPUT ---\n$output2");
+// });

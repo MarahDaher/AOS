@@ -53,7 +53,6 @@ const RawMaterialPrices = () => {
                 <RawMaterialRow
                   key={index}
                   row={row}
-                  index={index}
                   baseMaterials={baseMaterials}
                   onChangeMaterial={handleChangeMaterial}
                   onUpdateField={handleUpdateField}
