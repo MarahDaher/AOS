@@ -5,6 +5,7 @@ import CostOverviewCard from "../FormSections/Prices/CostOverviewCard";
 import FinalPriceContainer from "../FormSections/Prices/FinalPriceContainer";
 import TieredPriceCalculationCard from "../FormSections/Prices/TieredPriceCalculation/TieredPriceCalculationCard";
 import MachineUtilizationCard from "../FormSections/Prices/MachineUtilization/MachineUtilizationCard";
+import PieceLengthPricesCard from "../FormSections/Prices/PieceLengthPrices/PieceLengthPricesCard";
 
 interface PricesTabProps {}
 
@@ -43,6 +44,13 @@ const PricesTab: FunctionComponent<PricesTabProps> = () => {
       <Grid container spacing={1}>
         <Grid size={{ xs: 12, md: 12 }}>
           <MachineUtilizationCard />
+        </Grid>
+      </Grid>
+
+      {/* Row 6 */}
+      <Grid container spacing={1}>
+        <Grid size={{ xs: 12, md: 12 }}>
+          <PieceLengthPricesCard />
         </Grid>
       </Grid>
     </>
