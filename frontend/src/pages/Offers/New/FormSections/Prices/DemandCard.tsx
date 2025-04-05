@@ -9,14 +9,14 @@ const DemandCard: FC = () => {
       <Grid container spacing={5}>
         <Grid size={{ xs: 12, md: 2 }}>
           <FormInputSaveField
-            name="annual_demand_estimated"
+            name="calculation_working_annual_requirement_estimated"
             label="Jahresbedarf, geschätzt [m]"
             type="number"
           />
         </Grid>
         <Grid size={{ xs: 12, md: 2 }}>
           <FormInputSaveField
-            name="annual_revenue_estimated"
+            name="_pricing_requirement_annual_sales"
             label="Jahresumsatz, geschätzt [€]"
             type="number"
           />

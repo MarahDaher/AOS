@@ -2,7 +2,7 @@ import CalculationSummary from "./CalculationSummary";
 import TieredPriceTable from "./TieredPriceTable";
 import Grid from "@mui/material/Grid2";
 import CardBox from "@components/CardBox";
-
+import TieredPriceInklTable from "./TieredPriceInklTable";
 interface Props {
   data: {
     calculation: Record<string, number>;
@@ -13,11 +13,13 @@ interface Props {
       staffel_stk: number;
       stueck: number;
     }[];
+    StaffelpreiseInkl: any;
+    StaffelPricedata: any;
   };
 }
 
 export default function FinalPriceView({ data }: Props) {
-  const { calculation, staffelpreise } = data;
+  const { calculation, staffelpreise, StaffelpreiseInkl } = data;
 
   return (
     <CardBox label="Endpreise">
@@ -35,9 +37,9 @@ export default function FinalPriceView({ data }: Props) {
         </Grid>
 
         <Grid size={{ xs: 12, md: 4 }}>
-          <TieredPriceTable
+          <TieredPriceInklTable
             title="Staffelpreise inkl. Konfektion"
-            data={staffelpreise}
+            data={StaffelpreiseInkl}
           />
         </Grid>
       </Grid>

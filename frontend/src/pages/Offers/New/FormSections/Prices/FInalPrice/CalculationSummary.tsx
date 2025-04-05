@@ -5,18 +5,18 @@ interface Props {
 }
 
 const LABELS: Record<string, string> = {
-  zeitkosten: "Zeitkosten",
-  rohstoffpreis: "Rohstoffpreis",
-  ruestzeit: "Rüstzeit",
-  verpackung: "Verpackung",
-  transport: "Transport",
-  druck: "Druck",
-  konfektion1: "Konfektion 1",
-  konfektion2: "Konfektion 2",
+  _pricing_costs_calc_time_costs_quantity: "Zeitkosten",
+  _pricing_costs_calc_raw_material_price_total: "Rohstoffpreis",
+  _calculation_additional_setup_costs_total: "Rüstzeit",
+  _pricing_endprices_calc_packing_costs: "Verpackung",
+  _pricing_endprices_calc_transport_costs: "Transport",
+  _pricing_endprices_calc_print_costs: "Druck",
+  _pricing_endprices_calc_confection_lfm_costs: "Konfektion / m",
+  _pricing_endprices_calc_confection_stk_costs: "Konfektion / Stk",
   zusatz: "Zusatz",
-  provision: "Provision",
-  gewinn: "Gewinn",
-  zahlungsziel: "Zahlungsziel",
+  calculation_working_commission: "Provision",
+  calculation_working_profit: "Gewinn",
+  calculation_working_discount: "Zahlungsziel",
 };
 
 export default function CalculationSummary({ calculation }: Props) {
@@ -37,7 +37,7 @@ export default function CalculationSummary({ calculation }: Props) {
       <Box mt={2} display="flex" justifyContent="space-between">
         <Typography fontWeight="bold">Summe:</Typography>
         <Typography fontWeight="bold">
-          {calculation.summe.toFixed(2)} €
+          {calculation._pricing_endprices_calc_sum.toFixed(2)} €
         </Typography>
       </Box>
     </>

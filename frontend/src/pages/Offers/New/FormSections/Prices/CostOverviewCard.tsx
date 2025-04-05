@@ -9,32 +9,36 @@ import { Box } from "@mui/material";
 const kalkulationsmengeRows = [
   [
     {
-      name: "_pricing_production_time",
+      name: "_pricing_costs_calc_production_time",
       label: "Produktionszeit [h]",
       disabled: true,
     },
     null,
     null,
     {
-      name: "_pricing_time_costs_for_calc_quantity",
+      name: "_pricing_costs_calc_time_costs_quantity",
       label: "Zeitkosten gesamt [€]",
       disabled: true,
     },
   ],
   [
     {
-      name: "raw_material_weight",
+      name: "_pricing_costs_calc_raw_material_quantity",
       label: "Rohstoffmenge [kg]",
       disabled: true,
     },
-    { name: "setup_weight", label: "Einstellmenge [kg]", disabled: true },
     {
-      name: "raw_material_weight_total",
+      name: "_pricing_costs_calc_raw_material_setup_quantity",
+      label: "Einstellmenge [kg]",
+      disabled: true,
+    },
+    {
+      name: "_pricing_costs_calc_raw_material_quantity_total",
       label: "Rohstoffmenge gesamt [kg]",
       disabled: true,
     },
     {
-      name: "raw_material_price_total",
+      name: "_pricing_costs_calc_raw_material_price_total",
       label: "Rohstoffpreis gesamt [€]",
       disabled: true,
     },
@@ -42,7 +46,7 @@ const kalkulationsmengeRows = [
   [null, null, null],
   [
     {
-      name: "additional_price_per_meter",
+      name: "_pricing_costs_calc_price_additional_lfm",
       label: "Zusatzpreis / m [€]",
       disabled: true,
     },
@@ -53,15 +57,27 @@ const kalkulationsmengeRows = [
 
 // Right side fields (Jahresmenge)
 const jahresmengeRows = [
-  [{ name: "time_usage", label: "Zeiteinsatz [€]", disabled: true }],
   [
     {
-      name: "raw_material_usage",
+      name: "_pricing_costs_yearly_time_costs_quantity",
+      label: "Zeiteinsatz [€]",
+      disabled: true,
+    },
+  ],
+  [
+    {
+      name: "_pricing_costs_yearly_raw_material_quantity",
       label: "Rohstoffeinsatz [€]",
       disabled: true,
     },
   ],
-  [{ name: "fixed_costs", label: "Fixkosten [€]", disabled: true }],
+  [
+    {
+      name: "_pricing_costs_yearly_fixcosts",
+      label: "Fixkosten [€]",
+      disabled: true,
+    },
+  ],
 ];
 
 const CostOverviewCard: FC = () => {
