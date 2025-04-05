@@ -4,8 +4,8 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Typography,
-  Box,
+  TableContainer,
+  Paper,
 } from "@mui/material";
 
 export interface PieceLengthPriceRow {
@@ -23,15 +23,7 @@ interface Props {
 
 export default function PieceLengthPricesTable({ data }: Props) {
   return (
-    <Box>
-      <Typography
-        variant="subtitle1"
-        fontWeight="bold"
-        textAlign="center"
-        mb={2}
-      >
-        Stück-Längen-Preise
-      </Typography>
+    <TableContainer component={Paper}>
       <Table
         size="small"
         sx={{
@@ -62,6 +54,6 @@ export default function PieceLengthPricesTable({ data }: Props) {
           ))}
         </TableBody>
       </Table>
-    </Box>
+    </TableContainer>
   );
 }

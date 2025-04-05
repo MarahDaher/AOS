@@ -26,7 +26,7 @@ export default function CalculationSummary({ calculation }: Props) {
         Kalkulationsmenge
       </Typography>
       {Object.entries(calculation).map(([key, value]) =>
-        key !== "summe" ? (
+        key !== "_pricing_endprices_calc_sum" ? (
           <Box display="flex" justifyContent="space-between" key={key} py={1}>
             <Typography>{LABELS[key] || key}:</Typography>
             <Typography>{value.toFixed(2)} €</Typography>

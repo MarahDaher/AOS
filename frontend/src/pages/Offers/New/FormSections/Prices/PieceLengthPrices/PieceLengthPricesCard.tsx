@@ -8,7 +8,7 @@ const PieceLengthPricesCard = () => {
 
   return (
     <>
-      <CardBox label="Maschinenauslastung">
+      <CardBox label="Stück-Längen-Preise">
         <Grid container spacing={5}>
           <Grid size={{ xs: 12, md: 8 }}>
             <PieceLengthPricesTable data={pieceLengthData} />

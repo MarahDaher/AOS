@@ -16,6 +16,9 @@ body {
   min-height: 100vh;
 }
 
+main{
+  width: -webkit-fill-available;
+}
 
 button {
   border-radius: 8px;
