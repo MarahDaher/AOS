@@ -3,11 +3,16 @@ import Grid from "@mui/material/Grid2";
 import MachineUtilizationTable from "./MachineUtilizationTable";
 import { FormikProvider, useFormik } from "formik";
 import FormInputSaveField from "@components/FormInputSaveField";
-import { machineUtilizationMock, mapMachineUtilizationData } from ".";
 import { Box } from "@mui/material";
+import { useOfferContext } from "@contexts/OfferProvider";
+import { mapMachineUtilizationData } from ".";
 
 const MachineUtilizationCard = () => {
-  const { rows } = mapMachineUtilizationData(machineUtilizationMock);
+  const { offerDetails } = useOfferContext();
+
+  const mappedData = offerDetails
+    ? mapMachineUtilizationData(offerDetails).rows
+    : [];
 
   const formik = useFormik({
     initialValues: {
@@ -21,7 +26,7 @@ const MachineUtilizationCard = () => {
       <CardBox label="Maschinenauslastung">
         <Grid container spacing={5}>
           <Grid size={{ xs: 12, md: 8 }}>
-            <MachineUtilizationTable data={rows} />
+            <MachineUtilizationTable data={mappedData} />
           </Grid>
           <Grid size={{ xs: 12, md: 2 }}></Grid>
           <Grid size={{ xs: 12, md: 2 }}>

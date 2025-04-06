@@ -60,8 +60,8 @@ export default function TieredPriceInklTable({ title, data }: Props) {
           {mappedData.map((row, idx) => (
             <TableRow key={idx}>
               <TableCell>{row.staffel}</TableCell>
-              <TableCell>{row.staffel_m.toFixed(2)} €</TableCell>
-              <TableCell>{row.staffel_stk.toFixed(2)} €</TableCell>
+              <TableCell>{(row.staffel_m ?? 0).toFixed(2)} €</TableCell>
+              <TableCell>{(row.staffel_stk ?? 0).toFixed(2)} €</TableCell>
             </TableRow>
           ))}
         </TableBody>

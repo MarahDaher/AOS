@@ -10,10 +10,12 @@ return new class extends Migration {
     {
         Schema::create('offer_drawings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('offer_id')->constrained('offers')->onDelete('cascade');
+            $table->unsignedBigInteger('offer_id');
             $table->string('filename', 63);
-            $table->string('url', 63);
             $table->dateTime('upload_date')->default(DB::raw('CURRENT_TIMESTAMP'));
+
+            // Index
+            $table->foreign('offer_id')->references('id')->on('offers');
         });
     }
 

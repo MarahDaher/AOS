@@ -96,11 +96,11 @@ const finalPriceMock = {
     {
       staffel: "B",
       _pricing_graduated_calculation_quantityB: 1000, //merge
-      pricing_graduated_calculation_quantityB_addition_to_hourlyrate: 2, // Aufschlag
+      pricing_grad_qtyB_add_hourlyrate: 2, // Aufschlag
       _pricing_graduated_calculation_hourly_rate_quantityB: 60, // Stundensatz
       pricing_graduated_calculation_timescosts_relative_quantityB: 40, // Zeitkostenanteil
-      pricing_graduated_calculation_quantityB_addition_to_setup_costs: 126, // Rüstkosten
-      pricing_graduated_calculation_quantityB_addition_to_transport_costs: 100, // Transport
+      pricing_grad_qtyB_add_setupcosts: 126, // Rüstkosten
+      pricing_grad_qtyB_add_transport: 100, // Transport
       pricing_graduated_calculation_productiontime_quantityB: 8.2, // Produktionszeit
       pricing_graduated_calculation_rawmaterialquantity_quantityB: 344.52, // Rohstoffmenge
       pricing_graduated_calculation_subtotal_quantityB: 1213.97, // Zwischensumme
@@ -109,11 +109,11 @@ const finalPriceMock = {
     {
       staffel: "C",
       _pricing_graduated_calculation_quantityC: 2500, //merge
-      pricing_graduated_calculation_quantityC_addition_to_hourlyrate: 2, // Aufschlag
+      pricing_grad_qtyC_add_hourlyrate: 2, // Aufschlag
       _pricing_graduated_calculation_hourly_rate_quantityC: 60, // Stundensatz
       pricing_graduated_calculation_timescosts_relative_quantityC: 40, // Zeitkostenanteil
-      pricing_graduated_calculation_quantityC_addition_to_setup_costs: 126, // Rüstkosten
-      pricing_graduated_calculation_quantityC_addition_to_transport_costs: 100, // Transport
+      pricing_grad_qtyC_add_setupcosts: 126, // Rüstkosten
+      pricing_grad_qtyC_add_transport: 100, // Transport
       pricing_graduated_calculation_productiontime_quantityC: 8.2, // Produktionszeit
       pricing_graduated_calculation_rawmaterialquantity_quantityC: 344.52, // Rohstoffmenge
       pricing_graduated_calculation_subtotal_quantityC: 1213.97, // Zwischensumme
@@ -121,11 +121,11 @@ const finalPriceMock = {
     },
     {
       staffel: "D",
-      pricing_graduated_calculation_quantityD_addition_to_hourlyrate: 0, // Aufschlag
+      pricing_grad_qtyD_add_hourlyrate: 0, // Aufschlag
       _pricing_graduated_calculation_hourly_rate_quantityD: 60, // Stundensatz
       pricing_graduated_calculation_timescosts_relative_quantityD: 40, // Zeitkostenanteil
-      pricing_graduated_calculation_quantityD_addition_to_setup_costs: 126, // Rüstkosten
-      pricing_graduated_calculation_quantityD_addition_to_transport_costs: 100, // Transport
+      pricing_grad_qtyD_add_setupcosts: 126, // Rüstkosten
+      pricing_grad_qtyD_add_transport: 100, // Transport
       pricing_graduated_calculation_productiontime_quantityD: 8.2, // Produktionszeit
       pricing_graduated_calculation_rawmaterialquantity_quantityD: 344.52, // Rohstoffmenge
       pricing_graduated_calculation_subtotal_quantityD: 1213.97, // Zwischensumme
@@ -133,11 +133,11 @@ const finalPriceMock = {
     },
     {
       staffel: "E",
-      pricing_graduated_calculation_quantityE_addition_to_hourlyrate: 0, // Aufschlag
+      pricing_grad_qtyE_add_hourlyrate: 0, // Aufschlag
       _pricing_graduated_calculation_hourly_rate_quantityE: 60, // Stundensatz
       pricing_graduated_calculation_timescosts_relative_quantityE: 40, // Zeitkostenanteil
-      pricing_graduated_calculation_quantityE_addition_to_setup_costs: 126, // Rüstkosten
-      pricing_graduated_calculation_quantityE_addition_to_transport_costs: 100, // Transport
+      pricing_grad_qtyE_add_setupcosts: 126, // Rüstkosten
+      pricing_grad_qtyE_add_transport: 100, // Transport
       pricing_graduated_calculation_productiontime_quantityE: 8.2, // Produktionszeit
       pricing_graduated_calculation_rawmaterialquantity_quantityE: 344.52, // Rohstoffmenge
       pricing_graduated_calculation_subtotal_quantityE: 1213.97, // Zwischensumme

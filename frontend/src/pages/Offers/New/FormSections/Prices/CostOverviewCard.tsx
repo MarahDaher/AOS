@@ -4,6 +4,8 @@ import Grid from "@mui/material/Grid2";
 import Typography from "@mui/material/Typography";
 import FormInputSaveField from "@components/FormInputSaveField";
 import { Box, useMediaQuery, useTheme } from "@mui/material";
+import { FormikProvider, useFormik } from "formik";
+import { useOfferContext } from "@contexts/OfferProvider";
 
 // Left side fields (Kalkulationsmenge)
 const kalkulationsmengeRows = [
@@ -81,115 +83,134 @@ const jahresmengeRows = [
 ];
 
 const CostOverviewCard: FC = () => {
+  const { offerDetails } = useOfferContext();
   const theme = useTheme();
   const isMdDown = useMediaQuery(theme.breakpoints.down("md"));
 
+  const formik = useFormik({
+    initialValues: {
+      _pricing_costs_calc_production_time: "",
+      _pricing_costs_calc_time_costs_quantity: "",
+      _pricing_costs_calc_raw_material_quantity: "",
+      _pricing_costs_calc_raw_material_setup_quantity: "",
+      _pricing_costs_calc_raw_material_quantity_total: "",
+      _pricing_costs_calc_raw_material_price_total: "",
+      _pricing_costs_calc_price_additional_lfm: "",
+      _pricing_costs_yearly_time_costs_quantity: "",
+      _pricing_costs_yearly_raw_material_quantity: "",
+      _pricing_costs_yearly_fixcosts: "",
+      ...(offerDetails ? { ...offerDetails } : {}),
+    },
+    enableReinitialize: true,
+    onSubmit: () => {},
+  });
+
   return (
-    <CardBox label="Kosten">
-      <Grid container spacing={8}>
-        {/* Left Column (Kalkulationsmenge) */}
-        <Grid size={{ xs: 12, md: 8 }}>
-          <Typography
-            variant="subtitle1"
-            fontWeight="bold"
-            textAlign="center"
-            mb={4}
-          >
-            Kalkulationsmenge
-          </Typography>
+    <FormikProvider value={formik}>
+      <CardBox label="Kosten">
+        <Grid container spacing={8}>
+          {/* Left Column (Kalkulationsmenge) */}
+          <Grid size={{ xs: 12, md: 8 }}>
+            <Typography
+              variant="subtitle1"
+              fontWeight="bold"
+              textAlign="center"
+              mb={4}
+            >
+              Kalkulationsmenge
+            </Typography>
 
-          {kalkulationsmengeRows.map((row, rowIndex) => {
-            const isEmptyRow = row.every((field) => field === null);
+            {kalkulationsmengeRows.map((row, rowIndex) => {
+              const isEmptyRow = row.every((field) => field === null);
 
-            if (isMdDown) {
-              // ✅ On mobile / tablet, flatten all fields without gaps
+              if (isMdDown) {
+                return (
+                  <Grid container spacing={2} key={rowIndex}>
+                    {row
+                      .filter((field) => field !== null)
+                      .map((field, colIndex) => (
+                        <Grid size={12} key={colIndex}>
+                          <Box mb={2}>
+                            <FormInputSaveField
+                              name={field!.name}
+                              label={field!.label}
+                              type="number"
+                              disabled={field!.disabled}
+                            />
+                          </Box>
+                        </Grid>
+                      ))}
+                  </Grid>
+                );
+              }
+
               return (
-                <Grid container spacing={2} key={rowIndex}>
-                  {row
-                    .filter((field) => field !== null)
-                    .map((field, colIndex) => (
-                      <Grid size={12} key={colIndex}>
-                        <Box mb={2}>
+                <Grid
+                  container
+                  spacing={8}
+                  pt={rowIndex > 0 ? 1 : 0}
+                  key={rowIndex}
+                >
+                  {isEmptyRow ? (
+                    <Grid size={12}>
+                      <Box sx={{ height: 50 }} />
+                    </Grid>
+                  ) : (
+                    row.map((field, colIndex) => (
+                      <Grid key={colIndex} size={{ xs: 12, md: 3 }}>
+                        {field ? (
                           <FormInputSaveField
-                            name={field!.name}
-                            label={field!.label}
+                            name={field.name}
+                            label={field.label}
                             type="number"
-                            disabled={field!.disabled}
+                            disabled={field.disabled}
                           />
-                        </Box>
+                        ) : null}
                       </Grid>
-                    ))}
+                    ))
+                  )}
                 </Grid>
               );
-            }
+            })}
+          </Grid>
 
-            // 🖥 Desktop view (3 fields per row)
-            return (
+          {/* Right Column (Jahresmenge) */}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <Typography
+              variant="subtitle1"
+              fontWeight="bold"
+              textAlign="center"
+              mb={4}
+            >
+              Jahresmenge
+            </Typography>
+
+            {jahresmengeRows.map((row, rowIndex) => (
               <Grid
                 container
                 spacing={8}
                 pt={rowIndex > 0 ? 1 : 0}
                 key={rowIndex}
+                justifyContent="center"
               >
-                {isEmptyRow ? (
-                  <Grid size={12}>
-                    <Box sx={{ height: 50 }} />
+                {row.map((field, colIndex) => (
+                  <Grid size={isMdDown ? 12 : 5} key={colIndex}>
+                    <Box mb={isMdDown ? 2 : 0}>
+                      <FormInputSaveField
+                        name={field.name}
+                        label={field.label}
+                        type="number"
+                        disabled={field.disabled}
+                      />
+                    </Box>
                   </Grid>
-                ) : (
-                  row.map((field, colIndex) => (
-                    <Grid key={colIndex} size={{ xs: 12, md: 3 }}>
-                      {field ? (
-                        <FormInputSaveField
-                          name={field.name}
-                          label={field.label}
-                          type="number"
-                          disabled={field.disabled}
-                        />
-                      ) : null}
-                    </Grid>
-                  ))
-                )}
+                ))}
               </Grid>
-            );
-          })}
+            ))}
+          </Grid>
         </Grid>
-
-        {/* Right Column (Jahresmenge) */}
-        <Grid size={{ xs: 12, md: 4 }}>
-          <Typography
-            variant="subtitle1"
-            fontWeight="bold"
-            textAlign="center"
-            mb={4}
-          >
-            Jahresmenge
-          </Typography>
-
-          {jahresmengeRows.map((row, rowIndex) => (
-            <Grid
-              container
-              spacing={8}
-              pt={rowIndex > 0 ? 1 : 0}
-              key={rowIndex}
-              justifyContent="center"
-            >
-              {row.map((field, colIndex) => (
-                <Grid size={isMdDown ? 12 : 5} key={colIndex}>
-                  <Box mb={isMdDown ? 2 : 0}>
-                    <FormInputSaveField
-                      name={field.name}
-                      label={field.label}
-                      type="number"
-                      disabled={field.disabled}
-                    />
-                  </Box>
-                </Grid>
-              ))}
-            </Grid>
-          ))}
-        </Grid>
-      </Grid>
-    </CardBox>
+      </CardBox>
+    </FormikProvider>
   );
 };
 

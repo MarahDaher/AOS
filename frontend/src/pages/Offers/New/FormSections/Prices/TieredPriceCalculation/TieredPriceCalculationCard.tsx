@@ -1,15 +1,17 @@
 import CardBox from "@components/CardBox";
 import Grid from "@mui/material/Grid2";
 import TieredPriceCalculationTable from "./TieredPriceCalculationTable";
-import finalPriceMock from "../FInalPrice/finalPriceData";
-import { mapStaffelPricedata } from ".";
 import { FormikProvider, useFormik } from "formik";
 import FormInputSaveField from "@components/FormInputSaveField";
+import { useOfferContext } from "@contexts/OfferProvider";
+import { mapStaffelPricedataFromOffer } from ".";
 
 const TieredPriceCalculationCard = () => {
-  const { StaffelPricedata } = finalPriceMock;
+  const { offerDetails } = useOfferContext();
 
-  const mappedData = mapStaffelPricedata(StaffelPricedata);
+  const mappedData = offerDetails
+    ? mapStaffelPricedataFromOffer(offerDetails)
+    : [];
 
   const formik = useFormik({
     initialValues: {

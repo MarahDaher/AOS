@@ -11,6 +11,8 @@ class RawMaterial extends Model
 
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $fillable = ['name', 'type', 'density', 'price', 'price_date'];
 
     protected $casts = [

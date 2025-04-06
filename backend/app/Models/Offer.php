@@ -9,8 +9,10 @@ class Offer extends Model
 {
     use HasFactory;
 
+    public $timestamps = false; // ✅ لازم لأنه مافي created_at ولا updated_at
+
     protected $fillable = [
-        // General Info
+        // 🧹 General Info
         'general_status',
         'general_offer_number',
         'general_profile_description',
@@ -27,19 +29,19 @@ class Offer extends Model
         'general_customer_article_number',
         'general_request_date',
         'general_request_number',
-
+        'general_profile_crosssection',
         'general_raw_material_price_total_overwritten',
         'general_raw_material_purchase_discount',
         'general_comments',
 
-        // Quantities
+        // 🧹 Quantities
         'calculation_quantityA',
         'calculation_quantityB',
         'calculation_quantityC',
         'calculation_quantityD',
         'calculation_quantityE',
 
-        // Processing
+        // 🧹 Processing
         'calculation_processing_lfm_hourly_rate',
         'calculation_processing_piece_hourly_rate',
         'calculation_processing_lfm_runtime',
@@ -51,7 +53,7 @@ class Offer extends Model
         'calculation_processing_lfm_packing_time_factor',
         'calculation_processing_piece_packing_time_factor',
 
-        // Additional
+        // 🧹 Additional
         'calculation_additional_setup_time',
         'calculation_additional_hourly_rate',
         'calculation_additional_transport_costs_total',
@@ -61,8 +63,8 @@ class Offer extends Model
         'calculation_additional_single_print',
         'calculation_additional_single_print_price',
 
-        // Working
-        'calculation_working_setup_quantity',
+        // 🧹 Working
+        'calculation_working_setup_quantity_relative',
         'calculation_working_extrusion_speed',
         'calculation_working_annual_requirement_estimated',
         'calculation_working_tool_costs_total',
@@ -72,15 +74,33 @@ class Offer extends Model
         'calculation_working_profile_cross_section',
         'calculation_working_profile_cross_section_deviation_lower',
         'calculation_working_profile_cross_section_deviation_upper',
-        'calculation_working_setup_quantity_additional',
+        'calculation_working_setup_quantity_total',
         'calculation_working_hourly_rate',
         'calculation_working_additional_costs',
         'calculation_working_commission',
         'calculation_working_profit',
         'calculation_working_discount',
 
-        // Pricing
+        // 🧹 Pricing
         'pricing_annual_requirement',
+        'pricing_graduated_calculation_additional_setup_quantity',
+
+        'pricing_grad_qtyB_add_hourlyrate',
+        'pricing_grad_qtyC_add_hourlyrate',
+        'pricing_grad_qtyD_add_hourlyrate',
+        'pricing_grad_qtyE_add_hourlyrate',
+
+        'pricing_grad_qtyB_add_setupcosts',
+        'pricing_grad_qtyC_add_setupcosts',
+        'pricing_grad_qtyD_add_setupcosts',
+        'pricing_grad_qtyE_add_setupcosts',
+
+        'pricing_grad_qtyB_add_transport',
+        'pricing_grad_qtyC_add_transport',
+        'pricing_grad_qtyD_add_transport',
+        'pricing_grad_qtyE_add_transport',
+
+        'pricing_machine_utilization_annual_machine_capacity',
     ];
 
     protected $casts = [

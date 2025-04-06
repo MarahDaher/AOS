@@ -14,7 +14,6 @@ return new class extends Migration {
             $table->float('density')->default(0);
             $table->float('price')->nullable();
             $table->date('price_date')->nullable();
-            $table->timestamps();
         });
     }
 

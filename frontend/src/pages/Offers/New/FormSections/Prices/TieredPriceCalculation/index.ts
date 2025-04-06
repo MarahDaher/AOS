@@ -1,42 +1,34 @@
 import { StaffelPriceRow } from "@interfaces/StaffelPriceRow.model";
 
-export const mapStaffelPricedata = (rawData: any[]): StaffelPriceRow[] => {
-  return rawData.map((item) => {
-    const match = item.staffel.match(/[A-E]/);
-    const suffix = match ? match[0] : "";
+export const mapStaffelPricedataFromOffer = (offer: any): StaffelPriceRow[] => {
+  const staffels = ["A", "B", "C", "D", "E"];
 
-    const isA = suffix === "A"; // Important check if Staffel is "A"
+  return staffels.map((suffix) => {
+    const isA = suffix === "A";
 
     return {
-      staffel: item.staffel,
-      menge: item[`_pricing_graduated_calculation_quantity${suffix}`],
-      hourlyRateAddition:
-        item[
-          `pricing_graduated_calculation_quantity${suffix}_addition_to_hourlyrate`
-        ],
+      staffel: suffix,
+      menge: offer[`_pricing_graduated_calculation_quantity${suffix}`],
+      hourlyRateAddition: offer[`pricing_grad_qty${suffix}_add_hourlyrate`],
       hourlyRate: isA
-        ? item[`calculation_working_hourly_rate`] // For A
-        : item[`_pricing_graduated_calculation_hourly_rate_quantity${suffix}`], // For B, C, D, E
+        ? offer[`calculation_working_hourly_rate`]
+        : offer[`_pricing_graduated_calculation_hourly_rate_quantity${suffix}`],
       timeCostShare:
-        item[
-          `pricing_graduated_calculation_timescosts_relative_quantity${suffix}`
+        offer[
+          `_pricing_graduated_calculation_timecosts_relative_quantity${suffix}`
         ],
-      setupCosts:
-        item[
-          `pricing_graduated_calculation_quantity${suffix}_addition_to_setup_costs`
-        ],
-      transport:
-        item[
-          `pricing_graduated_calculation_quantity${suffix}_addition_to_transport_costs`
-        ],
+      setupCosts: offer[`pricing_grad_qty${suffix}_add_setupcosts`],
+      transport: offer[`pricing_grad_qty${suffix}_add_transport`],
       productionTime:
-        item[`pricing_graduated_calculation_productiontime_quantity${suffix}`],
+        offer[
+          `_pricing_graduated_calculation_productiontime_quantity${suffix}`
+        ],
       rawMaterialQuantity:
-        item[
-          `pricing_graduated_calculation_rawmaterialquantity_quantity${suffix}`
+        offer[
+          `_pricing_graduated_calculation_rawmaterialquantity_quantity${suffix}`
         ],
       subtotal:
-        item[`pricing_graduated_calculation_subtotal_quantity${suffix}`],
+        offer[`_pricing_graduated_calculation_subtotal_quantity${suffix}`],
     };
   });
 };

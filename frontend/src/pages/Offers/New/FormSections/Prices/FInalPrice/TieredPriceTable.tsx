@@ -74,10 +74,12 @@ export default function TieredPriceTable({
           {mappedData.map((row, idx) => (
             <TableRow key={idx}>
               <TableCell>{row.staffel}</TableCell>
-              {showFull && <TableCell>{row.menge?.toLocaleString()}</TableCell>}
-              <TableCell>{row.staffel_m.toFixed(2)} €</TableCell>
-              <TableCell>{row.staffel_stk.toFixed(2)} €</TableCell>
-              {showFull && <TableCell>{row.stueck}</TableCell>}
+              {showFull && (
+                <TableCell>{row.menge?.toLocaleString() ?? "-"}</TableCell>
+              )}
+              <TableCell>{(row.staffel_m ?? 0).toFixed(2)} €</TableCell>
+              <TableCell>{(row.staffel_stk ?? 0).toFixed(2)} €</TableCell>
+              {showFull && <TableCell>{row.stueck ?? "-"}</TableCell>}
             </TableRow>
           ))}
         </TableBody>

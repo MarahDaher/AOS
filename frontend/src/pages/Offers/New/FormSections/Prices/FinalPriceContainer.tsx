@@ -1,22 +1,13 @@
-import { useQuery } from "@tanstack/react-query";
-import finalPriceMock from "./FInalPrice/finalPriceData";
+import { useOfferContext } from "@contexts/OfferProvider";
 import FinalPriceView from "./FInalPrice/FinalPriceView";
-
-const fetchFinalPrice = async (): Promise<any> => {
-  // Simulate API
-  return new Promise((resolve) =>
-    setTimeout(() => resolve(finalPriceMock), 300)
-  );
-};
+import { mapOfferDetailsToFinalPriceData } from "./FInalPrice";
 
 export default function FinalPriceContainer() {
-  const { data, isLoading, error } = useQuery<any>({
-    queryKey: ["final-price"],
-    queryFn: fetchFinalPrice,
-  });
+  const { offerDetails } = useOfferContext();
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error || !data) return <p>Error loading data</p>;
+  if (!offerDetails) return <p>Loading...</p>;
 
-  return <FinalPriceView data={data} />;
+  const finalPriceData = mapOfferDetailsToFinalPriceData(offerDetails);
+
+  return <FinalPriceView data={finalPriceData} />;
 }

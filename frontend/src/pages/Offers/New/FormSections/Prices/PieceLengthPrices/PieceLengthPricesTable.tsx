@@ -45,11 +45,21 @@ export default function PieceLengthPricesTable({ data }: Props) {
           {data.map((row, idx) => (
             <TableRow key={idx}>
               <TableCell>{row.menge.toLocaleString()}m</TableCell>
-              <TableCell>{row.staffelM?.toFixed(2)} €</TableCell>
-              <TableCell>{row.length625mm?.toFixed(2)} € / stk</TableCell>
-              <TableCell>{row.length1000mm?.toFixed(2)} € / stk</TableCell>
-              <TableCell>{row.length1250mm?.toFixed(2)} € / stk</TableCell>
-              <TableCell>{row.length1333mm?.toFixed(2)} € / stk</TableCell>
+              <TableCell>
+                {row.staffelM ? row.staffelM.toFixed(2) : "-"} €
+              </TableCell>
+              <TableCell>
+                {row.length625mm ? row.length625mm.toFixed(2) : "-"} € / stk
+              </TableCell>
+              <TableCell>
+                {row.length1000mm ? row.length1000mm.toFixed(2) : "-"} € / stk
+              </TableCell>
+              <TableCell>
+                {row.length1250mm ? row.length1250mm.toFixed(2) : "-"} € / stk
+              </TableCell>
+              <TableCell>
+                {row.length1333mm ? row.length1333mm.toFixed(2) : "-"} € / stk
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

@@ -1,11 +1,15 @@
 import CardBox from "@components/CardBox";
 import Grid from "@mui/material/Grid2";
 import PieceLengthPricesTable from "./PieceLengthPricesTable";
-import pieceLengthPricesMock, { mapPieceLengthPrices } from ".";
+import { useOfferContext } from "@contexts/OfferProvider";
+import { mapPieceLengthPricesFromOffer } from ".";
 
 const PieceLengthPricesCard = () => {
-  const pieceLengthData = mapPieceLengthPrices(pieceLengthPricesMock);
+  const { offerDetails } = useOfferContext();
 
+  const pieceLengthData = offerDetails
+    ? mapPieceLengthPricesFromOffer(offerDetails)
+    : [];
   return (
     <>
       <CardBox label="Stück-Längen-Preise">

@@ -5,18 +5,7 @@ import CardBox from "@components/CardBox";
 import TieredPriceInklTable from "./TieredPriceInklTable";
 import { useMediaQuery, useTheme } from "@mui/material";
 interface Props {
-  data: {
-    calculation: Record<string, number>;
-    staffelpreise: {
-      staffel: string;
-      menge: number;
-      staffel_m: number;
-      staffel_stk: number;
-      stueck: number;
-    }[];
-    StaffelpreiseInkl: any;
-    StaffelPricedata: any;
-  };
+  data: any;
 }
 
 export default function FinalPriceView({ data }: Props) {

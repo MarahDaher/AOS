@@ -8,17 +8,8 @@ import {
   Paper,
 } from "@mui/material";
 
-interface MachineUtilizationRow {
-  label: string;
-  hours?: number;
-  days?: number;
-  weeks?: number;
-  months?: number;
-  yearlyRelative?: number;
-}
-
 interface Props {
-  data: MachineUtilizationRow[];
+  data: any[];
 }
 
 export default function MachineUtilizationTable({ data }: Props) {
