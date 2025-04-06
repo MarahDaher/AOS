@@ -6,6 +6,7 @@ import {
   TableCell,
   Typography,
 } from "@mui/material";
+import { formatCurrency } from "@utils/formatNumbers";
 
 interface TieredPriceInkl {
   staffel: string;
@@ -19,29 +20,7 @@ interface Props {
 }
 
 export default function TieredPriceInklTable({ title, data }: Props) {
-  const mapStaffelpreise = (rawData: any[]): TieredPriceInkl[] => {
-    return rawData.map((item) => {
-      const staffel = item.staffel;
-      const suffix = staffel; // because Staffel "A" => Suffix "A"
-
-      const staffel_m =
-        item[
-          `_pricing_endprices_graduated_with_confection_lfm_quantity${suffix}`
-        ];
-      const staffel_stk =
-        item[
-          `_pricing_endprices_graduated_with_confection_stk_quantity${suffix}`
-        ];
-
-      return {
-        staffel,
-        staffel_m,
-        staffel_stk,
-      };
-    });
-  };
-
-  const mappedData = mapStaffelpreise(data);
+  console.log(data);
 
   return (
     <>
@@ -57,11 +36,11 @@ export default function TieredPriceInklTable({ title, data }: Props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {mappedData.map((row, idx) => (
+          {data.map((row, idx) => (
             <TableRow key={idx}>
               <TableCell>{row.staffel}</TableCell>
-              <TableCell>{(row.staffel_m ?? 0).toFixed(2)} €</TableCell>
-              <TableCell>{(row.staffel_stk ?? 0).toFixed(2)} €</TableCell>
+              <TableCell>{formatCurrency(row.staffel_m)}</TableCell>
+              <TableCell>{formatCurrency(row.staffel_stk)}</TableCell>
             </TableRow>
           ))}
         </TableBody>

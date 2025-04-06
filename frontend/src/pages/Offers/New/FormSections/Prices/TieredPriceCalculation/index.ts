@@ -29,6 +29,8 @@ export const mapStaffelPricedataFromOffer = (offer: any): StaffelPriceRow[] => {
         ],
       subtotal:
         offer[`_pricing_graduated_calculation_subtotal_quantity${suffix}`],
+      subtotalM:
+        offer[`_pricing_graduated_calculation_subtotal_lfm_quantity${suffix}`],
     };
   });
 };

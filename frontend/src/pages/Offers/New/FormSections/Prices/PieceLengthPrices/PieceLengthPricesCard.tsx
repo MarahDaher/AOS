@@ -10,6 +10,7 @@ const PieceLengthPricesCard = () => {
   const pieceLengthData = offerDetails
     ? mapPieceLengthPricesFromOffer(offerDetails)
     : [];
+
   return (
     <>
       <CardBox label="Stück-Längen-Preise">

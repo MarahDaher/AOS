@@ -234,6 +234,40 @@ class OfferCalculated extends Model
 
             // Other
             'pricing_machine_utilization_annual_machine_capacity',
+
+
+            // Piece Length Prices
+            '_pricing_piece_length_prices_graduated_lfm_quantityA',
+            '_pricing_piece_length_prices_graduated_lfm_quantityB',
+            '_pricing_piece_length_prices_graduated_lfm_quantityC',
+            '_pricing_piece_length_prices_graduated_lfm_quantityD',
+            '_pricing_piece_length_prices_graduated_lfm_quantityE',
+
+            '_pricing_piece_length_prices_length625_quantityA',
+            '_pricing_piece_length_prices_length625_quantityB',
+            '_pricing_piece_length_prices_length625_quantityC',
+            '_pricing_piece_length_prices_length625_quantityD',
+            '_pricing_piece_length_prices_length625_quantityE',
+
+            '_pricing_piece_length_prices_length1000_quantityA',
+            '_pricing_piece_length_prices_length1000_quantityB',
+            '_pricing_piece_length_prices_length1000_quantityC',
+            '_pricing_piece_length_prices_length1000_quantityD',
+            '_pricing_piece_length_prices_length1000_quantityE',
+
+            '_pricing_piece_length_prices_length1250_quantityA',
+            '_pricing_piece_length_prices_length1250_quantityB',
+            '_pricing_piece_length_prices_length1250_quantityC',
+            '_pricing_piece_length_prices_length1250_quantityD',
+            '_pricing_piece_length_prices_length1250_quantityE',
+
+            '_pricing_piece_length_prices_length1333_quantityA',
+            '_pricing_piece_length_prices_length1333_quantityB',
+            '_pricing_piece_length_prices_length1333_quantityC',
+            '_pricing_piece_length_prices_length1333_quantityD',
+            '_pricing_piece_length_prices_length1333_quantityE',
+
+
         ];
     }
 }

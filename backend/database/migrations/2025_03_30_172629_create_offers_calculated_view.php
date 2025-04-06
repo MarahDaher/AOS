@@ -202,7 +202,38 @@ return new class extends Migration
                 0 AS _pricing_machine_utilization_months_quantityD,
                 0 AS _pricing_machine_utilization_months_quantityE,
 
-                0 AS _pricing_machine_utilization_yearly_relative
+                0 AS _pricing_machine_utilization_yearly_relative,
+
+                0 AS _pricing_piece_length_prices_graduated_lfm_quantityA, 
+                0 AS _pricing_piece_length_prices_graduated_lfm_quantityB, 
+                0 AS _pricing_piece_length_prices_graduated_lfm_quantityC, 
+                0 AS _pricing_piece_length_prices_graduated_lfm_quantityD, 
+                0 AS _pricing_piece_length_prices_graduated_lfm_quantityE,
+
+                0 AS _pricing_piece_length_prices_length625_quantityA, 
+                0 AS _pricing_piece_length_prices_length625_quantityB, 
+                0 AS _pricing_piece_length_prices_length625_quantityC, 
+                0 AS _pricing_piece_length_prices_length625_quantityD, 
+                0 AS _pricing_piece_length_prices_length625_quantityE,
+
+                0 AS _pricing_piece_length_prices_length1000_quantityA,
+                0 AS _pricing_piece_length_prices_length1000_quantityB,
+                0 AS _pricing_piece_length_prices_length1000_quantityC,
+                0 AS _pricing_piece_length_prices_length1000_quantityD,
+                0 AS _pricing_piece_length_prices_length1000_quantityE,
+
+                0 AS _pricing_piece_length_prices_length1250_quantityA,
+                0 AS _pricing_piece_length_prices_length1250_quantityB,
+                0 AS _pricing_piece_length_prices_length1250_quantityC,
+                0 AS _pricing_piece_length_prices_length1250_quantityD,
+                0 AS _pricing_piece_length_prices_length1250_quantityE,
+
+                0 AS _pricing_piece_length_prices_length1333_quantityA,
+                0 AS _pricing_piece_length_prices_length1333_quantityB,
+                0 AS _pricing_piece_length_prices_length1333_quantityC,
+                0 AS _pricing_piece_length_prices_length1333_quantityD,
+                0 AS _pricing_piece_length_prices_length1333_quantityE
+
 
             FROM offers o
         ");

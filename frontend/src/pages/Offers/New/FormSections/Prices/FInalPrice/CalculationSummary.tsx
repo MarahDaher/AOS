@@ -1,4 +1,5 @@
 import { Box, Divider, Typography } from "@mui/material";
+import { formatCurrency } from "@utils/formatNumbers";
 
 interface Props {
   calculation: Record<string, number>;
@@ -29,7 +30,7 @@ export default function CalculationSummary({ calculation }: Props) {
         key !== "_pricing_endprices_calc_sum" ? (
           <Box display="flex" justifyContent="space-between" key={key} py={1}>
             <Typography>{LABELS[key] || key}:</Typography>
-            <Typography>{value.toFixed(2)} €</Typography>
+            <Typography>{formatCurrency(value)}</Typography>
           </Box>
         ) : null
       )}
@@ -37,7 +38,7 @@ export default function CalculationSummary({ calculation }: Props) {
       <Box mt={2} display="flex" justifyContent="space-between">
         <Typography fontWeight="bold">Summe:</Typography>
         <Typography fontWeight="bold">
-          {calculation._pricing_endprices_calc_sum.toFixed(2)} €
+          {formatCurrency(calculation._pricing_endprices_calc_sum)}
         </Typography>
       </Box>
     </>

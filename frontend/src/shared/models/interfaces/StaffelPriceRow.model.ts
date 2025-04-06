@@ -9,6 +9,7 @@ export interface StaffelPriceRow {
   productionTime?: number;
   rawMaterialQuantity?: number;
   subtotal?: number;
+  subtotalM?: number;
 }
 
 export interface MachineUtilizationRow {
