@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class OfferDrawing extends Model
 {
     public $timestamps = false;
-    protected $fillable = ['offer_id', 'filename', 'url', 'upload_date'];
+    protected $fillable = ['offer_id', 'filename', 'upload_date'];
 
     protected $casts = [
         'upload_date' => 'datetime',
@@ -17,7 +17,11 @@ class OfferDrawing extends Model
 
     public function getPreviewUrlAttribute(): string
     {
-        return asset("storage/{$this->url}");
+        $basePath = config('offer_drawings.base_path');
+
+        $year = $this->upload_date ? $this->upload_date->format('Y') : now()->year;
+
+        return asset("storage/{$basePath}/{$year}/{$this->filename}");
     }
 
     public function offer()

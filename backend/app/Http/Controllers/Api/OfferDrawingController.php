@@ -25,15 +25,31 @@ class OfferDrawingController extends BaseController
         );
     }
 
-    public function show(int $id)
+    public function show(string $id = null)
     {
-        $offer = Offer::findOrFail($id);
+        $offerId = (int) $id;
+
+        if ($offerId === 0) {
+            return ApiResponse::error(
+                'Sie müssen zuerst ein Angebot erstellen, bevor Sie eine Datei hochladen können.',
+                400
+            );
+        }
+
+        $offer = Offer::find($offerId);
+
+        if (!$offer) {
+            return ApiResponse::error(
+                'Angebot nicht gefunden.',
+                404
+            );
+        }
 
         $drawing = $this->service->getLatestDrawing($offer);
 
         return ApiResponse::success(
             $drawing ? new OfferDrawingResource($drawing) : null,
-            $drawing ? 'Drawing loaded successfully' : 'No drawing found for this offer'
+            $drawing ? 'Zeichnung erfolgreich geladen.' : 'Keine Zeichnung für dieses Angebot gefunden.'
         );
     }
 }

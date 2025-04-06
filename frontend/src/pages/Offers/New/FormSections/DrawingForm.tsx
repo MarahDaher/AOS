@@ -33,9 +33,8 @@ const DrawingForm: FunctionComponent<DrawingFormProps> = () => {
     try {
       const res = await OffersApi.getDrawing(offerId!);
       setDrawing(res);
-    } catch (error) {
-      setDrawing(null);
-      showError(error);
+    } catch (error: any) {
+      console.error(error);
     }
   };
 

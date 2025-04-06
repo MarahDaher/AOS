@@ -14,16 +14,19 @@ class OfferDrawingService
 
     public function storeDrawing(Offer $offer, UploadedFile $file): OfferDrawing
     {
+        $year = now()->year;
+        $basePath = config('offer_drawings.base_path');
         $filename = $file->getClientOriginalName();
-        $path = $file->storeAs("offer_drawings/{$offer->id}", $filename, 'public');
+
+        $file->storeAs("{$basePath}/{$year}", $filename, 'public');
 
         return $this->repository->create([
             'offer_id' => $offer->id,
             'filename' => $filename,
-            'url' => $path,
             'upload_date' => now(),
         ]);
     }
+
 
     public function getLatestDrawing(Offer $offer): ?OfferDrawing
     {
