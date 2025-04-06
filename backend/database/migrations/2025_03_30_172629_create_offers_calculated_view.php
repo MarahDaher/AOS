@@ -92,16 +92,16 @@ return new class extends Migration
 
                 0 AS _pricing_requirement_annual_sales,
                 0 AS _pricing_costs_calc_production_time,
-                0 AS _pricing_costs_calc_time_costs_quantity,
                 0 AS _pricing_costs_yearly_time_costs_quantity,
                 0 AS _pricing_costs_calc_raw_material_quantity,
                 0 AS _pricing_costs_calc_raw_material_setup_quantity,
                 0 AS _pricing_costs_calc_raw_material_quantity_total,
-                0 AS _pricing_costs_calc_raw_material_price_total,
                 0 AS _pricing_costs_yearly_raw_material_quantity,
                 0 AS _pricing_costs_yearly_fixcosts,
                 0 AS _pricing_costs_calc_price_additional_lfm,
-
+                
+                0 AS _pricing_costs_calc_time_costs_quantity,
+                0 AS _pricing_costs_calc_raw_material_price_total,
                 0 AS _pricing_endprices_calc_packing_costs,
                 0 AS _pricing_endprices_calc_transport_costs,
                 0 AS _pricing_endprices_calc_print_costs,
