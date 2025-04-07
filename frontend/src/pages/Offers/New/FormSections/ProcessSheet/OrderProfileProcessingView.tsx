@@ -1,4 +1,3 @@
-import { ProcessSheetModel } from "@interfaces/ProcessSheet.model";
 import Grid from "@mui/material/Grid2";
 import InfoCard from "./InfoCard";
 import RawMaterialTable from "./RawMaterialTable";
@@ -8,7 +7,7 @@ import WorkHoursCard from "./WorkHoursCard";
 import ToolingCard from "./ToolingCard";
 
 type Props = {
-  data: ProcessSheetModel;
+  data: any;
 };
 
 export default function OrderProfileProcessingView({ data }: Props) {
@@ -65,7 +64,7 @@ export default function OrderProfileProcessingView({ data }: Props) {
         </Grid>
       </Grid>
 
-      <RawMaterialTable materials={raw_materials} />
+      {/* <RawMaterialTable materials={raw_materials} /> */}
 
       <Grid size={{ xs: 12, md: 12 }}>
         <SamplingCard />

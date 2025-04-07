@@ -30,6 +30,8 @@ class OfferSeeder extends Seeder
                 'general_raw_material_price_total_overwritten' => 1500.50,
                 'general_raw_material_purchase_discount' => 5.0,
                 'general_comments' => 'Erstangebot für Kunde A',
+
+                // Calculation
                 'calculation_quantityA' => 1000,
                 'calculation_quantityB' => 2000,
                 'calculation_quantityC' => 3000,
@@ -70,6 +72,8 @@ class OfferSeeder extends Seeder
                 'calculation_working_commission' => 5.0,
                 'calculation_working_profit' => 15.0,
                 'calculation_working_discount' => 3.0,
+
+                // Pricing
                 'pricing_grad_qtyB_add_hourlyrate' => 10.0,
                 'pricing_grad_qtyC_add_hourlyrate' => 20.0,
                 'pricing_grad_qtyD_add_hourlyrate' => 30.0,
@@ -82,6 +86,30 @@ class OfferSeeder extends Seeder
                 'pricing_grad_qtyC_add_transport' => 100.0,
                 'pricing_grad_qtyD_add_transport' => 110.0,
                 'pricing_grad_qtyE_add_transport' => 120.0,
+
+                // Runningcard
+                'runningcard_sampling_date' => '2025-04-05',
+                'runningcard_sampling_quantity' => 100,
+                'runningcard_sampling_length' => 500,
+                'runningcard_sampling_packing' => 10,
+                'runningcard_sampling_indication' => 'Good quality',
+                'runningcard_qualitity_indication' => 'No defects found during inspection.',
+                'runningcard_printing' => 'Standard black ink printing.',
+                'runningcard_packing_type' => 'Box',
+                'runningcard_packing_variant' => 'Type A',
+                'runningcard_packing_length' => 120,
+                'runningcard_packing_packing_unit' => 5,
+                'runningcard_packing_quantity' => 500,
+                'runningcard_packing_description' => 'Packed in standard boxes of 5 units.',
+                'runningcard_hourlyrecording_construction' => 2,
+                'runningcard_hourlyrecording_toolwork' => 3,
+                'runningcard_hourlyrecording_entry' => 1,
+                'runningcard_hourlyrecording_entrystitches' => 50,
+                'runningcard_hourlyrecording_entrydriver_user_id' => 1,
+                'runningcard_hourlyrecording_toolmaker_user_id' => 1,
+                'runningcard_tool_costs' => 1000,
+                'runningcard_tool_cost_type' => 'Purchase',
+                'runningcard_tool_hint' => 'Tool must be recalibrated annually.',
             ],
             [
                 'general_status' => 'Auftrag',
@@ -103,6 +131,8 @@ class OfferSeeder extends Seeder
                 'general_raw_material_price_total_overwritten' => 1750.00,
                 'general_raw_material_purchase_discount' => 7.5,
                 'general_comments' => 'Sonderanfertigung für Kunde B',
+
+                // Calculation
                 'calculation_quantityA' => 1500,
                 'calculation_quantityB' => 2500,
                 'calculation_quantityC' => 3500,
@@ -143,6 +173,8 @@ class OfferSeeder extends Seeder
                 'calculation_working_commission' => 6.0,
                 'calculation_working_profit' => 18.0,
                 'calculation_working_discount' => 4.0,
+
+                // Pricing
                 'pricing_grad_qtyB_add_hourlyrate' => 15.0,
                 'pricing_grad_qtyC_add_hourlyrate' => 25.0,
                 'pricing_grad_qtyD_add_hourlyrate' => 35.0,
@@ -155,6 +187,30 @@ class OfferSeeder extends Seeder
                 'pricing_grad_qtyC_add_transport' => 105.0,
                 'pricing_grad_qtyD_add_transport' => 115.0,
                 'pricing_grad_qtyE_add_transport' => 125.0,
+
+                // Runningcard
+                'runningcard_sampling_date' => '2025-04-07',
+                'runningcard_sampling_quantity' => 120,
+                'runningcard_sampling_length' => 520,
+                'runningcard_sampling_packing' => 12,
+                'runningcard_sampling_indication' => 'Minor defects',
+                'runningcard_qualitity_indication' => 'Few scratches detected.',
+                'runningcard_printing' => 'Custom color printing.',
+                'runningcard_packing_type' => 'Crate',
+                'runningcard_packing_variant' => 'Type B',
+                'runningcard_packing_length' => 130,
+                'runningcard_packing_packing_unit' => 6,
+                'runningcard_packing_quantity' => 600,
+                'runningcard_packing_description' => 'Packed in wooden crates, 6 per unit.',
+                'runningcard_hourlyrecording_construction' => 3,
+                'runningcard_hourlyrecording_toolwork' => 2,
+                'runningcard_hourlyrecording_entry' => 2,
+                'runningcard_hourlyrecording_entrystitches' => 60,
+                'runningcard_hourlyrecording_entrydriver_user_id' => 2,
+                'runningcard_hourlyrecording_toolmaker_user_id' => 2,
+                'runningcard_tool_costs' => 1200,
+                'runningcard_tool_cost_type' => 'Rental',
+                'runningcard_tool_hint' => 'Rental expires end of year.',
             ],
             [
                 'general_status' => 'Produziert',
@@ -176,6 +232,8 @@ class OfferSeeder extends Seeder
                 'general_raw_material_price_total_overwritten' => 2000.75,
                 'general_raw_material_purchase_discount' => 6.0,
                 'general_comments' => 'Produktionsauftrag für Kunde C',
+
+                // Calculation
                 'calculation_quantityA' => 2000,
                 'calculation_quantityB' => 3000,
                 'calculation_quantityC' => 4000,
@@ -216,6 +274,8 @@ class OfferSeeder extends Seeder
                 'calculation_working_commission' => 7.0,
                 'calculation_working_profit' => 20.0,
                 'calculation_working_discount' => 5.0,
+
+                // Pricing
                 'pricing_grad_qtyB_add_hourlyrate' => 20.0,
                 'pricing_grad_qtyC_add_hourlyrate' => 30.0,
                 'pricing_grad_qtyD_add_hourlyrate' => 40.0,
@@ -228,6 +288,30 @@ class OfferSeeder extends Seeder
                 'pricing_grad_qtyC_add_transport' => 110.0,
                 'pricing_grad_qtyD_add_transport' => 120.0,
                 'pricing_grad_qtyE_add_transport' => 130.0,
+
+                // Runningcard
+                'runningcard_sampling_date' => '2025-04-12',
+                'runningcard_sampling_quantity' => 150,
+                'runningcard_sampling_length' => 550,
+                'runningcard_sampling_packing' => 15,
+                'runningcard_sampling_indication' => 'Excellent',
+                'runningcard_qualitity_indication' => 'Perfect sample, no issues.',
+                'runningcard_printing' => 'UV-resistant printing.',
+                'runningcard_packing_type' => 'Pallet',
+                'runningcard_packing_variant' => 'Type C',
+                'runningcard_packing_length' => 140,
+                'runningcard_packing_packing_unit' => 7,
+                'runningcard_packing_quantity' => 700,
+                'runningcard_packing_description' => 'Packed on pallets, 7 units each.',
+                'runningcard_hourlyrecording_construction' => 4,
+                'runningcard_hourlyrecording_toolwork' => 5,
+                'runningcard_hourlyrecording_entry' => 3,
+                'runningcard_hourlyrecording_entrystitches' => 80,
+                'runningcard_hourlyrecording_entrydriver_user_id' => 3,
+                'runningcard_hourlyrecording_toolmaker_user_id' => 3,
+                'runningcard_tool_costs' => 1500,
+                'runningcard_tool_cost_type' => 'Lease',
+                'runningcard_tool_hint' => 'Leased tool, return after project completion.',
             ],
         ]);
     }

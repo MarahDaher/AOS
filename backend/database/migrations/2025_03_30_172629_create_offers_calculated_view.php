@@ -7,27 +7,6 @@ return new class extends Migration
 {
   public function up(): void
   {
-    // 🛠 Create offers_raw_materials_calculated view
-    DB::statement("
-            CREATE OR REPLACE VIEW offers_raw_materials_calculated AS
-            SELECT 
-                r.name,
-                r.type,
-                r.density,
-                o_r.offer_id,
-                o_r.raw_material_id,
-                o_r.absolut_demand,
-                o_r.share,
-                o_r.supplier,
-                COALESCE(o_r.price, r.price) AS price,
-                COALESCE(o_r.price_date, r.price_date) AS price_date,
-                ROUND(r.price - (r.price * o.general_raw_material_purchase_discount / 100), 2) AS _price_minus_discount,
-                ROUND((r.price * o_r.share / 100), 2) AS _price_share,
-                ROUND((r.price - (r.price * o.general_raw_material_purchase_discount / 100)) * (o_r.share / 100), 2) AS _price_minus_discount_share
-            FROM raw_materials r
-            JOIN offers_raw_materials o_r ON r.id = o_r.raw_material_id
-            JOIN offers o ON o.id = o_r.offer_id;
-        ");
 
     // 🛠 Create offers_calculated view
     DB::statement("
@@ -232,8 +211,9 @@ return new class extends Migration
                 0 AS _pricing_piece_length_prices_length1333_quantityB,
                 0 AS _pricing_piece_length_prices_length1333_quantityC,
                 0 AS _pricing_piece_length_prices_length1333_quantityD,
-                0 AS _pricing_piece_length_prices_length1333_quantityE
+                0 AS _pricing_piece_length_prices_length1333_quantityE,
 
+                (o.`runningcard_hourlyrecording_construction` + o.`runningcard_hourlyrecording_toolwork` + o.`runningcard_hourlyrecording_entry`) AS `_runningcard_hourlyrecording_total`
 
             FROM offers o
         ");

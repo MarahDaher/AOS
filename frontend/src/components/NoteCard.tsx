@@ -6,7 +6,7 @@ import { FunctionComponent } from "react";
 import Grid from "@mui/material/Grid2";
 
 interface NoteCardProps {
-  field: "quality_note" | "printing_note";
+  field: any;
   label: string;
 }
 

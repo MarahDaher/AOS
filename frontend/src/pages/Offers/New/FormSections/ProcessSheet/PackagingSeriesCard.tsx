@@ -10,13 +10,17 @@ const PackagingSeriesCard: FunctionComponent = () => {
 
   const formik = useFormik({
     initialValues: {
-      packaging_type: offerDetails?.packaging_type ?? "",
-      packaging_variant: offerDetails?.packaging_variant ?? "",
-      packaging_length: offerDetails?.packaging_length ?? "",
-      packaging_unit: offerDetails?.packaging_unit ?? "",
-      packaging_quantity_per_box:
-        offerDetails?.packaging_quantity_per_box ?? "",
-      packaging_note: offerDetails?.packaging_note ?? "",
+      runningcard_packing_type: offerDetails?.runningcard_packing_type ?? "",
+      runningcard_packing_variant:
+        offerDetails?.runningcard_packing_variant ?? "",
+      runningcard_packing_length:
+        offerDetails?.runningcard_packing_length ?? "",
+      runningcard_packing_packing_unit:
+        offerDetails?.runningcard_packing_packing_unit ?? "",
+      runningcard_packing_quantity:
+        offerDetails?.runningcard_packing_quantity ?? "",
+      runningcard_packing_description:
+        offerDetails?.runningcard_packing_description ?? "",
     },
     enableReinitialize: true,
     onSubmit: () => {},
@@ -27,30 +31,39 @@ const PackagingSeriesCard: FunctionComponent = () => {
       <CardBox label="Verpackung Serie">
         <Grid container spacing={2}>
           <Grid size={{ xs: 12, md: 2.4 }}>
-            <FormInputSaveField name="packaging_type" label="Verpackungsart" />
+            <FormInputSaveField
+              name="runningcard_packing_type"
+              label="Verpackungsart"
+            />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>
             <FormInputSaveField
-              name="packaging_variant"
+              name="runningcard_packing_variant"
               label="Verpackungsvariante"
             />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>
-            <FormInputSaveField name="packaging_length" label="Länge" />
-          </Grid>
-          <Grid size={{ xs: 12, md: 2.4 }}>
-            <FormInputSaveField name="packaging_unit" label="Packeinheit" />
+            <FormInputSaveField
+              name="runningcard_packing_length"
+              label="Länge"
+            />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>
             <FormInputSaveField
-              name="packaging_quantity_per_box"
+              name="runningcard_packing_packing_unit"
+              label="Packeinheit"
+            />
+          </Grid>
+          <Grid size={{ xs: 12, md: 2.4 }}>
+            <FormInputSaveField
+              name="runningcard_packing_quantity"
               label="Menge / Palette-Box-Karton"
             />
           </Grid>
 
           <Grid size={{ xs: 12 }}>
             <FormInputSaveField
-              name="packaging_note"
+              name="runningcard_packing_description"
               label="Anmerkung"
               multiline
               minRows={3}

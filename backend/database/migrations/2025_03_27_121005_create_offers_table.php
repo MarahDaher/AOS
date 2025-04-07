@@ -14,7 +14,7 @@ return new class extends Migration {
             // $table->string('general_material', 63)->nullable(); // deprecated
             $table->integer('general_profile_description')->nullable();
             $table->dateTime('general_creation_date');
-            $table->unsignedBigInteger('general_created_by_user_id');
+            $table->foreignId('general_created_by_user_id')->constrained('users');
             $table->string('general_color', 31)->nullable();
             $table->integer('general_packaging')->nullable();
             $table->string('general_tool_number', 31)->nullable();
@@ -36,10 +36,12 @@ return new class extends Migration {
             $table->integer('calculation_quantityC')->nullable();
             $table->integer('calculation_quantityD')->nullable();
             $table->integer('calculation_quantityE')->nullable();
+
             $table->float('calculation_processing_lfm_hourly_rate')->nullable();
             $table->float('calculation_processing_piece_hourly_rate')->nullable();
             $table->float('calculation_processing_lfm_runtime')->nullable();
             $table->float('calculation_processing_piece_runtime')->nullable();
+
             $table->integer('calculation_processing_lfm_runtime_factor')->nullable();
             $table->integer('calculation_processing_piece_runtime_factor')->nullable();
             $table->float('calculation_processing_lfm_packing_time')->nullable();
@@ -68,6 +70,7 @@ return new class extends Migration {
             $table->integer('calculation_working_profile_cross_section_deviation_upper')->default(0);
             $table->integer('calculation_working_setup_quantity_total')->nullable();
             $table->integer('calculation_working_hourly_rate')->nullable();
+
             $table->integer('calculation_working_setup_quantity_additional')->nullable();
             $table->float('calculation_working_additional_costs')->nullable();
             $table->float('calculation_working_commission')->nullable();
@@ -95,8 +98,32 @@ return new class extends Migration {
 
             $table->float('pricing_machine_utilization_annual_machine_capacity')->nullable();
 
-            // Foreign key
-            $table->foreign('general_created_by_user_id')->references('id')->on('users');
+            $table->date('runningcard_sampling_date')->nullable();
+            $table->integer('runningcard_sampling_quantity')->nullable();
+            $table->integer('runningcard_sampling_length')->nullable();
+            $table->integer('runningcard_sampling_packing')->nullable();
+            $table->string('runningcard_sampling_indication', 31)->nullable();
+            $table->text('runningcard_qualitity_indication')->nullable();
+            $table->text('runningcard_printing')->nullable();
+            $table->string('runningcard_packing_type', 31)->nullable();
+            $table->string('runningcard_packing_variant', 31)->nullable();
+            $table->integer('runningcard_packing_length')->nullable();
+            $table->integer('runningcard_packing_packing_unit')->nullable();
+            $table->integer('runningcard_packing_quantity')->nullable();
+            $table->text('runningcard_packing_description')->nullable();
+
+            $table->integer('runningcard_hourlyrecording_construction')->nullable();
+            $table->integer('runningcard_hourlyrecording_toolwork')->nullable();
+            $table->integer('runningcard_hourlyrecording_entry')->nullable();
+            $table->integer('runningcard_hourlyrecording_entrystitches')->nullable();
+            $table->foreignId('runningcard_hourlyrecording_entrydriver_user_id')->nullable()->constrained('users');
+            $table->foreignId('runningcard_hourlyrecording_toolmaker_user_id')->nullable()->constrained('users');
+
+            $table->integer('runningcard_tool_costs')->nullable();
+            $table->string('runningcard_tool_cost_type', 31)->nullable();
+            $table->text('runningcard_tool_hint')->nullable();
+
+            $table->timestamps();
         });
     }
 

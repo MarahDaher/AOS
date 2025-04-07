@@ -4,16 +4,16 @@ import Grid from "@mui/material/Grid2";
 import { FormikProvider, useFormik } from "formik";
 import { useOfferContext } from "@contexts/OfferProvider";
 import { FunctionComponent } from "react";
-import { Typography } from "@mui/material";
 
 const ToolingCard: FunctionComponent = () => {
   const { offerDetails } = useOfferContext();
 
   const formik = useFormik({
     initialValues: {
-      tool_cost: offerDetails?.tool_cost ?? "",
-      tool_cost_type: offerDetails?.tool_cost_type ?? "anteilig",
-      general_note: offerDetails?.general_note ?? "",
+      runningcard_tool_costs: offerDetails?.runningcard_tool_costs ?? "",
+      runningcard_tool_cost_type:
+        offerDetails?.runningcard_tool_cost_type ?? "anteilig",
+      runningcard_tool_hint: offerDetails?.runningcard_tool_hint ?? "",
     },
     enableReinitialize: true,
     onSubmit: () => {},
@@ -24,12 +24,14 @@ const ToolingCard: FunctionComponent = () => {
       <CardBox label="Werkzeug">
         <Grid container spacing={2}>
           <Grid size={{ xs: 12, md: 2.4 }}>
-            <FormInputSaveField name="tool_cost" label="Kosten" />
+            <FormInputSaveField name="runningcard_tool_costs" label="Kosten" />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>
-            <Typography sx={{ mt: 3, fontWeight: "bold" }}>
-              Kostenart: {formik.values.tool_cost_type}
-            </Typography>
+            <FormInputSaveField
+              name="runningcard_tool_cost_type"
+              label="Kostenart"
+              disabled
+            />
           </Grid>
         </Grid>
       </CardBox>
@@ -38,7 +40,7 @@ const ToolingCard: FunctionComponent = () => {
         <Grid container spacing={2}>
           <Grid size={{ xs: 12 }}>
             <FormInputSaveField
-              name="general_note"
+              name="runningcard_tool_hint"
               label=""
               multiline
               minRows={3}

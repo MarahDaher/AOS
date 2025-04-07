@@ -8,20 +8,15 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('offers_raw_materials', function (Blueprint $table) {
-            $table->unsignedBigInteger('offer_id');
-            $table->unsignedBigInteger('raw_material_id');
+            $table->foreignId('offer_id')->constrained('offers');
+            $table->foreignId('raw_material_id')->constrained('raw_materials');
             $table->float('absolut_demand')->default(0);
             $table->float('share')->default(0);
             $table->string('supplier', 63)->nullable();
             $table->float('price')->nullable();
             $table->date('price_date')->nullable();
 
-            // Primary key
             $table->primary(['offer_id', 'raw_material_id']);
-
-            // Foreign keys
-            $table->foreign('offer_id')->references('id')->on('offers')->onDelete('restrict')->onUpdate('restrict');
-            $table->foreign('raw_material_id')->references('id')->on('raw_materials')->onDelete('restrict')->onUpdate('restrict');
         });
     }
 
