@@ -133,7 +133,7 @@ export const mapAdditionalCostsInitialValues = (offerDetails: any) =>
 
 //-------------------------------------------------
 export const WorkCalculationFields = [
-  "calculation_working_setup_quantity",
+  "calculation_working_setup_quantity_relative",
   "calculation_working_extrusion_speed",
   "_calculation_working_setup_quantity_lfm",
   "_calculation_working_setup_time",

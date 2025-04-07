@@ -80,6 +80,7 @@ class Offer extends Model
         'calculation_working_commission',
         'calculation_working_profit',
         'calculation_working_discount',
+        'calculation_working_setup_quantity_additional',
 
         // 🧹 Pricing
         'pricing_annual_requirement',

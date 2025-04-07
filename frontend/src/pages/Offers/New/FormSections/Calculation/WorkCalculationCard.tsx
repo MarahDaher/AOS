@@ -2,7 +2,7 @@ import { FC } from "react";
 import CardBox from "@components/CardBox";
 import Grid from "@mui/material/Grid2";
 import FormInputSaveField from "@components/FormInputSaveField";
-import { useTheme, useMediaQuery } from "@mui/material";
+// import { useTheme, useMediaQuery } from "@mui/material";
 import { FormikProvider, useFormik } from "formik";
 import { useOfferContext } from "@contexts/OfferProvider";
 import {
@@ -13,7 +13,10 @@ import ProfileWeightTripleDisplay from "./ProfileWeightTripleDisplay";
 
 const rows = [
   [
-    { name: "calculation_working_setup_quantity", label: "Einstellmenge [%]" },
+    {
+      name: "calculation_working_setup_quantity_relative",
+      label: "Einstellmenge [%]",
+    },
     {
       name: "calculation_working_extrusion_speed",
       label: "Extrusionsgeschw. [m/min]",
@@ -73,7 +76,7 @@ const rows = [
     },
     {
       name: "_calculation_working_density_total",
-      label: "Rohstoffdichte [gr./cm³]",
+      label: "Rohstoffdichte gesamt [gr/cm³]",
       disabled: true,
     },
     null,
@@ -101,8 +104,8 @@ const rows = [
 const WorkCalculationCard: FC = () => {
   const { offerDetails } = useOfferContext();
 
-  const theme = useTheme();
-  const isMdUp = useMediaQuery(theme.breakpoints.up("md"));
+  // const theme = useTheme();
+  // const isMdUp = useMediaQuery(theme.breakpoints.up("md"));
 
   const formik = useFormik({
     initialValues: {

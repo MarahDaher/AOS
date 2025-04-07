@@ -68,6 +68,7 @@ return new class extends Migration {
             $table->integer('calculation_working_profile_cross_section_deviation_upper')->default(0);
             $table->integer('calculation_working_setup_quantity_total')->nullable();
             $table->integer('calculation_working_hourly_rate')->nullable();
+            $table->integer('calculation_working_setup_quantity_additional')->nullable();
             $table->float('calculation_working_additional_costs')->nullable();
             $table->float('calculation_working_commission')->nullable();
             $table->float('calculation_working_profit')->nullable();
