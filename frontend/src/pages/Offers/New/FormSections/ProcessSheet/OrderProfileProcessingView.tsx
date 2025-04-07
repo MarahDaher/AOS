@@ -1,6 +1,5 @@
 import Grid from "@mui/material/Grid2";
 import InfoCard from "./InfoCard";
-import RawMaterialTable from "./RawMaterialTable";
 import SamplingCard from "./SamplingCard";
 import PackagingSeriesCard from "./PackagingSeriesCard";
 import WorkHoursCard from "./WorkHoursCard";
@@ -11,7 +10,7 @@ type Props = {
 };
 
 export default function OrderProfileProcessingView({ data }: Props) {
-  const { order, profile, processing, raw_materials } = data;
+  const { order, profile, processing } = data;
 
   return (
     <>
