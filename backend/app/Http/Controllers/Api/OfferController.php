@@ -80,4 +80,19 @@ class OfferController extends BaseController
             return ApiResponse::error($e->getMessage(), 422);
         }
     }
+
+
+    public function duplicate($id)
+    {
+        try {
+            $newOffer = $this->service->duplicateOffer($id);
+
+            return ApiResponse::success([
+                'id' => $newOffer->id,
+                'offer' => $newOffer->fresh(['createdByUser']),
+            ], 'Offer duplicated successfully');
+        } catch (\Exception $e) {
+            return ApiResponse::error('Failed to duplicate offer: ' . $e->getMessage(), 400);
+        }
+    }
 }

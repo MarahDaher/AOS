@@ -35,6 +35,13 @@ export class OffersApi {
     });
   }
 
+  static async duplicateOffer(offerId: number) {
+    return await handleRequest<any>({
+      method: "POST",
+      endpoint: `offers/${offerId}/duplicate`,
+    });
+  }
+
   // Drawings
   static async getDrawing(offerId: number) {
     return await handleRequest<any>({

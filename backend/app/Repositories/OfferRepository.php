@@ -22,6 +22,15 @@ class OfferRepository
         return Offer::with('createdByUser')->findOrFail($id);
     }
 
+    public function duplicate(Offer $offer): Offer
+    {
+        $newOffer = $offer->replicate();
+        $newOffer->general_offer_number = 'Copy of ' . $offer->general_offer_number;
+        $newOffer->general_creation_date = now();
+        $newOffer->save();
+
+        return $newOffer;
+    }
 
     public function createOffer(array $data): Offer
     {

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Offer;
 use App\Models\OfferCalculated;
 use App\Repositories\OfferRepository;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Str;
 
 class OfferService
@@ -19,6 +20,19 @@ class OfferService
     public function getOfferById(int $id): OfferCalculated
     {
         return OfferCalculated::with('createdByUser')->findOrFail($id);
+    }
+
+    public function duplicateOffer(int $id)
+    {
+        $offer = $this->repository->getOfferById($id);
+
+        if (!$offer) {
+            throw new ModelNotFoundException('Offer not found.');
+        }
+
+        $newOffer = $this->repository->duplicate($offer);
+
+        return $newOffer;
     }
 
 

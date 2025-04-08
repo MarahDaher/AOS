@@ -87,7 +87,7 @@ class OfferCalculated extends Model
 
             // Working
             'calculation_working_setup_quantity_relative',
-            'runningcard_extrusion_speed_IST',
+            'calculation_working_extrusion_speed',
             '_calculation_working_setup_quantity_lfm',
             '_calculation_working_setup_time',
             'calculation_working_annual_requirement_estimated',
@@ -101,7 +101,6 @@ class OfferCalculated extends Model
             'calculation_working_profile_cross_section_deviation_upper',
             '_calculation_working_density_total',
             '_calculation_working_profile_weight_lowerborder',
-            'runningcard_profile_weight_IST',
             '_calculation_working_profile_weight_upperborder',
             'calculation_working_setup_quantity_total',
             'calculation_working_hourly_rate',
@@ -268,6 +267,8 @@ class OfferCalculated extends Model
             '_pricing_piece_length_prices_length1333_quantityD',
             '_pricing_piece_length_prices_length1333_quantityE',
 
+            '_calculation_working_profile_weight_average',
+
 
             'runningcard_sampling_date',
             'runningcard_sampling_quantity',
@@ -289,6 +290,9 @@ class OfferCalculated extends Model
             'runningcard_hourlyrecording_entrystitches',
             'runningcard_hourlyrecording_entrydriver_user_id',
             'runningcard_hourlyrecording_toolmaker_user_id',
+
+            'runningcard_profile_weight_IST',
+            'runningcard_extrusion_speed_IST',
 
             'runningcard_tool_costs',
             'runningcard_tool_cost_type',

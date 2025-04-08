@@ -42,6 +42,16 @@ const OffersPage: FunctionComponent<OffersPageProps> = () => {
     }
   };
 
+  const handleDuplicate = async (offerId: number) => {
+    try {
+      await OffersApi.duplicateOffer(offerId);
+      await fetchOffers();
+      // navigate(`/angebote/${res.offer.id}`);
+    } catch (error) {
+      showError(error);
+    }
+  };
+
   //LifeCycles
   useEffect(() => {
     fetchOffers();
@@ -67,7 +77,7 @@ const OffersPage: FunctionComponent<OffersPageProps> = () => {
 
                 <IconAction
                   tooltip="Angebot duplizieren"
-                  onClick={() => console.log("Duplicate Offer")}
+                  onClick={() => handleDuplicate(row.id)}
                 >
                   <ContentCopy fontSize="small" />
                 </IconAction>

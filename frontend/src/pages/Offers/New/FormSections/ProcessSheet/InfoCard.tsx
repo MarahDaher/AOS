@@ -20,7 +20,9 @@ export default function InfoCard({ title, rows }: Props) {
         {rows.map(({ label, value }) => (
           <Box key={label} display="flex" justifyContent="space-between">
             <Typography>{label}:</Typography>
-            <Typography>{value || "-"}</Typography>
+            <Typography>
+              {value !== undefined && value !== null ? value : "-"}
+            </Typography>
           </Box>
         ))}
       </CardContent>

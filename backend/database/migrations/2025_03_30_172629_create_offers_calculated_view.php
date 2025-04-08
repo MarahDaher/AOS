@@ -212,6 +212,8 @@ return new class extends Migration
                 0 AS _pricing_piece_length_prices_length1333_quantityD,
                 0 AS _pricing_piece_length_prices_length1333_quantityE,
 
+                    0 AS `_calculation_working_profile_weight_average`,
+
                 (o.`runningcard_hourlyrecording_construction` + o.`runningcard_hourlyrecording_toolwork` + o.`runningcard_hourlyrecording_entry`) AS `_runningcard_hourlyrecording_total`
 
             FROM offers o

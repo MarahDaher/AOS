@@ -49,7 +49,7 @@ export default function OrderProfileProcessingView({ data }: Props) {
               },
               {
                 label: "Metergewicht Kalkulation",
-                value: processing.weight_calc,
+                value: processing.weight_actual,
               },
             ]}
           />

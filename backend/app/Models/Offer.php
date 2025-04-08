@@ -65,7 +65,7 @@ class Offer extends Model
 
         // 🧹 Working
         'calculation_working_setup_quantity_relative',
-        'runningcard_extrusion_speed_IST',
+        'calculation_working_extrusion_speed',
         'calculation_working_annual_requirement_estimated',
         'calculation_working_tool_costs_total',
         'calculation_working_tool_costs_customer',
@@ -123,6 +123,9 @@ class Offer extends Model
         'runningcard_hourlyrecording_entrystitches',
         'runningcard_hourlyrecording_entrydriver_user_id',
         'runningcard_hourlyrecording_toolmaker_user_id',
+
+        'runningcard_extrusion_speed_IST',
+        'runningcard_profile_weight_IST',
 
         'runningcard_tool_costs',
         'runningcard_tool_cost_type',
