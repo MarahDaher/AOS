@@ -5,25 +5,24 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    public function up(): void
+
+    public function up()
     {
-        Schema::create('offers_raw_materials', function (Blueprint $table) {
+        Schema::create('additives_offers_raw_materials', function (Blueprint $table) {
             $table->unsignedBigInteger('offer_id');
             $table->unsignedBigInteger('raw_material_id');
-            $table->float('absolut_demand')->default(0);
+            $table->unsignedBigInteger('additives_id');
             $table->float('share')->default(0);
-            $table->string('supplier', 63)->nullable();
-            $table->float('price')->nullable();
-            $table->date('price_date')->nullable();
 
-            $table->primary(['offer_id', 'raw_material_id']);
+            $table->primary(['offer_id', 'raw_material_id', 'additives_id']);
             $table->foreign('offer_id')->references('id')->on('offers')->restrictOnDelete()->restrictOnUpdate();
             $table->foreign('raw_material_id')->references('id')->on('raw_materials')->restrictOnDelete()->restrictOnUpdate();
+            $table->foreign('additives_id')->references('id')->on('additives')->restrictOnDelete()->restrictOnUpdate();
         });
     }
 
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('offers_raw_materials');
+        Schema::dropIfExists('additives_offers_raw_materials');
     }
 };

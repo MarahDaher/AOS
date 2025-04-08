@@ -66,7 +66,6 @@ return new class extends Migration
                 -- Static 0 placeholders
                 0 AS _calculation_working_density_total,
                 0 AS _calculation_working_profile_weight_lowerborder,
-                0 AS runningcard_profile_weight_IST,
                 0 AS _calculation_working_profile_weight_upperborder,
 
                 0 AS _pricing_requirement_annual_sales,

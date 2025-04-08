@@ -19,6 +19,9 @@ class DatabaseSeeder extends Seeder
             // OfferRawMaterialSeeder::class,
             OfferSeeder::class,
             RawMaterialSeeder::class,
+            OfferRawMaterialSeeder::class,
+            AdditiveSeeder::class,
+            AdditivesOffersRawMaterialsSeeder::class,
 
         ]);
     }

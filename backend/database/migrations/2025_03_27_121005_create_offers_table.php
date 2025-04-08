@@ -14,7 +14,7 @@ return new class extends Migration {
             // $table->string('general_material', 63)->nullable(); // deprecated
             $table->integer('general_profile_description')->nullable();
             $table->dateTime('general_creation_date');
-            $table->foreignId('general_created_by_user_id')->constrained('users');
+            $table->unsignedBigInteger('general_created_by_user_id');
             $table->string('general_color', 31)->nullable();
             $table->integer('general_packaging')->nullable();
             $table->string('general_tool_number', 31)->nullable();
@@ -59,7 +59,7 @@ return new class extends Migration {
             $table->float('calculation_additional_single_print_price')->nullable();
 
             $table->integer('calculation_working_setup_quantity_relative')->nullable();
-            $table->float('runningcard_extrusion_speed_IST')->nullable();
+            $table->float('calculation_working_extrusion_speed')->nullable();
             $table->integer('calculation_working_annual_requirement_estimated')->nullable();
             $table->float('calculation_working_tool_costs_total')->nullable();
             $table->float('calculation_working_tool_costs_customer')->nullable();
@@ -98,6 +98,8 @@ return new class extends Migration {
 
             $table->float('pricing_machine_utilization_annual_machine_capacity')->nullable();
 
+            $table->integer('runningcard_extrusion_speed_IST')->nullable();
+            $table->integer('runningcard_profile_weight_IST')->nullable();
             $table->date('runningcard_sampling_date')->nullable();
             $table->integer('runningcard_sampling_quantity')->nullable();
             $table->integer('runningcard_sampling_length')->nullable();
@@ -116,13 +118,17 @@ return new class extends Migration {
             $table->integer('runningcard_hourlyrecording_toolwork')->nullable();
             $table->integer('runningcard_hourlyrecording_entry')->nullable();
             $table->integer('runningcard_hourlyrecording_entrystitches')->nullable();
-            $table->foreignId('runningcard_hourlyrecording_entrydriver_user_id')->nullable()->constrained('users');
-            $table->foreignId('runningcard_hourlyrecording_toolmaker_user_id')->nullable()->constrained('users');
+            $table->unsignedBigInteger('runningcard_hourlyrecording_entrydriver_user_id')->nullable();
+            $table->unsignedBigInteger('runningcard_hourlyrecording_toolmaker_user_id')->nullable();
 
             $table->integer('runningcard_tool_costs')->nullable();
             $table->string('runningcard_tool_cost_type', 31)->nullable();
             $table->text('runningcard_tool_hint')->nullable();
 
+            // index
+            $table->foreign('general_created_by_user_id')->references('id')->on('users')->restrictOnDelete();
+            $table->foreign('runningcard_hourlyrecording_entrydriver_user_id')->references('id')->on('users')->restrictOnDelete();
+            $table->foreign('runningcard_hourlyrecording_toolmaker_user_id')->references('id')->on('users')->restrictOnDelete();
             $table->timestamps();
         });
     }
