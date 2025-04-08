@@ -59,7 +59,7 @@ return new class extends Migration {
             $table->float('calculation_additional_single_print_price')->nullable();
 
             $table->integer('calculation_working_setup_quantity_relative')->nullable();
-            $table->float('calculation_working_extrusion_speed')->nullable();
+            $table->float('runningcard_extrusion_speed_IST')->nullable();
             $table->integer('calculation_working_annual_requirement_estimated')->nullable();
             $table->float('calculation_working_tool_costs_total')->nullable();
             $table->float('calculation_working_tool_costs_customer')->nullable();

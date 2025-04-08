@@ -4,6 +4,7 @@ import SamplingCard from "./SamplingCard";
 import PackagingSeriesCard from "./PackagingSeriesCard";
 import WorkHoursCard from "./WorkHoursCard";
 import ToolingCard from "./ToolingCard";
+import ProcessingCard from "./ProcessingCard";
 
 type Props = {
   data: any;
@@ -14,7 +15,7 @@ export default function OrderProfileProcessingView({ data }: Props) {
 
   return (
     <>
-      <Grid container spacing={2}>
+      <Grid container spacing={10} px={0.5}>
         <Grid size={{ xs: 12, md: 4 }}>
           <InfoCard
             title="Auftrag"
@@ -38,7 +39,7 @@ export default function OrderProfileProcessingView({ data }: Props) {
           />
         </Grid>
 
-        <Grid size={{ xs: 12, md: 4 }}>
+        <Grid size={{ xs: 12, md: 4 }} alignContent="center">
           <InfoCard
             title="Verarbeitungsvorgaben"
             rows={[
@@ -47,16 +48,8 @@ export default function OrderProfileProcessingView({ data }: Props) {
                 value: processing.speed_calc,
               },
               {
-                label: "Geschwindigkeit Eingefahren",
-                value: processing.speed_actual,
-              },
-              {
                 label: "Metergewicht Kalkulation",
                 value: processing.weight_calc,
-              },
-              {
-                label: "Metergewicht Eingefahren",
-                value: processing.weight_actual,
               },
             ]}
           />
@@ -64,6 +57,10 @@ export default function OrderProfileProcessingView({ data }: Props) {
       </Grid>
 
       {/* <RawMaterialTable materials={raw_materials} /> */}
+
+      <Grid size={{ xs: 12, md: 12 }}>
+        <ProcessingCard />
+      </Grid>
 
       <Grid size={{ xs: 12, md: 12 }}>
         <SamplingCard />

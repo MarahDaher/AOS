@@ -87,7 +87,7 @@ class OfferCalculated extends Model
 
             // Working
             'calculation_working_setup_quantity_relative',
-            'calculation_working_extrusion_speed',
+            'runningcard_extrusion_speed_IST',
             '_calculation_working_setup_quantity_lfm',
             '_calculation_working_setup_time',
             'calculation_working_annual_requirement_estimated',
@@ -101,7 +101,7 @@ class OfferCalculated extends Model
             'calculation_working_profile_cross_section_deviation_upper',
             '_calculation_working_density_total',
             '_calculation_working_profile_weight_lowerborder',
-            '_calculation_working_profile_weight_average',
+            'runningcard_profile_weight_IST',
             '_calculation_working_profile_weight_upperborder',
             'calculation_working_setup_quantity_total',
             'calculation_working_hourly_rate',

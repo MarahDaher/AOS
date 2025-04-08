@@ -15,14 +15,8 @@ export const mapOfferDetailsToProcessSheetData = (offerDetails: any) => {
   };
 
   const processing = {
-    speed_calc: offerDetails
-      ? offerDetails.calculation_working_extrusion_speed
-      : "-",
     speed_actual: offerDetails
       ? offerDetails.calculation_processing_piece_hourly_rate
-      : "-",
-    weight_calc: offerDetails
-      ? offerDetails._calculation_working_profile_weight_average
       : "-",
     weight_actual: offerDetails
       ? offerDetails.calculation_processing_piece_runtime

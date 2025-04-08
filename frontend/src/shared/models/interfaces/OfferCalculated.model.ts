@@ -54,7 +54,7 @@ export interface OfferCalculated {
   calculation_additional_single_print_price: number | null;
 
   calculation_working_setup_quantity_relative: number | null;
-  calculation_working_extrusion_speed: number | null;
+  runningcard_extrusion_speed_IST: number | null;
   calculation_working_annual_requirement_estimated: number | null;
   calculation_working_tool_costs_total: number | null;
   calculation_working_tool_costs_customer: number | null;

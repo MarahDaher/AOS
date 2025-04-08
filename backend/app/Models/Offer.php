@@ -65,7 +65,7 @@ class Offer extends Model
 
         // 🧹 Working
         'calculation_working_setup_quantity_relative',
-        'calculation_working_extrusion_speed',
+        'runningcard_extrusion_speed_IST',
         'calculation_working_annual_requirement_estimated',
         'calculation_working_tool_costs_total',
         'calculation_working_tool_costs_customer',

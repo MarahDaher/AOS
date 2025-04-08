@@ -52,7 +52,7 @@ return new class extends Migration
                   AS _calculation_working_setup_quantity_lfm,
 
                 ROUND((o.calculation_working_setup_quantity_relative * o.calculation_quantityA / 100) /
-                      o.calculation_working_extrusion_speed, 2)
+                      o.runningcard_extrusion_speed_IST, 2)
                   AS _calculation_working_setup_time,
 
                 ROUND(o.calculation_working_tool_costs_customer / o.calculation_working_tool_costs_total * 100, 2)
@@ -66,7 +66,7 @@ return new class extends Migration
                 -- Static 0 placeholders
                 0 AS _calculation_working_density_total,
                 0 AS _calculation_working_profile_weight_lowerborder,
-                0 AS _calculation_working_profile_weight_average,
+                0 AS runningcard_profile_weight_IST,
                 0 AS _calculation_working_profile_weight_upperborder,
 
                 0 AS _pricing_requirement_annual_sales,
