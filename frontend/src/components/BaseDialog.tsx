@@ -28,10 +28,17 @@ const BaseDialog = ({
   submitText = "Speichern",
   cancelText = "Abbrechen",
   hideActions = false,
+  maxWidth = "sm",
   ...props
 }: BaseDialogProps) => {
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm" {...props}>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      fullWidth
+      maxWidth={maxWidth}
+      {...props}
+    >
       <DialogTitle>{title}</DialogTitle>
       <DialogContent dividers>{children}</DialogContent>
       {!hideActions && (

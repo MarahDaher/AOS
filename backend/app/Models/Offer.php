@@ -71,7 +71,6 @@ class Offer extends Model
         'calculation_working_tool_costs_customer',
         'calculation_working_tool_costs_amortization_years',
         'calculation_working_allocation_costs_additional',
-        'calculation_working_profile_cross_section',
         'calculation_working_profile_cross_section_deviation_lower',
         'calculation_working_profile_cross_section_deviation_upper',
         'calculation_working_setup_quantity_total',

@@ -22,9 +22,13 @@ const RawMaterialPrices = () => {
     handleOpenModal,
     handleChangeMaterial,
     handleUpdateField,
-    handleUpdateRawMaterial,
     setRawMaterialRows,
   } = useRawMaterialPricesTable();
+
+  const totalPriceShare = rawMaterialRows.reduce(
+    (sum, row) => sum + (parseFloat(String(row._price_share)) || 0),
+    0
+  );
 
   return (
     <FormikProvider value={formik}>
@@ -56,7 +60,6 @@ const RawMaterialPrices = () => {
                   baseMaterials={baseMaterials}
                   onChangeMaterial={handleChangeMaterial}
                   onUpdateField={handleUpdateField}
-                  onUpdateRawMaterial={handleUpdateRawMaterial}
                   setRawMaterialRows={setRawMaterialRows}
                   onOpenModal={handleOpenModal}
                 />
@@ -85,9 +88,7 @@ const RawMaterialPrices = () => {
             <FormInputField
               name="general_raw_material_price_total_calculated"
               label="Rohstoffpreis gesamt / kg [€]"
-              value={
-                formik.values.general_raw_material_price_total_calculated || ""
-              }
+              value={totalPriceShare.toFixed(2)}
               disabled
             />
             <Typography variant="caption">(berechnet)</Typography>

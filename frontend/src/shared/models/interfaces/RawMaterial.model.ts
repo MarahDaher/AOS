@@ -25,36 +25,15 @@ export interface RawMaterialRow {
   price_date?: string;
 
   // ✅ Newly added fields:
-  additive?: string;
-  price_additive?: number;
-  price_total?: number;
+  _additives_concatenated?: string;
+  _additives_price_sum?: number;
+  price_total?: number; // still missing
 
   // Existing calculated fields
   _price_minus_discount?: number;
   _price_share?: number;
   _price_minus_discount_share?: number;
 }
-export interface RawMaterialRow {
-  offer_id: number;
-  raw_material_id: number;
-  name?: string;
-  type?: string;
-  supplier?: string;
-  share: number;
-  price?: number;
-  price_date?: string;
-
-  // ✅ Newly added fields:
-  additive?: string;
-  price_additive?: number;
-  price_total?: number;
-
-  // Existing calculated fields
-  _price_minus_discount?: number;
-  _price_share?: number;
-  _price_minus_discount_share?: number;
-}
-
 export interface BaseMaterial {
   id: number;
   name: string;

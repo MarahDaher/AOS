@@ -11,62 +11,55 @@ return new class extends Migration
     // 🛠 Create offers_calculated view
     DB::statement("
             CREATE OR REPLACE VIEW offers_calculated AS
-            SELECT 
+ SELECT 
                 o.*,
-
-                ROUND(o.calculation_processing_lfm_runtime * o.calculation_processing_lfm_runtime_factor +
-                      o.calculation_processing_lfm_packing_time * o.calculation_processing_lfm_packing_time_factor, 2)
-                  AS _calculation_processing_lfm_expense,
-
-                ROUND((o.calculation_processing_lfm_runtime * o.calculation_processing_lfm_runtime_factor +
-                       o.calculation_processing_lfm_packing_time * o.calculation_processing_lfm_packing_time_factor) *
-                      o.calculation_processing_lfm_hourly_rate / 3600, 2)
-                  AS _calculation_processing_lfm_costs,
-
-                ROUND(o.calculation_processing_piece_runtime * o.calculation_processing_piece_runtime_factor +
-                      o.calculation_processing_piece_packing_time * o.calculation_processing_piece_packing_time_factor, 2)
-                  AS _calculation_processing_piece_expense,
-
-                ROUND((o.calculation_processing_piece_runtime * o.calculation_processing_piece_runtime_factor +
-                       o.calculation_processing_piece_packing_time * o.calculation_processing_piece_packing_time_factor) *
-                      o.calculation_processing_piece_hourly_rate / 3600, 2)
-                  AS _calculation_processing_piece_costs,
-
-                ROUND(o.calculation_additional_setup_time * o.calculation_additional_hourly_rate, 2)
-                  AS _calculation_additional_setup_costs_total,
-
-                ROUND(o.calculation_additional_setup_time * o.calculation_additional_hourly_rate / o.calculation_quantityA, 2)
-                  AS _calculation_additional_setup_costs_lfm,
-
-                ROUND(o.calculation_additional_transport_costs_total / o.calculation_quantityA, 2)
-                  AS _calculation_additional_transport_costs_lfm,
-
-                ROUND((o.calculation_additional_box_count * o.calculation_additional_box_price_per_piece +
-                       o.calculation_additional_box_price_flat_additional) / o.calculation_quantityA, 2)
-                  AS _calculation_additional_box_costs_lfm,
-
-                ROUND(o.calculation_additional_single_print * o.calculation_additional_single_print_price, 2)
-                  AS _calculation_additional_single_print_lfm,
-
-                ROUND(o.calculation_working_setup_quantity_relative * o.calculation_quantityA / 100, 2)
-                  AS _calculation_working_setup_quantity_lfm,
-
-                ROUND((o.calculation_working_setup_quantity_relative * o.calculation_quantityA / 100) /
-                      o.runningcard_extrusion_speed_IST, 2)
-                  AS _calculation_working_setup_time,
-
-                ROUND(o.calculation_working_tool_costs_customer / o.calculation_working_tool_costs_total * 100, 2)
-                  AS _calculation_working_tool_costs_customer_relative,
-
-                ROUND((o.calculation_working_allocation_costs_additional + o.calculation_working_tool_costs_total - o.calculation_working_tool_costs_customer) /
-                      (o.calculation_working_annual_requirement_estimated * o.calculation_working_tool_costs_amortization_years), 2)
-                  AS _calculation_working_allocation_costs_lfm,
-
-
-                -- Static 0 placeholders
-                0 AS _calculation_working_density_total,
-                0 AS _calculation_working_profile_weight_lowerborder,
-                0 AS _calculation_working_profile_weight_upperborder,
+                ROUND(o.calculation_processing_lfm_runtime * o.calculation_processing_lfm_runtime_factor + o.calculation_processing_lfm_packing_time * o.calculation_processing_lfm_packing_time_factor, 2) AS _calculation_processing_lfm_expense,
+                ROUND((o.calculation_processing_lfm_runtime * o.calculation_processing_lfm_runtime_factor + o.calculation_processing_lfm_packing_time * o.calculation_processing_lfm_packing_time_factor) * o.calculation_processing_lfm_hourly_rate / 3600, 2) AS _calculation_processing_lfm_costs,
+                ROUND(o.calculation_processing_piece_runtime * o.calculation_processing_piece_runtime_factor + o.calculation_processing_piece_packing_time * o.calculation_processing_piece_packing_time_factor, 2) AS _calculation_processing_piece_expense,
+                ROUND((o.calculation_processing_piece_runtime * o.calculation_processing_piece_runtime_factor + o.calculation_processing_piece_packing_time * o.calculation_processing_piece_packing_time_factor) * o.calculation_processing_piece_hourly_rate / 3600, 2) AS _calculation_processing_piece_costs,
+                ROUND(o.calculation_additional_setup_time * o.calculation_additional_hourly_rate, 2) AS _calculation_additional_setup_costs_total,
+                ROUND(o.calculation_additional_setup_time * o.calculation_additional_hourly_rate / o.calculation_quantityA, 2) AS _calculation_additional_setup_costs_lfm,
+                ROUND(o.calculation_additional_transport_costs_total / o.calculation_quantityA, 2) AS _calculation_additional_transport_costs_lfm,
+                ROUND(((o.calculation_additional_box_count * o.calculation_additional_box_price_per_piece) + o.calculation_additional_box_price_flat_additional) / o.calculation_quantityA, 2) AS _calculation_additional_box_costs_lfm,
+                ROUND((o.calculation_additional_single_print * o.calculation_additional_single_print_price), 2) AS _calculation_additional_single_print_lfm,
+                ROUND(o.calculation_working_setup_quantity_relative * o.calculation_quantityA / 100, 2) AS _calculation_working_setup_quantity_lfm,
+                ROUND((o.calculation_working_setup_quantity_relative * o.calculation_quantityA / 100) / o.calculation_working_extrusion_speed, 2) AS _calculation_working_setup_time,
+                ROUND(o.calculation_working_tool_costs_customer / o.calculation_working_tool_costs_total * 100, 2) AS _calculation_working_tool_costs_customer_relative,
+                ROUND((o.calculation_working_allocation_costs_additional + o.calculation_working_tool_costs_total - o.calculation_working_tool_costs_customer) / (o.calculation_working_annual_requirement_estimated * o.calculation_working_tool_costs_amortization_years), 2) AS _calculation_working_allocation_costs_lfm,
+                (
+                    SELECT SUM(r.density * o_r.share/100)
+                    FROM offers_raw_materials o_r 
+                    JOIN raw_materials r ON (r.id=o_r.raw_material_id)
+                    WHERE (o.id=o_r.offer_id)
+                ) AS _calculation_working_density_total,
+                (
+                    (
+                        SELECT SUM(r.density * o_r.share/100)
+                        FROM offers_raw_materials o_r 
+                        JOIN raw_materials r ON (r.id=o_r.raw_material_id)
+                        WHERE (o.id=o_r.offer_id)
+                    ) 
+                    * o.general_profile_crosssection 
+                    * (100 - o.calculation_working_profile_cross_section_deviation_lower)/100
+                ) AS _calculation_working_profile_weight_lowerborder,
+                (
+                    (
+                        SELECT SUM(r.density * o_r.share/100)
+                        FROM offers_raw_materials o_r 
+                        JOIN raw_materials r ON (r.id=o_r.raw_material_id)
+                        WHERE (o.id=o_r.offer_id)
+                    ) * general_profile_crosssection
+                ) AS _calculation_working_profile_weight_average,
+                (
+                    (
+                        SELECT SUM(r.density * o_r.share/100)
+                        FROM offers_raw_materials o_r 
+                        JOIN raw_materials r ON (r.id=o_r.raw_material_id)
+                        WHERE (o.id=o_r.offer_id)
+                    )
+                    * o.general_profile_crosssection 
+                    * (100 + o.calculation_working_profile_cross_section_deviation_upper)/100
+                ) AS _calculation_working_profile_weight_upperborder,
 
                 0 AS _pricing_requirement_annual_sales,
                 0 AS _pricing_costs_calc_production_time,
@@ -211,8 +204,6 @@ return new class extends Migration
                 0 AS _pricing_piece_length_prices_length1333_quantityC,
                 0 AS _pricing_piece_length_prices_length1333_quantityD,
                 0 AS _pricing_piece_length_prices_length1333_quantityE,
-
-                    0 AS `_calculation_working_profile_weight_average`,
 
                 (o.`runningcard_hourlyrecording_construction` + o.`runningcard_hourlyrecording_toolwork` + o.`runningcard_hourlyrecording_entry`) AS `_runningcard_hourlyrecording_total`
 

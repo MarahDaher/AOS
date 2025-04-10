@@ -60,7 +60,6 @@ export interface OfferCalculated {
   calculation_working_tool_costs_customer: number | null;
   calculation_working_tool_costs_amortization_years: number | null;
   calculation_working_allocation_costs_additional: number | null;
-  calculation_working_profile_cross_section: number | null;
   calculation_working_profile_cross_section_deviation_lower: number | null;
   calculation_working_profile_cross_section_deviation_upper: number | null;
   calculation_working_setup_quantity_total: number | null;

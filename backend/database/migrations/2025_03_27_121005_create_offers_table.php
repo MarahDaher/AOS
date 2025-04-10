@@ -65,7 +65,6 @@ return new class extends Migration {
             $table->float('calculation_working_tool_costs_customer')->nullable();
             $table->integer('calculation_working_tool_costs_amortization_years')->nullable();
             $table->integer('calculation_working_allocation_costs_additional')->nullable();
-            $table->float('calculation_working_profile_cross_section')->nullable();
             $table->integer('calculation_working_profile_cross_section_deviation_lower')->default(0);
             $table->integer('calculation_working_profile_cross_section_deviation_upper')->default(0);
             $table->integer('calculation_working_setup_quantity_total')->nullable();
@@ -118,6 +117,8 @@ return new class extends Migration {
             $table->integer('runningcard_hourlyrecording_toolwork')->nullable();
             $table->integer('runningcard_hourlyrecording_entry')->nullable();
             $table->integer('runningcard_hourlyrecording_entrystitches')->nullable();
+
+
             $table->unsignedBigInteger('runningcard_hourlyrecording_entrydriver_user_id')->nullable();
             $table->unsignedBigInteger('runningcard_hourlyrecording_toolmaker_user_id')->nullable();
 
@@ -130,6 +131,10 @@ return new class extends Migration {
             $table->foreign('runningcard_hourlyrecording_entrydriver_user_id')->references('id')->on('users')->restrictOnDelete();
             $table->foreign('runningcard_hourlyrecording_toolmaker_user_id')->references('id')->on('users')->restrictOnDelete();
             $table->timestamps();
+
+            $table->engine = 'InnoDB';
+            $table->charset = 'utf8mb4';
+            $table->collation = 'utf8mb4_0900_ai_ci';
         });
     }
 

@@ -11,8 +11,8 @@ class AdditiveSeeder extends Seeder
     {
         DB::table('additives')->insert([
             ['name' => 'Antioxidans', 'category' => 'Chemisch', 'price' => 20.00, 'price_date' => '2025-04-01'],
-            ['name' => 'Farbe Blau', 'category' => 'Farbstoff', 'price' => 5.00, 'price_date' => '2025-04-01'],
-            ['name' => 'Weichmacher', 'category' => 'Chemisch', 'price' => 15.00, 'price_date' => '2025-04-01'],
+            ['name' => 'Blau', 'category' => 'Farbe', 'price' => 5.00, 'price_date' => '2025-04-01'],
+            ['name' => 'Weichmacher', 'category' => 'Chemisch', 'price' => 15.00, 'price_date' => '2025-04-01']
         ]);
     }
 }

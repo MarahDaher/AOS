@@ -1,25 +1,30 @@
 <?php
 
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class OfferRawMaterial extends Model
 {
     protected $table = 'offers_raw_materials';
 
-    protected $primaryKey = null; // no auto-increment
+    public $timestamps = false;
+
     public $incrementing = false;
+
+    protected $primaryKey = null;
 
     protected $fillable = [
         'offer_id',
         'raw_material_id',
-        'supplier',
+        'absolut_demand',
         'share',
-        'absolut_demand'
+        'supplier',
+        'price',
+        'price_date',
     ];
 
-    public $timestamps = false;
+    protected $casts = [
+        'price_date' => 'date:Y-m-d',
+    ];
 }

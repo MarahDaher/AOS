@@ -23,11 +23,6 @@ interface RawMaterialRowProps {
     field: keyof RawMaterialRowType,
     value: string | number
   ) => void;
-  onUpdateRawMaterial: (
-    id: number,
-    field: keyof RawMaterialRowType,
-    value: string | number
-  ) => void;
   setRawMaterialRows: React.Dispatch<
     React.SetStateAction<RawMaterialRowType[]>
   >;
@@ -39,7 +34,6 @@ const RawMaterialRow = ({
   baseMaterials,
   onChangeMaterial,
   onUpdateField,
-  onUpdateRawMaterial,
   setRawMaterialRows,
   onOpenModal,
 }: RawMaterialRowProps) => (
@@ -64,6 +58,7 @@ const RawMaterialRow = ({
       <Typography>{row.type || "-"}</Typography>
     </TableCell>
 
+    {/* Lieferant */}
     <TableCell>
       <TextField
         fullWidth
@@ -76,9 +71,9 @@ const RawMaterialRow = ({
       />
     </TableCell>
 
+    {/* Anteil [%] */}
     <TableCell>
       <TextField
-        fullWidth
         type="number"
         variant="standard"
         value={row.share}
@@ -94,10 +89,10 @@ const RawMaterialRow = ({
       />
     </TableCell>
 
+    {/* Preisstand */}
     <TableCell>
       <TextField
         type="month"
-        fullWidth
         variant="standard"
         value={formatPriceDate(row.price_date)}
         onChange={(e) =>
@@ -108,16 +103,11 @@ const RawMaterialRow = ({
             `${e.target.value}-01`
           )
         }
-        onBlur={(e) =>
-          onUpdateRawMaterial(
-            row.raw_material_id,
-            "price_date",
-            `${e.target.value}-01`
-          )
-        }
+        onBlur={(e) => onUpdateField(row, "price_date", `${e.target.value}-01`)}
       />
     </TableCell>
 
+    {/* Preis [€] */}
     <TableCell>
       <TextField
         fullWidth
@@ -127,56 +117,22 @@ const RawMaterialRow = ({
         onChange={(e) =>
           updateRowField(setRawMaterialRows, row, "price", e.target.value)
         }
-        onBlur={(e) =>
-          onUpdateRawMaterial(
-            row.raw_material_id,
-            "price",
-            Number(e.target.value)
-          )
-        }
+        onBlur={(e) => onUpdateField(row, "price", Number(e.target.value))}
       />
     </TableCell>
 
+    {/* Additive */}
     <TableCell>
-      <TextField
-        fullWidth
-        variant="standard"
-        value={row.additive || ""}
-        onChange={(e) =>
-          updateRowField(setRawMaterialRows, row, "additive", e.target.value)
-        }
-        onBlur={(e) =>
-          onUpdateRawMaterial(row.raw_material_id, "additive", e.target.value)
-        }
-      />
+      <Typography>
+        {row._additives_concatenated ? row._additives_concatenated : "-"}
+      </Typography>
     </TableCell>
 
+    {/*  */}
     <TableCell>
-      <TextField
-        fullWidth
-        type="number"
-        variant="standard"
-        value={row.price_additive || ""}
-        onChange={(e) =>
-          updateRowField(
-            setRawMaterialRows,
-            row,
-            "price_additive",
-            e.target.value
-          )
-        }
-        onBlur={(e) =>
-          onUpdateRawMaterial(
-            row.raw_material_id,
-            "price_additive",
-            Number(e.target.value)
-          )
-        }
-      />
-    </TableCell>
-
-    <TableCell>
-      <Typography>{row.price_total ?? "-"}</Typography>
+      <Typography>
+        {row._additives_price_sum ? row._additives_price_sum : "-"}
+      </Typography>
     </TableCell>
 
     <TableCell>

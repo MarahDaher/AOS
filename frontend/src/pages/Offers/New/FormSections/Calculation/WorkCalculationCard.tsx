@@ -63,8 +63,9 @@ const rows = [
   ],
   [
     {
-      name: "calculation_working_profile_cross_section",
+      name: "general_profile_crosssection",
       label: "Profilquerschnitt [mm²]",
+      disabled: true,
     },
     {
       name: "calculation_working_profile_cross_section_deviation_lower",

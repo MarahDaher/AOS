@@ -18,6 +18,8 @@ class OfferRawMaterialCalculatedResource extends JsonResource
             'price_date' => $this->price_date->format('d.m.Y'),
             'supplier' => $this->supplier,
             'share' => $this->share,
+            '_additives_concatenated' => $this->_additives_concatenated,
+            '_additives_price_sum' => $this->_additives_price_sum,
             'absolut_demand' => $this->absolut_demand,
             '_price_minus_discount' => $this->_price_minus_discount,
             '_price_share' => $this->_price_share,

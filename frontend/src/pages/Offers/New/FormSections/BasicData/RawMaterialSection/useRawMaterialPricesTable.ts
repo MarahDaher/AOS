@@ -44,8 +44,17 @@ export const useRawMaterialPricesTable = () => {
     field: keyof RawMaterialRow,
     value: string | number
   ) => {
+    // Optimistically update local
+    setRawMaterialRows((prev) =>
+      prev.map((r) =>
+        r.offer_id === row.offer_id && r.raw_material_id === row.raw_material_id
+          ? { ...r, [field]: value }
+          : r
+      )
+    );
+
     try {
-      await OfferRawMaterialCalculatedApi.update(
+      await OfferRawMaterialCalculatedApi.updateRawMaterial(
         row.offer_id,
         row.raw_material_id,
         { [field]: value }
@@ -53,19 +62,8 @@ export const useRawMaterialPricesTable = () => {
       fetchOfferRawMaterials();
     } catch (error) {
       showError(error);
-    }
-  };
-
-  const handleUpdateRawMaterial = async (
-    rawMaterialId: number,
-    field: keyof RawMaterialRow,
-    value: string | number
-  ) => {
-    try {
-      await RawMaterialApi.updateRawMaterial(rawMaterialId, { [field]: value });
+      // optional: rollback if failed
       fetchOfferRawMaterials();
-    } catch (error) {
-      showError(error);
     }
   };
 
@@ -74,7 +72,7 @@ export const useRawMaterialPricesTable = () => {
     newMaterialId: number
   ) => {
     try {
-      await OfferRawMaterialCalculatedApi.update(
+      await OfferRawMaterialCalculatedApi.updateRawMaterial(
         row.offer_id,
         row.raw_material_id,
         {
@@ -101,8 +99,6 @@ export const useRawMaterialPricesTable = () => {
               offerDetails.general_raw_material_price_total_overwritten ?? "",
             general_raw_material_purchase_discount:
               offerDetails.general_raw_material_purchase_discount ?? "",
-            general_raw_material_price_total_calculated:
-              offerDetails.general_raw_material_price_total_calculated ?? "",
           }
         : {}),
     },
@@ -115,18 +111,6 @@ export const useRawMaterialPricesTable = () => {
     fetchOfferRawMaterials();
   }, [offerDetails?.id]);
 
-  useEffect(() => {
-    const totalPriceShare = rawMaterialRows.reduce(
-      (sum, row) => sum + (parseFloat(String(row._price_share)) || 0),
-      0
-    );
-
-    formik.setFieldValue(
-      "general_raw_material_price_total_calculated",
-      totalPriceShare.toFixed(2)
-    );
-  }, [rawMaterialRows]);
-
   return {
     formik,
     baseMaterials,
@@ -138,7 +122,6 @@ export const useRawMaterialPricesTable = () => {
     setSelectedMaterial,
     handleChangeMaterial,
     handleUpdateField,
-    handleUpdateRawMaterial,
     setRawMaterialRows,
   };
 };

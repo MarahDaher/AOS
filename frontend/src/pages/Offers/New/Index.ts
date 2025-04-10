@@ -145,7 +145,7 @@ export const WorkCalculationFields = [
   "calculation_working_tool_costs_amortization_years",
   "_calculation_working_allocation_costs_lfm",
 
-  "calculation_working_profile_cross_section",
+  "general_profile_crosssection",
   "calculation_working_profile_cross_section_deviation_lower",
   "calculation_working_profile_cross_section_deviation_upper",
   "_calculation_working_density_total",

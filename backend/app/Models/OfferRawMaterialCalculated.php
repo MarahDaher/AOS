@@ -16,4 +16,9 @@ class OfferRawMaterialCalculated extends Model
     protected $casts = [
         'price_date' => 'date:Y-m-d',
     ];
+
+    public function additives()
+    {
+        return $this->hasMany(AdditiveOfferRawMaterial::class, 'raw_material_id', 'raw_material_id');
+    }
 }

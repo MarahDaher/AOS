@@ -8,7 +8,11 @@ export class OfferRawMaterialCalculatedApi {
     });
   }
 
-  static async update(offerId: number, rawMaterialId: number, data: any) {
+  static async updateRawMaterial(
+    offerId: number,
+    rawMaterialId: number,
+    data: any
+  ) {
     return await handleRequest<any>({
       method: "PATCH",
       endpoint: `offers/${offerId}/raw-materials/${rawMaterialId}`,

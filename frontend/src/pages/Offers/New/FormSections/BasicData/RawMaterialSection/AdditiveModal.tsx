@@ -11,6 +11,7 @@ import {
   TableHead,
   TableRow,
   TextField,
+  Typography,
 } from "@mui/material";
 import { Formik, Form, FieldArray } from "formik";
 import * as Yup from "yup";
@@ -70,6 +71,7 @@ const AdditiveModal = ({
             onClose={onClose}
             hideActions={true}
             onSubmit={submitForm}
+            maxWidth="md"
           >
             <FieldArray name="additives">
               {({ remove, push }) => (
@@ -91,24 +93,10 @@ const AdditiveModal = ({
                         {values.map((item, index) => (
                           <TableRow key={index}>
                             <TableCell>
-                              <TextField
-                                name={`[${index}].name`}
-                                variant="standard"
-                                value={item.name}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                fullWidth
-                              />
+                              <Typography>{item.name}</Typography>
                             </TableCell>
                             <TableCell>
-                              <TextField
-                                name={`[${index}].category`}
-                                variant="standard"
-                                value={item.category}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                fullWidth
-                              />
+                              <Typography>{item.category}</Typography>
                             </TableCell>
                             <TableCell>
                               <TextField

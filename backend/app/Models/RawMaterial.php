@@ -24,4 +24,10 @@ class RawMaterial extends Model
         return $this->belongsToMany(Offer::class, 'offers_raw_materials')
             ->withPivot('absolut_demand', 'share', 'supplier');
     }
+
+    public function additives()
+    {
+        return $this->belongsToMany(Additive::class, 'additives_offers_raw_materials', 'raw_material_id', 'additives_id')
+            ->withPivot('offer_id', 'share');
+    }
 }

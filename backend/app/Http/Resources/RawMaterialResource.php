@@ -21,6 +21,7 @@ class RawMaterialResource extends JsonResource
             'price' => $this->price,
             'price_date' => $this->price_date,
             'density' => $this->density,
+            'additives' => AdditiveResource::collection($this->whenLoaded('additives')),
         ];
     }
 }

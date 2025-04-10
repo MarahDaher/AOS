@@ -15,6 +15,11 @@ class OfferRawMaterialRepository
             ->where('raw_material_id', $rawMaterialId)
             ->firstOrFail();
 
+        // ✅ ADD THIS:
+        if (empty($data)) {
+            throw new \Exception('No data provided to update.');
+        }
+
         if (empty($data['raw_material_id']) || $data['raw_material_id'] == $rawMaterialId) {
             OfferRawMaterial::where('offer_id', $offerId)
                 ->where('raw_material_id', $rawMaterialId)
@@ -49,6 +54,7 @@ class OfferRawMaterialRepository
 
         return new OfferRawMaterialCalculatedResource($updated);
     }
+
 
 
     public function updateRawMaterialDemand(array $data, int $offerId, int $rawMaterialId): OfferRawMaterialCalculatedResource
