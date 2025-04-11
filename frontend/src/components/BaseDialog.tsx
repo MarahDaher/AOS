@@ -5,6 +5,7 @@ import {
   DialogActions,
   Button,
   DialogProps,
+  Box,
 } from "@mui/material";
 import { ReactNode } from "react";
 
@@ -13,10 +14,11 @@ interface BaseDialogProps extends DialogProps {
   open: boolean;
   onClose: () => void;
   children: ReactNode;
-  onSubmit: () => void;
+  onSubmit?: () => void;
   submitText?: string;
   cancelText?: string;
   hideActions?: boolean;
+  actionButton?: ReactNode;
 }
 
 const BaseDialog = ({
@@ -29,6 +31,7 @@ const BaseDialog = ({
   cancelText = "Abbrechen",
   hideActions = false,
   maxWidth = "sm",
+  actionButton,
   ...props
 }: BaseDialogProps) => {
   return (
@@ -39,7 +42,16 @@ const BaseDialog = ({
       maxWidth={maxWidth}
       {...props}
     >
-      <DialogTitle>{title}</DialogTitle>
+      <DialogTitle
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        {title}
+        {actionButton && <Box>{actionButton}</Box>}
+      </DialogTitle>
       <DialogContent dividers>{children}</DialogContent>
       {!hideActions && (
         <DialogActions>

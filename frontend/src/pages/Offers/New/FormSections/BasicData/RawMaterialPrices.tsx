@@ -1,10 +1,9 @@
-// 📁 RawMaterialPricesTable.tsx
 import CardBox from "@components/CardBox";
 import FormInputField from "@components/FormInputField";
 import FormInputSaveField from "@components/FormInputSaveField";
 import Grid from "@mui/material/Grid2";
 import { FormikProvider } from "formik";
-import { Typography } from "@mui/material";
+import { Typography, Button } from "@mui/material";
 import { Table, TableContainer, TableBody, Paper } from "@mui/material";
 import RawMaterialTableHead from "./RawMaterialSection/RawMaterialTableHead";
 import RawMaterialRow from "./RawMaterialSection/RawMaterialRow";
@@ -23,6 +22,9 @@ const RawMaterialPrices = () => {
     handleChangeMaterial,
     handleUpdateField,
     setRawMaterialRows,
+    fetchOfferRawMaterials,
+    createEmptyRow,
+    handleAddMaterial,
   } = useRawMaterialPricesTable();
 
   const totalPriceShare = rawMaterialRows.reduce(
@@ -57,16 +59,32 @@ const RawMaterialPrices = () => {
                 <RawMaterialRow
                   key={index}
                   row={row}
+                  rawMaterialRows={rawMaterialRows}
                   baseMaterials={baseMaterials}
                   onChangeMaterial={handleChangeMaterial}
                   onUpdateField={handleUpdateField}
                   setRawMaterialRows={setRawMaterialRows}
                   onOpenModal={handleOpenModal}
+                  handleAddMaterial={handleAddMaterial}
                 />
               ))}
             </TableBody>
           </Table>
         </TableContainer>
+
+        {/* ➡️ Add "Add Row" Button */}
+        <Grid container justifyContent="flex-end" mt={2}>
+          <Grid>
+            <Button
+              variant="outlined"
+              onClick={() =>
+                setRawMaterialRows((prev) => [...prev, createEmptyRow()])
+              }
+            >
+              Neue Zeile hinzufügen
+            </Button>
+          </Grid>
+        </Grid>
 
         <Grid
           container
@@ -98,13 +116,16 @@ const RawMaterialPrices = () => {
 
       <AdditiveModal
         open={openModal}
-        onClose={() => setOpenModal(false)}
-        onSubmit={(values) => {
-          console.log("Saving additives:", values);
+        onClose={() => {
+          fetchOfferRawMaterials();
           setOpenModal(false);
         }}
         materialName={selectedMaterial?.name || ""}
         initialValues={selectedMaterial?.additives || []}
+        selectedMaterial={{
+          offer_id: selectedMaterial?.offer_id,
+          raw_material_id: selectedMaterial?.raw_material_id,
+        }}
       />
     </FormikProvider>
   );

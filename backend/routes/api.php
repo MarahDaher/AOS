@@ -1,6 +1,8 @@
 <?php
 
 use App\Config\PermissionConstants;
+use App\Http\Controllers\Api\AdditiveController;
+use App\Http\Controllers\Api\AdditiveOfferRawMaterialController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\OfferController;
 use App\Http\Controllers\Api\OfferDrawingController;
@@ -48,10 +50,13 @@ Route::middleware(['auth:api'])->group(function () {
         Route::get('{id}/raw-materials-calculated', [OfferRawMaterialCalculatedController::class, 'index'])->middleware('check.permission:' . PermissionConstants::VIEW_OFFER_RAW_MATERIAL);
         Route::patch('{offerId}/raw-materials/{rawMaterialId}', [OfferRawMaterialCalculatedController::class, 'update'])->middleware('check.permission:' . PermissionConstants::UPDATE_OFFER_RAW_MATERIAL);;
         Route::patch('{offerId}/raw-materials-demand/{rawMaterialId}', [OfferRawMaterialCalculatedController::class, 'updateDemand'])->middleware('check.permission:' . PermissionConstants::UPDATE_OFFER_RAW_MATERIAL);;
+        Route::delete('{offerId}/raw-materials/{rawMaterialId}', [OfferRawMaterialCalculatedController::class, 'destroy'])->middleware('check.permission:' . PermissionConstants::DELETE_OFFER_RAW_MATERIAL);;
         // Drawings
         Route::get('{id}/drawing', [OfferDrawingController::class, 'show'])->middleware('check.permission:' . PermissionConstants::VIEW_DRAWERING);
         Route::post('{id}/drawing', [OfferDrawingController::class, 'store'])->middleware('check.permission:' . PermissionConstants::CREATE_DRAWERING);
     });
+
+    Route::post('offer-raw-materials', [OfferRawMaterialCalculatedController::class, 'store']);
 
     // Raw Materials
     Route::prefix('raw-materials')->group(function () {
@@ -60,4 +65,10 @@ Route::middleware(['auth:api'])->group(function () {
         Route::post('/', [RawMaterialController::class, 'store'])->middleware('check.permission:' . PermissionConstants::CREATE_RAW_MATERIAL);
         Route::patch('{id}', [RawMaterialController::class, 'update'])->middleware('check.permission:' . PermissionConstants::UPDATE_RAW_MATERIAL);
     });
+
+    // Additives
+    Route::get('additives', [AdditiveController::class, 'index']);
+    Route::get('additives-for-raw-material', [AdditiveOfferRawMaterialController::class, 'getAdditivesForRawMaterial']);
+    Route::post('additives-offers-raw-materials', [AdditiveOfferRawMaterialController::class, 'store']);
+    Route::delete('additives-offers-raw-materials', [AdditiveOfferRawMaterialController::class, 'destroy']);
 });

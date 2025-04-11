@@ -2,16 +2,23 @@
 import {
   IconButton,
   MenuItem,
+  Stack,
   TableCell,
   TableRow,
   TextField,
   Typography,
 } from "@mui/material";
+import { Delete, PlaylistAdd } from "@mui/icons-material";
 import {
   RawMaterialRow as RawMaterialRowType,
   BaseMaterial,
 } from "@interfaces/RawMaterial.model";
-import { PlaylistAdd } from "@mui/icons-material";
+import { useOfferContext } from "@contexts/OfferProvider";
+import { useApiErrorHandler } from "@hooks/useApiErrorHandler";
+import { OfferRawMaterialCalculatedApi } from "@api/offer-raw-material";
+import { useState } from "react";
+import ConfirmationDialog from "@components/ConfirmationDialog";
+import { useApiSuccessHandler } from "@hooks/useApiSuccessHandler";
 
 interface RawMaterialRowProps {
   row: RawMaterialRowType;
@@ -27,133 +34,204 @@ interface RawMaterialRowProps {
     React.SetStateAction<RawMaterialRowType[]>
   >;
   onOpenModal: (row: RawMaterialRowType) => void;
+  handleAddMaterial: (newMaterialId: number) => void;
+  rawMaterialRows: RawMaterialRowType[];
 }
 
 const RawMaterialRow = ({
   row,
   baseMaterials,
+  rawMaterialRows,
   onChangeMaterial,
   onUpdateField,
   setRawMaterialRows,
   onOpenModal,
-}: RawMaterialRowProps) => (
-  <TableRow>
-    <TableCell>
-      <TextField
-        select
-        fullWidth
-        variant="standard"
-        value={row.raw_material_id || ""}
-        onChange={(e) => onChangeMaterial(row, Number(e.target.value))}
-      >
-        {baseMaterials.map((m) => (
-          <MenuItem key={m.id} value={m.id}>
-            {m.name}
-          </MenuItem>
-        ))}
-      </TextField>
-    </TableCell>
+  handleAddMaterial,
+}: RawMaterialRowProps) => {
+  const { offerDetails } = useOfferContext();
+  const { showError } = useApiErrorHandler();
 
-    <TableCell>
-      <Typography>{row.type || "-"}</Typography>
-    </TableCell>
+  const { showSuccess } = useApiSuccessHandler();
 
-    {/* Lieferant */}
-    <TableCell>
-      <TextField
-        fullWidth
-        variant="standard"
-        value={row.supplier || ""}
-        onChange={(e) =>
-          updateRowField(setRawMaterialRows, row, "supplier", e.target.value)
-        }
-        onBlur={(e) => onUpdateField(row, "supplier", e.target.value)}
+  const [confirmOpen, setConfirmOpen] = useState(false);
+
+  const handleConfirmDelete = async () => {
+    if (!row.raw_material_id || !offerDetails?.id) return;
+
+    try {
+      await OfferRawMaterialCalculatedApi.deleteRawMaterial(
+        offerDetails.id,
+        row.raw_material_id
+      );
+      showSuccess("Rohstoff erfolgreich gelöscht.");
+      setRawMaterialRows((prev) =>
+        prev.filter(
+          (r) =>
+            !(
+              r.offer_id === offerDetails.id &&
+              r.raw_material_id === row.raw_material_id
+            )
+        )
+      );
+      setConfirmOpen(false);
+    } catch (error) {
+      showError(error);
+      setConfirmOpen(false);
+    }
+  };
+
+  const selectedMaterialIds = rawMaterialRows
+    .filter(
+      (r) =>
+        r.raw_material_id !== 0 && r.raw_material_id !== row.raw_material_id
+    )
+    .map((r) => r.raw_material_id);
+  return (
+    <TableRow>
+      <TableCell>
+        <TextField
+          select
+          fullWidth
+          variant="standard"
+          value={row.raw_material_id || ""}
+          onChange={(e) => {
+            const selectedId = Number(e.target.value);
+            if (!row.raw_material_id) {
+              handleAddMaterial(selectedId);
+            } else {
+              onChangeMaterial(row, selectedId);
+            }
+          }}
+        >
+          {baseMaterials
+            .filter((material) => !selectedMaterialIds.includes(material.id))
+            .map((m) => (
+              <MenuItem key={m.id} value={m.id}>
+                {m.name}
+              </MenuItem>
+            ))}
+        </TextField>
+      </TableCell>
+
+      <TableCell>
+        <Typography>{row.type || "-"}</Typography>
+      </TableCell>
+
+      {/* Lieferant */}
+      <TableCell>
+        <TextField
+          fullWidth
+          variant="standard"
+          value={row.supplier ?? ""}
+          onChange={(e) =>
+            updateRowField(setRawMaterialRows, row, "supplier", e.target.value)
+          }
+          onBlur={(e) => onUpdateField(row, "supplier", e.target.value)}
+        />
+      </TableCell>
+
+      {/* Anteil [%] */}
+      <TableCell>
+        <TextField
+          type="number"
+          variant="standard"
+          value={row.share ?? 0}
+          onChange={(e) =>
+            updateRowField(
+              setRawMaterialRows,
+              row,
+              "share",
+              Number(e.target.value)
+            )
+          }
+          onBlur={(e) => onUpdateField(row, "share", Number(e.target.value))}
+        />
+      </TableCell>
+
+      {/* Preisstand */}
+      <TableCell>
+        <TextField
+          type="month"
+          variant="standard"
+          value={formatPriceDate(row.price_date) ?? ""}
+          onChange={(e) =>
+            updateRowField(
+              setRawMaterialRows,
+              row,
+              "price_date",
+              `${e.target.value}-01`
+            )
+          }
+          onBlur={(e) =>
+            onUpdateField(row, "price_date", `${e.target.value}-01`)
+          }
+        />
+      </TableCell>
+
+      {/* Preis [€] */}
+      <TableCell>
+        <TextField
+          fullWidth
+          type="number"
+          variant="standard"
+          value={row.price ?? 0}
+          onChange={(e) =>
+            updateRowField(setRawMaterialRows, row, "price", e.target.value)
+          }
+          onBlur={(e) => onUpdateField(row, "price", Number(e.target.value))}
+        />
+      </TableCell>
+
+      {/* Additive */}
+      <TableCell>
+        <Typography>{row._additives_concatenated || "-"}</Typography>
+      </TableCell>
+
+      <TableCell>
+        <Typography>{row._additives_price_sum || "-"}</Typography>
+      </TableCell>
+
+      <TableCell>
+        <Typography>{row._price_minus_discount ?? "-"}</Typography>
+      </TableCell>
+
+      <TableCell>
+        <Typography>{row._price_share ?? "-"}</Typography>
+      </TableCell>
+
+      <TableCell>
+        <Typography>{row._price_minus_discount_share ?? "-"}</Typography>
+      </TableCell>
+
+      {/* ➡️ Stack icons horizontally */}
+      <TableCell>
+        <Stack direction="row" spacing={1}>
+          <IconButton onClick={() => onOpenModal(row)} size="small">
+            <PlaylistAdd />
+          </IconButton>
+          <IconButton
+            onClick={() => setConfirmOpen(true)}
+            size="small"
+            color="error"
+          >
+            <Delete />
+          </IconButton>
+        </Stack>
+      </TableCell>
+
+      <ConfirmationDialog
+        open={confirmOpen}
+        onClose={() => setConfirmOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title="Rohstoff löschen"
+        message="Möchten Sie diesen Rohstoff wirklich löschen?"
+        confirmText="Löschen"
+        cancelText="Abbrechen"
+        danger
       />
-    </TableCell>
-
-    {/* Anteil [%] */}
-    <TableCell>
-      <TextField
-        type="number"
-        variant="standard"
-        value={row.share}
-        onChange={(e) =>
-          updateRowField(
-            setRawMaterialRows,
-            row,
-            "share",
-            Number(e.target.value)
-          )
-        }
-        onBlur={(e) => onUpdateField(row, "share", Number(e.target.value))}
-      />
-    </TableCell>
-
-    {/* Preisstand */}
-    <TableCell>
-      <TextField
-        type="month"
-        variant="standard"
-        value={formatPriceDate(row.price_date)}
-        onChange={(e) =>
-          updateRowField(
-            setRawMaterialRows,
-            row,
-            "price_date",
-            `${e.target.value}-01`
-          )
-        }
-        onBlur={(e) => onUpdateField(row, "price_date", `${e.target.value}-01`)}
-      />
-    </TableCell>
-
-    {/* Preis [€] */}
-    <TableCell>
-      <TextField
-        fullWidth
-        type="number"
-        variant="standard"
-        value={row.price}
-        onChange={(e) =>
-          updateRowField(setRawMaterialRows, row, "price", e.target.value)
-        }
-        onBlur={(e) => onUpdateField(row, "price", Number(e.target.value))}
-      />
-    </TableCell>
-
-    {/* Additive */}
-    <TableCell>
-      <Typography>
-        {row._additives_concatenated ? row._additives_concatenated : "-"}
-      </Typography>
-    </TableCell>
-
-    {/*  */}
-    <TableCell>
-      <Typography>
-        {row._additives_price_sum ? row._additives_price_sum : "-"}
-      </Typography>
-    </TableCell>
-
-    <TableCell>
-      <Typography>{row._price_minus_discount ?? "-"}</Typography>
-    </TableCell>
-
-    <TableCell>
-      <Typography>{row._price_share ?? "-"}</Typography>
-    </TableCell>
-
-    <TableCell>
-      <Typography>{row._price_minus_discount_share ?? "-"}</Typography>
-    </TableCell>
-
-    <TableCell>
-      <IconButton onClick={() => onOpenModal(row)}>
-        <PlaylistAdd />
-      </IconButton>
-    </TableCell>
-  </TableRow>
-);
+    </TableRow>
+  );
+};
 
 const updateRowField = (
   setRows: React.Dispatch<React.SetStateAction<RawMaterialRowType[]>>,

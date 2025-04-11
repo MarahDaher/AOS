@@ -6,9 +6,12 @@ import { RawMaterialApi } from "@api/raw-materials";
 import { useOfferContext } from "@contexts/OfferProvider";
 import { RawMaterialPricesTableInitialValues } from "@pages/Offers/New/Index";
 import { BaseMaterial, RawMaterialRow } from "@interfaces/RawMaterial.model";
+import { AdditiveApi } from "@api/additives";
+import { useApiSuccessHandler } from "@hooks/useApiSuccessHandler";
 
 export const useRawMaterialPricesTable = () => {
   const { showError } = useApiErrorHandler();
+  const { showSuccess } = useApiSuccessHandler();
   const { offerDetails } = useOfferContext();
 
   const [baseMaterials, setRawMaterials] = useState<BaseMaterial[]>([]);
@@ -17,6 +20,21 @@ export const useRawMaterialPricesTable = () => {
   const [selectedMaterial, setSelectedMaterial] = useState<any | null>(null);
   const [openModal, setOpenModal] = useState(false);
 
+  const createEmptyRow = (): RawMaterialRow => ({
+    offer_id: offerDetails?.id || 0,
+    raw_material_id: 0,
+    supplier: "",
+    share: 0,
+    price_date: "",
+    price: 0,
+    type: "",
+    _additives_concatenated: "",
+    _additives_price_sum: 0,
+    _price_minus_discount: 0,
+    _price_share: 0,
+    _price_minus_discount_share: 0,
+  });
+
   const fetchOfferRawMaterials = async () => {
     if (!offerDetails?.id) return;
     try {
@@ -24,7 +42,14 @@ export const useRawMaterialPricesTable = () => {
         await OfferRawMaterialCalculatedApi.getRawMaterialCalculatedByOfferId(
           offerDetails.id
         );
-      setRawMaterialRows(res);
+
+      // Fill to 4 rows if needed
+      const filledRows = [...res];
+      while (filledRows.length < 4) {
+        filledRows.push(createEmptyRow());
+      }
+
+      setRawMaterialRows(filledRows);
     } catch (error) {
       showError(error);
     }
@@ -34,6 +59,22 @@ export const useRawMaterialPricesTable = () => {
     try {
       const res = await RawMaterialApi.getAllOffers();
       setRawMaterials(res);
+    } catch (error) {
+      showError(error);
+    }
+  };
+
+  const handleAddMaterial = async (newMaterialId: number) => {
+    if (!offerDetails?.id) return;
+
+    try {
+      await OfferRawMaterialCalculatedApi.createRawMaterial({
+        offer_id: offerDetails.id,
+        raw_material_id: newMaterialId,
+      });
+
+      fetchOfferRawMaterials(); // reload table
+      showSuccess("Rohstoff erfolgreich hinzugefügt.");
     } catch (error) {
       showError(error);
     }
@@ -85,9 +126,22 @@ export const useRawMaterialPricesTable = () => {
     }
   };
 
-  const handleOpenModal = (row: any) => {
-    setSelectedMaterial(row);
-    setOpenModal(true);
+  const handleOpenModal = async (row: RawMaterialRow) => {
+    try {
+      const response = await AdditiveApi.getAdditivesForRawMaterial(
+        row.offer_id,
+        row.raw_material_id
+      );
+      const additives = response;
+      setSelectedMaterial({
+        ...row,
+        additives: additives,
+      });
+
+      setOpenModal(true);
+    } catch (error) {
+      showError(error);
+    }
   };
 
   const formik = useFormik<any>({
@@ -118,10 +172,13 @@ export const useRawMaterialPricesTable = () => {
     selectedMaterial,
     openModal,
     setOpenModal,
+    handleAddMaterial,
     handleOpenModal,
     setSelectedMaterial,
     handleChangeMaterial,
     handleUpdateField,
     setRawMaterialRows,
+    fetchOfferRawMaterials,
+    createEmptyRow,
   };
 };

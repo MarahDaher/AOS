@@ -15,7 +15,7 @@ class OfferRawMaterialCalculatedResource extends JsonResource
             'name' => $this->name,
             'type' => $this->type,
             'price' => $this->price,
-            'price_date' => $this->price_date->format('d.m.Y'),
+            'price_date' => $this->price_date ? $this->price_date->format('d.m.Y') : null,
             'supplier' => $this->supplier,
             'share' => $this->share,
             '_additives_concatenated' => $this->_additives_concatenated,

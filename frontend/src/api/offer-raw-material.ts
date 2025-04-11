@@ -8,6 +8,17 @@ export class OfferRawMaterialCalculatedApi {
     });
   }
 
+  static async createRawMaterial(data: {
+    offer_id: number;
+    raw_material_id: number;
+  }) {
+    return await handleRequest<any>({
+      method: "POST",
+      endpoint: `offer-raw-materials`,
+      data,
+    });
+  }
+
   static async updateRawMaterial(
     offerId: number,
     rawMaterialId: number,
@@ -29,6 +40,13 @@ export class OfferRawMaterialCalculatedApi {
       method: "PATCH",
       endpoint: `offers/${offerId}/raw-materials-demand/${rawMaterialId}`,
       data,
+    });
+  }
+
+  static async deleteRawMaterial(offerId: number, rawMaterialId: number) {
+    return await handleRequest<any>({
+      method: "DELETE",
+      endpoint: `offers/${offerId}/raw-materials/${rawMaterialId}`,
     });
   }
 }
