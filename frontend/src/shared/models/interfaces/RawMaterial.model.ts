@@ -12,6 +12,17 @@ export interface OfferRawMaterialCalculatedModel {
   absolut_demand: number;
   share: number;
   supplier?: string;
+  name?: string;
+  price: number;
+  price_date: string;
+  _additives_concatenated?: string;
+  _additives_price_sum?: number;
+  _price_minus_discount?: number;
+  _price_share?: number;
+  _price_minus_discount_share?: number;
+  density: number;
+  type: string;
+  id: number;
 }
 
 export interface RawMaterialRow {

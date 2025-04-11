@@ -1,4 +1,5 @@
-import { FC, useEffect } from "react";
+// 📁 RawMaterialDemandCard.tsx
+import { FC, useEffect, useCallback } from "react";
 import CardBox from "@components/CardBox";
 import Grid from "@mui/material/Grid2";
 import FormInputField from "@components/FormInputField";
@@ -8,6 +9,7 @@ import { FormikProvider, useFormik } from "formik";
 import { OfferRawMaterialCalculatedModel } from "@interfaces/RawMaterial.model";
 import { useOfferContext } from "@contexts/OfferProvider";
 import { useRawMaterials } from "@hooks/useRawMaterialsDemand";
+import debounce from "lodash.debounce";
 
 interface FormValues {
   raw_materials: OfferRawMaterialCalculatedModel[];
@@ -17,30 +19,27 @@ interface FormValues {
 const RawMaterialDemandCard: FC = () => {
   const offerId = useOfferContext().offerId;
   const { data, updateRawMaterial, refetch } = useRawMaterials(offerId!);
-  // Default 4 blank raw materials
-  const defaultRawMaterials: OfferRawMaterialCalculatedModel[] = Array.from(
-    { length: 4 },
-    (_, i) => ({
-      raw_material_id: i + 1,
-      offer_id: offerId!,
-      absolut_demand: 0,
-      share: 0,
-      name: "",
-      supplier: "",
-      price: 0,
-      price_date: "",
-      _price_minus_discount: 0,
-      _price_share: 0,
-      _price_minus_discount_share: 0,
-      density: 0,
-      type: "",
-      id: i + 1,
-    })
-  );
+
+  const emptyMaterial = (id: number): OfferRawMaterialCalculatedModel => ({
+    raw_material_id: id,
+    offer_id: offerId!,
+    absolut_demand: 0,
+    share: 0,
+    name: "",
+    supplier: "",
+    price: 0,
+    price_date: "",
+    _price_minus_discount: 0,
+    _price_share: 0,
+    _price_minus_discount_share: 0,
+    density: 0,
+    type: "",
+    id,
+  });
 
   const formik = useFormik<FormValues>({
     initialValues: {
-      raw_materials: defaultRawMaterials,
+      raw_materials: Array.from({ length: 4 }, (_, i) => emptyMaterial(i + 1)),
       raw_materials_total: 0,
     },
     enableReinitialize: true,
@@ -58,39 +57,96 @@ const RawMaterialDemandCard: FC = () => {
     }
   }, [formik.values.raw_materials]);
 
-  const handleBlur = (index: number, field: "absolut_demand" | "share") => {
-    const item = formik.values.raw_materials[index];
-    if (!item) return;
-
-    const payload: Partial<OfferRawMaterialCalculatedModel> = {
-      [field]: item[field],
-      // all_raw_material_ids: formik.values.raw_materials.map((m) => m.raw_material_id),
-    };
-
-    updateRawMaterial(
-      {
-        rawMaterialId: item.raw_material_id,
-        data: payload,
-      },
-      {
-        onSuccess: () => {
-          refetch();
-        },
-      }
-    );
-  };
-
   useEffect(() => {
-    if (data && data.length > 0) {
+    if (data) {
+      const filledData = [...data];
+
+      while (filledData.length < 4) {
+        filledData.push(emptyMaterial(filledData.length + 1));
+      }
+
       formik.setValues({
-        raw_materials: data,
-        raw_materials_total: data.reduce(
+        raw_materials: filledData,
+        raw_materials_total: filledData.reduce(
           (sum, item) => sum + (item.absolut_demand ?? 0),
           0
         ),
       });
     }
-  }, [data]); //
+  }, [data]);
+
+  const debouncedUpdate = useCallback(
+    debounce(
+      (
+        rawMaterialId: number,
+        field: "absolut_demand" | "share",
+        value: number
+      ) => {
+        updateRawMaterial(
+          {
+            rawMaterialId: rawMaterialId,
+            data: { [field]: value },
+          },
+          {
+            onSuccess: () => {
+              refetch();
+            },
+          }
+        );
+      },
+      500
+    ),
+    []
+  );
+
+  const handleBlur = (index: number, field: "absolut_demand" | "share") => {
+    const item = formik.values.raw_materials[index];
+    if (!item) return;
+
+    const originalItem = data?.find(
+      (d) => d.raw_material_id === item.raw_material_id
+    );
+    const currentValue = item[field];
+    const originalValue = originalItem ? originalItem[field] : undefined;
+
+    if (currentValue === originalValue) {
+      return; // ❌ Skip API if no real change
+    }
+
+    let updatedMaterials = [...formik.values.raw_materials];
+
+    if (field === "absolut_demand") {
+      updatedMaterials[index].absolut_demand = item.absolut_demand;
+
+      const totalDemand = updatedMaterials.reduce(
+        (sum, material) => sum + (material.absolut_demand ?? 0),
+        0
+      );
+
+      if (totalDemand > 0) {
+        updatedMaterials = updatedMaterials.map((material) => ({
+          ...material,
+          share: material.absolut_demand
+            ? parseFloat(
+                ((material.absolut_demand / totalDemand) * 100).toFixed(2)
+              )
+            : 0,
+        }));
+      }
+    }
+
+    formik.setFieldValue("raw_materials", updatedMaterials);
+
+    if (item.raw_material_id) {
+      debouncedUpdate(item.raw_material_id, field, Number(currentValue));
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      debouncedUpdate.cancel();
+    };
+  }, []);
 
   return (
     <FormikProvider value={formik}>
@@ -99,7 +155,7 @@ const RawMaterialDemandCard: FC = () => {
           <Grid
             container
             spacing={2}
-            key={item.raw_material_id}
+            key={item.raw_material_id || index}
             pt={index !== 0 ? "4px" : 0}
           >
             <Grid size={{ xs: 6, md: 6 }}>
@@ -116,6 +172,7 @@ const RawMaterialDemandCard: FC = () => {
                 label={`Rohstoff ${index + 1} [%]`}
                 type="number"
                 onBlur={() => handleBlur(index, "share")}
+                disabled
               />
             </Grid>
           </Grid>

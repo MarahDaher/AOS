@@ -1,5 +1,7 @@
+// 📁 useRawMaterialPricesTable.ts
+
 import { useFormik } from "formik";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useApiErrorHandler } from "@hooks/useApiErrorHandler";
 import { OfferRawMaterialCalculatedApi } from "@api/offer-raw-material";
 import { RawMaterialApi } from "@api/raw-materials";
@@ -8,6 +10,7 @@ import { RawMaterialPricesTableInitialValues } from "@pages/Offers/New/Index";
 import { BaseMaterial, RawMaterialRow } from "@interfaces/RawMaterial.model";
 import { AdditiveApi } from "@api/additives";
 import { useApiSuccessHandler } from "@hooks/useApiSuccessHandler";
+import debounce from "lodash.debounce";
 
 export const useRawMaterialPricesTable = () => {
   const { showError } = useApiErrorHandler();
@@ -16,7 +19,6 @@ export const useRawMaterialPricesTable = () => {
 
   const [baseMaterials, setRawMaterials] = useState<BaseMaterial[]>([]);
   const [rawMaterialRows, setRawMaterialRows] = useState<RawMaterialRow[]>([]);
-
   const [selectedMaterial, setSelectedMaterial] = useState<any | null>(null);
   const [openModal, setOpenModal] = useState(false);
 
@@ -43,7 +45,6 @@ export const useRawMaterialPricesTable = () => {
           offerDetails.id
         );
 
-      // Fill to 4 rows if needed
       const filledRows = [...res];
       while (filledRows.length < 4) {
         filledRows.push(createEmptyRow());
@@ -73,19 +74,42 @@ export const useRawMaterialPricesTable = () => {
         raw_material_id: newMaterialId,
       });
 
-      fetchOfferRawMaterials(); // reload table
+      fetchOfferRawMaterials();
       showSuccess("Rohstoff erfolgreich hinzugefügt.");
     } catch (error) {
       showError(error);
     }
   };
 
-  const handleUpdateField = async (
+  const debouncedUpdate = useCallback(
+    debounce(
+      async (
+        offerId: number,
+        rawMaterialId: number,
+        field: keyof RawMaterialRow,
+        value: any
+      ) => {
+        try {
+          await OfferRawMaterialCalculatedApi.updateRawMaterial(
+            offerId,
+            rawMaterialId,
+            { [field]: value }
+          );
+          showSuccess("Feld erfolgreich gespeichert.");
+        } catch (error) {
+          showError(error);
+        }
+      },
+      500
+    ),
+    []
+  );
+
+  const handleUpdateField = (
     row: RawMaterialRow,
     field: keyof RawMaterialRow,
     value: string | number
   ) => {
-    // Optimistically update local
     setRawMaterialRows((prev) =>
       prev.map((r) =>
         r.offer_id === row.offer_id && r.raw_material_id === row.raw_material_id
@@ -94,17 +118,8 @@ export const useRawMaterialPricesTable = () => {
       )
     );
 
-    try {
-      await OfferRawMaterialCalculatedApi.updateRawMaterial(
-        row.offer_id,
-        row.raw_material_id,
-        { [field]: value }
-      );
-      fetchOfferRawMaterials();
-    } catch (error) {
-      showError(error);
-      // optional: rollback if failed
-      fetchOfferRawMaterials();
+    if (row.offer_id && row.raw_material_id) {
+      debouncedUpdate(row.offer_id, row.raw_material_id, field, value);
     }
   };
 
@@ -164,6 +179,12 @@ export const useRawMaterialPricesTable = () => {
     fetchRawMaterials();
     fetchOfferRawMaterials();
   }, [offerDetails?.id]);
+
+  useEffect(() => {
+    return () => {
+      debouncedUpdate.cancel();
+    };
+  }, []);
 
   return {
     formik,

@@ -59,13 +59,34 @@ class OfferRawMaterialRepository
 
     public function updateRawMaterialDemand(array $data, int $offerId, int $rawMaterialId): OfferRawMaterialCalculatedResource
     {
+        // 1. Update the absolut_demand
         OfferRawMaterial::where('offer_id', $offerId)
             ->where('raw_material_id', $rawMaterialId)
             ->update($data);
 
+        // 2. Get all raw materials for recalculating
+        $allMaterials = OfferRawMaterial::where('offer_id', $offerId)->get();
+        $totalDemand = $allMaterials->sum('absolut_demand');
+
+        if ($totalDemand > 0) {
+            foreach ($allMaterials as $material) {
+                $newShare = ($material->absolut_demand / $totalDemand) * 100;
+                OfferRawMaterial::where('offer_id', $offerId)
+                    ->where('raw_material_id', $material->raw_material_id)
+                    ->update([
+                        'share' => round($newShare, 2),
+                    ]);
+            }
+        }
+
+        // 3. Try to get the updated material safely
         $updated = OfferRawMaterialCalculated::where('offer_id', $offerId)
             ->where('raw_material_id', $rawMaterialId)
             ->first();
+
+        if (!$updated) {
+            abort(404, 'Raw material not found for this offer.');
+        }
 
         return new OfferRawMaterialCalculatedResource($updated);
     }
