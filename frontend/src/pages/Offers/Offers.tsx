@@ -2,7 +2,7 @@ import AddIcon from "@mui/icons-material/Add";
 import CardBox from "../../components/CardBox";
 import IconAction from "@components/IconAction";
 import RoundedIconButton from "@components/RoundedIconButton";
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { ContentCopy, Edit, ShoppingBasket } from "@mui/icons-material";
 import { FunctionComponent, useEffect, useState } from "react";
 import { MTable } from "@components/MTable";
@@ -24,6 +24,7 @@ const OffersPage: FunctionComponent<OffersPageProps> = () => {
   // State
   const [offers, setOffers] = useState<OffersModel[]>([]);
   const [loading, setLoading] = useState(false);
+  const [exportingOfferId, setExportingOfferId] = useState<number | null>(null);
 
   const handleAdd = () => {
     resetOffer();
@@ -52,6 +53,19 @@ const OffersPage: FunctionComponent<OffersPageProps> = () => {
     }
   };
 
+  const handleExport = async (offerId: number) => {
+    try {
+      setExportingOfferId(offerId);
+      await OffersApi.export(offerId);
+
+      // ⏳ Wait a little so user can see spinner
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    } catch (error) {
+      showError(error);
+    } finally {
+      setExportingOfferId(null);
+    }
+  };
   //LifeCycles
   useEffect(() => {
     fetchOffers();
@@ -70,9 +84,14 @@ const OffersPage: FunctionComponent<OffersPageProps> = () => {
               <>
                 <IconAction
                   tooltip="Als Word exportieren"
-                  onClick={() => console.log("Export as Word")}
+                  onClick={() => handleExport(row.id)}
+                  disabled={exportingOfferId === row.id}
                 >
-                  <ShoppingBasket fontSize="small" />
+                  {exportingOfferId === row.id ? (
+                    <CircularProgress size={20} />
+                  ) : (
+                    <ShoppingBasket fontSize="small" />
+                  )}
                 </IconAction>
 
                 <IconAction

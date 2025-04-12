@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AdditiveOfferRawMaterialController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\OfferController;
 use App\Http\Controllers\Api\OfferDrawingController;
+use App\Http\Controllers\Api\OfferExportController;
 use App\Http\Controllers\Api\OfferRawMaterialCalculatedController;
 use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\RawMaterialController;
@@ -54,6 +55,8 @@ Route::middleware(['auth:api'])->group(function () {
         // Drawings
         Route::get('{id}/drawing', [OfferDrawingController::class, 'show'])->middleware('check.permission:' . PermissionConstants::VIEW_DRAWERING);
         Route::post('{id}/drawing', [OfferDrawingController::class, 'store'])->middleware('check.permission:' . PermissionConstants::CREATE_DRAWERING);
+        //Export Offer
+        Route::get('{id}/export', [OfferExportController::class, 'export']);
     });
 
     Route::post('offer-raw-materials', [OfferRawMaterialCalculatedController::class, 'store']);

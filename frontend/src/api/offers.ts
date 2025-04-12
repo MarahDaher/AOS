@@ -63,4 +63,16 @@ export class OffersApi {
       },
     });
   }
+
+  // Export
+  static async export(offerId: number) {
+    const url = `${import.meta.env.VITE_API_URL}/offers/${offerId}/export`;
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `Offer_${offerId}.docx`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
 }
