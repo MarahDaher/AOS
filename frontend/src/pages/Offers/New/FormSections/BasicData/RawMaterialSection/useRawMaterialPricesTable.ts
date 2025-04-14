@@ -45,12 +45,15 @@ export const useRawMaterialPricesTable = () => {
           offerDetails.id
         );
 
-      const filledRows = [...res];
-      while (filledRows.length < 4) {
-        filledRows.push(createEmptyRow());
+      if (res.length === 0) {
+        setRawMaterialRows([createEmptyRow()]);
+      } else {
+        const filledRows = [...res];
+        while (filledRows.length < 4) {
+          filledRows.push(createEmptyRow());
+        }
+        setRawMaterialRows(filledRows);
       }
-
-      setRawMaterialRows(filledRows);
     } catch (error) {
       showError(error);
     }
@@ -69,18 +72,38 @@ export const useRawMaterialPricesTable = () => {
     if (!offerDetails?.id) return;
 
     try {
-      await OfferRawMaterialCalculatedApi.createRawMaterial({
-        offer_id: offerDetails.id,
-        raw_material_id: newMaterialId,
-      });
+      const createdMaterial =
+        await OfferRawMaterialCalculatedApi.createRawMaterial({
+          offer_id: offerDetails.id,
+          raw_material_id: newMaterialId,
+        });
 
-      fetchOfferRawMaterials();
+      // 🆕 تحديث فوري: حط كل الداتا الجديدة اللي رجعت
+      setRawMaterialRows((prev) =>
+        prev.map((r) =>
+          r.raw_material_id === 0
+            ? {
+                ...createdMaterial, // Use all fields from API response
+                share: r.share, // Keep local edits if necessary
+                supplier: r.supplier,
+                price_date: r.price_date,
+                price: r.price,
+                type: r.type,
+              }
+            : r
+        )
+      );
+
       showSuccess("Rohstoff erfolgreich hinzugefügt.");
+
+      // (Optional) لو بدك تتأكد انه كل شي تمام بعد شوي
+      fetchOfferRawMaterials();
     } catch (error) {
       showError(error);
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedUpdate = useCallback(
     debounce(
       async (
@@ -95,6 +118,7 @@ export const useRawMaterialPricesTable = () => {
             rawMaterialId,
             { [field]: value }
           );
+          await fetchOfferRawMaterials();
           showSuccess("Feld erfolgreich gespeichert.");
         } catch (error) {
           showError(error);
@@ -102,7 +126,7 @@ export const useRawMaterialPricesTable = () => {
       },
       500
     ),
-    []
+    [fetchOfferRawMaterials] // Also important to pass it as dependency
   );
 
   const handleUpdateField = (

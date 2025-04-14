@@ -84,6 +84,7 @@ class Offer extends Model
         // 🧹 Pricing
         'pricing_annual_requirement',
         'pricing_graduated_calculation_additional_setup_quantity',
+        'pricing_costs_calc_price_additional_lfm',
 
         'pricing_grad_qtyB_add_hourlyrate',
         'pricing_grad_qtyC_add_hourlyrate',

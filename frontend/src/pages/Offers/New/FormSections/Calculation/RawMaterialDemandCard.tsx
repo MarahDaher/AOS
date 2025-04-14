@@ -151,32 +151,36 @@ const RawMaterialDemandCard: FC = () => {
   return (
     <FormikProvider value={formik}>
       <CardBox label="Flächen - Rohstoffbedarf" height={CARD_HEIGHT}>
-        {formik.values.raw_materials.map((item, index) => (
-          <Grid
-            container
-            spacing={2}
-            key={item.raw_material_id || index}
-            pt={index !== 0 ? "4px" : 0}
-          >
-            <Grid size={{ xs: 6, md: 6 }}>
-              <FormInputField
-                name={`raw_materials.${index}.absolut_demand`}
-                label={`Rohstoff ${index + 1} [mm²]`}
-                type="number"
-                onBlur={() => handleBlur(index, "absolut_demand")}
-              />
+        {formik.values.raw_materials.map((item, index) => {
+          const isDisabled = !item.name;
+          return (
+            <Grid
+              container
+              spacing={2}
+              key={item.raw_material_id || index}
+              pt={index !== 0 ? "4px" : 0}
+            >
+              <Grid size={{ xs: 6, md: 6 }}>
+                <FormInputField
+                  name={`raw_materials.${index}.absolut_demand`}
+                  label={`Rohstoff ${index + 1} [mm²]`}
+                  type="number"
+                  onBlur={() => handleBlur(index, "absolut_demand")}
+                  disabled={isDisabled}
+                />
+              </Grid>
+              <Grid size={{ xs: 6, md: 6 }}>
+                <FormInputField
+                  name={`raw_materials.${index}.share`}
+                  label={`Rohstoff ${index + 1} [%]`}
+                  type="number"
+                  onBlur={() => handleBlur(index, "share")}
+                  disabled
+                />
+              </Grid>
             </Grid>
-            <Grid size={{ xs: 6, md: 6 }}>
-              <FormInputField
-                name={`raw_materials.${index}.share`}
-                label={`Rohstoff ${index + 1} [%]`}
-                type="number"
-                onBlur={() => handleBlur(index, "share")}
-                disabled
-              />
-            </Grid>
-          </Grid>
-        ))}
+          );
+        })}
 
         <Grid size={{ xs: 12 }}>
           <Divider sx={{ my: 1, borderColor: "black" }} />

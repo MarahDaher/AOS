@@ -48,9 +48,9 @@ const kalkulationsmengeRows = [
   [null, null, null],
   [
     {
-      name: "_pricing_costs_calc_price_additional_lfm",
+      name: "pricing_costs_calc_price_additional_lfm",
       label: "Zusatzpreis / m [€]",
-      disabled: true,
+      disabled: false,
     },
     null,
     null,

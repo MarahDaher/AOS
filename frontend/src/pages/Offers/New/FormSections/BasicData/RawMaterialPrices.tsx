@@ -96,7 +96,7 @@ const RawMaterialPrices = () => {
           <Grid size={{ xs: 3, md: 2 }}>
             <FormInputSaveField
               name="general_raw_material_price_total_overwritten"
-              label="Rohstoffpreis gesamt [€]"
+              label="Rohstoffpreis gesamt / kg [€]"
               type="number"
             />
             <Typography variant="caption">(überschrieben)</Typography>

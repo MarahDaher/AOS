@@ -19,21 +19,10 @@ class OfferExportController extends BaseController
     {
         $offer = Offer::findOrFail($id);
 
-
         $html = view('exports.offer', compact('offer'))->render();
-
-        // Remove everything before <body> and after </body>
-        $bodyStart = strpos($html, '<body>');
-        $bodyEnd = strpos($html, '</body>');
-
-        if ($bodyStart !== false && $bodyEnd !== false) {
-            $bodyContent = substr($html, $bodyStart + 6, $bodyEnd - $bodyStart - 6); // Only inside <body>...</body>
-        } else {
-            $bodyContent = $html; // fallback if somehow no body found
-        }
-
         $filename = 'Offer_' . $offer->general_offer_number;
 
-        return $this->wordExportService->exportHtmlToWord($bodyContent, $filename);
+        // No need to manually extract body here anymore! ✅
+        return $this->wordExportService->exportHtmlToWord($html, $filename);
     }
 }

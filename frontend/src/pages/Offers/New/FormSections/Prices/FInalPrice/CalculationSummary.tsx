@@ -14,7 +14,7 @@ const LABELS: Record<string, string> = {
   _pricing_endprices_calc_print_costs: "Druck",
   _pricing_endprices_calc_confection_lfm_costs: "Konfektion / m",
   _pricing_endprices_calc_confection_stk_costs: "Konfektion / Stk",
-  zusatz: "Zusatz",
+  _pricing_endprices_calc_price_additional_lfm_total: "Zusatz",
   calculation_working_commission: "Provision",
   calculation_working_profit: "Gewinn",
   calculation_working_discount: "Zahlungsziel",

@@ -16,7 +16,7 @@ export const mapOfferDetailsToFinalPriceData = (offerDetails: any) => {
       offerDetails._pricing_endprices_calc_confection_lfm_costs || 0,
     _pricing_endprices_calc_confection_stk_costs:
       offerDetails._pricing_endprices_calc_confection_stk_costs || 0,
-    zusatz: 0,
+    _pricing_endprices_calc_price_additional_lfm_total: 0,
     calculation_working_commission:
       offerDetails.calculation_working_commission || 0,
     calculation_working_profit: offerDetails.calculation_working_profit || 0,

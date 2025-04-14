@@ -13,19 +13,15 @@ class WordExportService
 {
     public function exportHtmlToWord(string $htmlContent, string $filename)
     {
-        $cleanHtml = $this->wrapHtml($htmlContent);
+        $htmlContent = $this->extractBodyContent($htmlContent);
 
         $phpWord = new PhpWord();
         $section = $phpWord->addSection();
 
-        // 👉 Add Header
         $this->addHeader($section);
-
-        // 👉 Add Footer
         $this->addFooter($section);
 
-        // 👉 Add body content
-        Html::addHtml($section, $cleanHtml, false, false);
+        Html::addHtml($section, $htmlContent, false, false);
 
         $filename = $this->sanitizeFilename($filename) . '.docx';
 
@@ -127,13 +123,18 @@ class WordExportService
         $cell3->addText('Steuernummer: 151/116/10409', ['size' => 8], ['spaceAfter' => 50]);
     }
 
-    private function wrapHtml(string $html): string
+    private function extractBodyContent(string $html): string
     {
-        if (!str_contains($html, '<html')) {
-            return '<html><body>' . $html . '</body></html>';
+        $bodyStart = strpos($html, '<body>');
+        $bodyEnd = strpos($html, '</body>');
+
+        if ($bodyStart !== false && $bodyEnd !== false) {
+            return substr($html, $bodyStart + 6, $bodyEnd - $bodyStart - 6);
         }
-        return $html;
+
+        return $html; // fallback if no body found
     }
+
 
     private function sanitizeFilename(string $filename): string
     {

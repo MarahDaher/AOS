@@ -8,7 +8,14 @@ const ProfileWeightTripleDisplay: FC = () => {
   const b = values.runningcard_profile_weight_IST;
   const c = values._calculation_working_profile_weight_upperborder;
 
-  const displayValue = `(${a?.toFixed(1)}) ${b?.toFixed(1)} (${c?.toFixed(1)})`;
+  const formatNumber = (value: any) => {
+    const num = Number(value);
+    return isNaN(num) ? "-" : num.toFixed(1);
+  };
+
+  const displayValue = `(${formatNumber(a)}) ${formatNumber(b)} (${formatNumber(
+    c
+  )})`;
 
   return (
     <TextField
