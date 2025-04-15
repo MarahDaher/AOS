@@ -18,7 +18,7 @@ const rows = [
       label: "Einstellmenge [%]",
     },
     {
-      name: "runningcard_extrusion_speed_IST",
+      name: "calculation_working_extrusion_speed",
       label: "Extrusionsgeschw. [m/min]",
     },
     {

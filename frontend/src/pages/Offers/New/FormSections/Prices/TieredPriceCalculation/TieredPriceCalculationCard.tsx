@@ -15,7 +15,9 @@ const TieredPriceCalculationCard = () => {
 
   const formik = useFormik({
     initialValues: {
-      pricing_graduated_calculation_additional_setup_quantity: 0,
+      pricing_graduated_calculation_additional_setup_quantity: offerDetails
+        ? offerDetails?.pricing_graduated_calculation_additional_setup_quantity
+        : 0,
     },
     onSubmit: () => {},
   });

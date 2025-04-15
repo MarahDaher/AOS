@@ -78,13 +78,12 @@ export const useRawMaterialPricesTable = () => {
           raw_material_id: newMaterialId,
         });
 
-      // 🆕 تحديث فوري: حط كل الداتا الجديدة اللي رجعت
       setRawMaterialRows((prev) =>
         prev.map((r) =>
           r.raw_material_id === 0
             ? {
-                ...createdMaterial, // Use all fields from API response
-                share: r.share, // Keep local edits if necessary
+                ...createdMaterial,
+                share: r.share,
                 supplier: r.supplier,
                 price_date: r.price_date,
                 price: r.price,

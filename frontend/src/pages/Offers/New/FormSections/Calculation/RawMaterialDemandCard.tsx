@@ -157,7 +157,7 @@ const RawMaterialDemandCard: FC = () => {
             <Grid
               container
               spacing={2}
-              key={item.raw_material_id || index}
+              key={`${item.raw_material_id}-${index}`}
               pt={index !== 0 ? "4px" : 0}
             >
               <Grid size={{ xs: 6, md: 6 }}>
