@@ -26,7 +26,10 @@ const OfferForm: FunctionComponent<OfferFormProps> = () => {
   const { id } = useParams();
   const { setOfferId, setOfferData, resetOffer } = useOfferContext();
 
-  const [selectedTab, setSelectedTab] = useState(0);
+  const [selectedTab, setSelectedTab] = useState(() => {
+    const saved = localStorage.getItem("offer_form_selected_tab");
+    return saved !== null ? Number(saved) : 0;
+  });
 
   const formik = useFormik({
     initialValues,
@@ -50,6 +53,7 @@ const OfferForm: FunctionComponent<OfferFormProps> = () => {
 
   useEffect(() => {
     loadOffer();
+    return () => localStorage.removeItem("offer_form_selected_tab");
   }, [id]);
 
   return (
@@ -59,7 +63,13 @@ const OfferForm: FunctionComponent<OfferFormProps> = () => {
           <Tabs
             variant="fullWidth"
             value={selectedTab}
-            onChange={(_, newValue) => setSelectedTab(newValue)}
+            onChange={(_, newValue) => {
+              setSelectedTab(newValue);
+              localStorage.setItem(
+                "offer_form_selected_tab",
+                newValue.toString()
+              );
+            }}
           >
             {tabs.map((tab, index) => (
               <Tab key={index} label={tab.label} />
