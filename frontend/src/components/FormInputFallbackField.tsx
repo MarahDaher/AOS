@@ -3,6 +3,7 @@ import { useField, useFormikContext } from "formik";
 import { TextField, TextFieldProps, InputAdornment } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useSaveFieldMutation } from "@hooks/useSaveFieldMutation";
+import { parseGermanNumber } from "@utils/formatNumbers";
 
 interface Props extends Omit<TextFieldProps, "name" | "variant"> {
   name: string;
@@ -26,13 +27,19 @@ const FormInputFallbackField: FunctionComponent<Props> = ({
       : field.value;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFieldValue(name, e.target.value);
+    let val = e.target.value;
+
+    // Optional: Remove all non-numeric (except comma, dot and minus)
+    val = val.replace(/[^0-9,.\-]/g, "");
+
+    // Keep input as-is for now
+    setFieldValue(name, val);
   };
 
   const handleBlur = () => {
     if (field.value === "") {
       mutation.mutate(
-        { name, value: "" }, // this triggers reset to fallback logic
+        { name, value: "" }, // Reset to fallback
         {
           onSuccess: () => {
             setJustSaved(true);
@@ -41,15 +48,18 @@ const FormInputFallbackField: FunctionComponent<Props> = ({
         }
       );
     } else {
-      mutation.mutate(
-        { name, value: field.value },
-        {
-          onSuccess: () => {
-            setJustSaved(true);
-            setTimeout(() => setJustSaved(false), 2000);
-          },
-        }
-      );
+      const parsedValue = parseGermanNumber(field.value);
+      if (parsedValue !== null) {
+        mutation.mutate(
+          { name, value: parsedValue },
+          {
+            onSuccess: () => {
+              setJustSaved(true);
+              setTimeout(() => setJustSaved(false), 2000);
+            },
+          }
+        );
+      }
     }
   };
 
