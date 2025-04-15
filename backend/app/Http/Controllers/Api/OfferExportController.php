@@ -19,10 +19,17 @@ class OfferExportController extends BaseController
     {
         $offer = Offer::findOrFail($id);
 
-        $html = view('exports.offer', compact('offer'))->render();
+        $data = [
+            'company_name'     => $offer->customer_name ?? 'Default Company',
+            // 'offer_number'     => $offer->general_offer_number ?? 'AN-DEFAULT',
+            'profile_name'     => $offer->profile_name ?? 'Vierkantprofil',
+            // 'price_per_meter'  => number_format($offer->price_per_meter, 2, ',', '.') ?? '0,00',
+            // 'delivery_time'    => $offer->delivery_time ?? 'ca. 15 AT',
+            'color'     => 'red',
+        ];
+
         $filename = 'Offer_' . $offer->general_offer_number;
 
-        // No need to manually extract body here anymore! ✅
-        return $this->wordExportService->exportHtmlToWord($html, $filename);
+        return $this->wordExportService->exportOfferWithTemplate($data, $filename);
     }
 }

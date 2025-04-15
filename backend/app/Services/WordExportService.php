@@ -8,9 +8,32 @@ use PhpOffice\PhpWord\Shared\Html;
 use PhpOffice\PhpWord\SimpleType\TblWidth;
 use PhpOffice\PhpWord\SimpleType\Jc;
 use Illuminate\Support\Facades\Response;
+use PhpOffice\PhpWord\TemplateProcessor;
 
 class WordExportService
 {
+
+    public function exportOfferWithTemplate(array $data, string $outputFilename)
+    {
+        $templatePath = storage_path('app/templates/Angebot Vorlage AOS.docx');
+
+        $template = new TemplateProcessor($templatePath);
+
+        // 🔄 Replace placeholders in the DOCX with dynamic data
+        $template->setValue('company_name', $data['company_name'] ?? 'Marah');
+        $template->setValue('color', $data['color'] ?? 'blue');
+        $template->setValue('profile_name', $data['profile_name'] ?? 'Daher');
+        // $template->setValue('price_per_meter', $data['price_per_meter'] ?? '1,47');
+        // $template->setValue('delivery_time', $data['delivery_time'] ?? 'ca. 15 AT');
+        // $template->setValue('manager_name', $data['manager_name'] ?? 'Michael Diebner');
+        // 🔁 Add as many placeholders as you defined in the Word file like ${...}
+
+        $outputPath = storage_path("app/public/{$outputFilename}.docx");
+        $template->saveAs($outputPath);
+
+        return response()->download($outputPath)->deleteFileAfterSend();
+    }
+
     public function exportHtmlToWord(string $htmlContent, string $filename)
     {
         $htmlContent = $this->extractBodyContent($htmlContent);
@@ -19,7 +42,9 @@ class WordExportService
         $section = $phpWord->addSection();
 
         $this->addHeader($section);
-        $this->addFooter($section);
+        $htmlFooter = view('exports.footer')->render();
+        $footer = $section->addFooter();
+        Html::addHtml($footer, $htmlFooter, false, false);
 
         Html::addHtml($section, $htmlContent, false, false);
 
@@ -61,67 +86,6 @@ class WordExportService
         $header->addTextBreak(2);
     }
 
-    private function addFooter($section)
-    {
-        $footer = $section->addFooter();
-
-        $table = $footer->addTable([
-            'borderSize' => 0,
-            'cellMargin' => 80,
-            'width' => 100 * 50,
-            'unit' => \PhpOffice\PhpWord\SimpleType\TblWidth::PERCENT,
-
-            // ❗ Explicitly disable table borders
-            'tableBorderTopSize' => 0,
-            'tableBorderBottomSize' => 0,
-            'tableBorderLeftSize' => 0,
-            'tableBorderRightSize' => 0,
-        ]);
-
-        $table->addRow();
-
-        $firstCellBorderStyle = [
-            'borderLeftColor' => '0070C0',
-            'borderLeftSize' => 12,
-            'borderRightColor' => '0070C0',
-            'borderRightSize' => 12,
-            'borderTopSize' => 0,
-            'borderBottomSize' => 0,
-            'valign' => 'top',
-        ];
-
-        $otherCellsBorderStyle = [
-            'borderRightColor' => '0070C0',
-            'borderRightSize' => 12,
-            'borderTopSize' => 0,
-            'borderBottomSize' => 0,
-            'valign' => 'top',
-        ];
-
-        // 📋 First column - Company info
-        $cell1 = $table->addCell(3333, $firstCellBorderStyle);
-        $cell1->addText('AOS Kunststofftechnik GmbH', ['size' => 8], ['spaceAfter' => 50]);
-        $cell1->addText('Josef-Ost-Straße 11', ['size' => 8], ['spaceAfter' => 50]);
-        $cell1->addText('89257 Illertissen', ['size' => 8], ['spaceAfter' => 50]);
-        $cell1->addText('info@aos-kunststofftechnik.de', ['size' => 8], ['spaceAfter' => 50]);
-        $cell1->addText('www.aos-kunststofftechnik.de', ['size' => 8], ['spaceAfter' => 50]);
-        $cell1->addText('Tel: +49 7303 / 9602-0', ['size' => 8], ['spaceAfter' => 50]);
-
-        // 📋 Second column - Bank info
-        $cell2 = $table->addCell(3333, $otherCellsBorderStyle);
-        $cell2->addText('Bankverbindung:', ['size' => 8], ['spaceAfter' => 50]);
-        $cell2->addText('Sparkasse Neu-Ulm – Illertissen', ['size' => 8], ['spaceAfter' => 50]);
-        $cell2->addText('IBAN: DE44 7305 0000 0441 7647 84', ['size' => 8], ['spaceAfter' => 50]);
-        $cell2->addText('BIC: BYLADEM1NUL', ['size' => 8], ['spaceAfter' => 50]);
-
-        // 📋 Third column - Legal info
-        $cell3 = $table->addCell(3333, $otherCellsBorderStyle);
-        $cell3->addText('Sitz: Illertissen', ['size' => 8], ['spaceAfter' => 50]);
-        $cell3->addText('Registergericht: Memmingen HRB 18724', ['size' => 8], ['spaceAfter' => 50]);
-        $cell3->addText('Geschäftsführer: Armin Oßwald', ['size' => 8], ['spaceAfter' => 50]);
-        $cell3->addText('Ust.ID-Nr.: DE 330922308', ['size' => 8], ['spaceAfter' => 50]);
-        $cell3->addText('Steuernummer: 151/116/10409', ['size' => 8], ['spaceAfter' => 50]);
-    }
 
     private function extractBodyContent(string $html): string
     {
