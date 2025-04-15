@@ -34,7 +34,6 @@ const ProcessingPerPieceCard: FC = () => {
             <FormInputSaveField
               name="calculation_processing_piece_hourly_rate"
               label="Stundensatz [€] / h"
-              type="number"
             />
           </Grid>
 
@@ -42,14 +41,12 @@ const ProcessingPerPieceCard: FC = () => {
             <FormInputSaveField
               name="calculation_processing_piece_runtime"
               label="Laufzeit / Stk [sek]"
-              type="number"
             />
           </Grid>
           <Grid size={{ xs: 4 }}>
             <FormInputSaveField
               name="calculation_processing_piece_runtime_factor"
               label="Faktor"
-              type="number"
             />
           </Grid>
 
@@ -57,14 +54,12 @@ const ProcessingPerPieceCard: FC = () => {
             <FormInputSaveField
               name="calculation_processing_piece_packing_time"
               label="Verpackungszeit / Stk [sek]"
-              type="number"
             />
           </Grid>
           <Grid size={{ xs: 4 }}>
             <FormInputSaveField
               name="calculation_processing_piece_packing_time_factor"
               label="Faktor"
-              type="number"
             />
           </Grid>
 

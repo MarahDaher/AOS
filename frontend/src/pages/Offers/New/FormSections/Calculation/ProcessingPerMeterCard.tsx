@@ -29,7 +29,6 @@ const ProcessingPerMeterCard: FC = () => {
             <FormInputSaveField
               name="calculation_processing_lfm_hourly_rate"
               label="Stundensatz [€] / h"
-              type="number"
             />
           </Grid>
 
@@ -37,14 +36,12 @@ const ProcessingPerMeterCard: FC = () => {
             <FormInputSaveField
               name="calculation_processing_lfm_runtime"
               label="Laufzeit / m [sek]"
-              type="number"
             />
           </Grid>
           <Grid size={{ xs: 4 }}>
             <FormInputSaveField
               name="calculation_processing_lfm_runtime_factor"
               label="Faktor"
-              type="number"
             />
           </Grid>
 
@@ -52,14 +49,12 @@ const ProcessingPerMeterCard: FC = () => {
             <FormInputSaveField
               name="calculation_processing_lfm_packing_time"
               label="Verpackungszeit / m [sek]"
-              type="number"
             />
           </Grid>
           <Grid size={{ xs: 4 }}>
             <FormInputSaveField
               name="calculation_processing_lfm_packing_time_factor"
               label="Faktor"
-              type="number"
             />
           </Grid>
 

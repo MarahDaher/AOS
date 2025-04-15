@@ -129,7 +129,6 @@ const WorkCalculationCard: FC = () => {
                     name={field.name}
                     label={field.label}
                     disabled={field.disabled}
-                    type="number"
                   />
                 ) : rowIndex === 2 && colIndex === 4 ? (
                   <ProfileWeightTripleDisplay />

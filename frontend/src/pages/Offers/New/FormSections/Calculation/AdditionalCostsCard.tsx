@@ -101,7 +101,6 @@ const AdditionalCostsCard: FC = () => {
                   <FormInputSaveField
                     name={field.name}
                     label={field.label}
-                    type="number"
                     disabled={field.disabled}
                   />
                 ) : null}

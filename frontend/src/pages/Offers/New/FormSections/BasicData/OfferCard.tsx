@@ -8,6 +8,7 @@ import { FormikProvider, useFormik } from "formik";
 import { FunctionComponent } from "react";
 import { OfferCardInitialValues } from "../../Index";
 import { useOfferContext } from "@contexts/OfferProvider";
+import { formatNumberToGerman } from "@utils/formatNumbers";
 
 const OfferCard: FunctionComponent = () => {
   // Hooks
@@ -24,7 +25,9 @@ const OfferCard: FunctionComponent = () => {
   const mapOfferToOfferCardInitialValues = (offer: any) => ({
     general_offer_number: offer.general_offer_number ?? "",
     general_status: offer.general_status ?? "",
-    general_profile_crosssection: offer.general_profile_crosssection ?? "",
+    general_profile_crosssection: formatNumberToGerman(
+      offer.general_profile_crosssection
+    ),
     general_profile_description: offer.general_profile_description ?? "",
     general_color: offer.general_color ?? "",
     general_packaging: offer.general_packaging ?? "",

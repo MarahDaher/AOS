@@ -11,6 +11,7 @@ import { BaseMaterial, RawMaterialRow } from "@interfaces/RawMaterial.model";
 import { AdditiveApi } from "@api/additives";
 import { useApiSuccessHandler } from "@hooks/useApiSuccessHandler";
 import debounce from "lodash.debounce";
+import { formatNumberToGerman } from "@utils/formatNumbers";
 
 export const useRawMaterialPricesTable = () => {
   const { showError } = useApiErrorHandler();
@@ -187,10 +188,12 @@ export const useRawMaterialPricesTable = () => {
       ...RawMaterialPricesTableInitialValues,
       ...(offerDetails
         ? {
-            general_raw_material_price_total_overwritten:
-              offerDetails.general_raw_material_price_total_overwritten ?? "",
-            general_raw_material_purchase_discount:
-              offerDetails.general_raw_material_purchase_discount ?? "",
+            general_raw_material_price_total_overwritten: formatNumberToGerman(
+              offerDetails.general_raw_material_price_total_overwritten
+            ),
+            general_raw_material_purchase_discount: formatNumberToGerman(
+              offerDetails.general_raw_material_purchase_discount
+            ),
           }
         : {}),
     },

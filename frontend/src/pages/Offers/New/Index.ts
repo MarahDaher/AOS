@@ -1,3 +1,5 @@
+import { formatNumberToGerman } from "@utils/formatNumbers";
+
 export const OfferCardInitialValues = {
   general_offer_number: "",
   general_status: "",
@@ -78,7 +80,7 @@ export const mapInitialValues = (offerDetails: any) =>
   Object.fromEntries(
     ProcessingPerMeterFields.map((field) => [
       field,
-      offerDetails?.[field] ?? "",
+      formatNumberToGerman(offerDetails?.[field]) ?? "",
     ])
   );
 
@@ -101,7 +103,7 @@ export const mapPerPieceInitialValuesInitialValues = (offerDetails: any) =>
   Object.fromEntries(
     ProcessingPerPieceFields.map((field) => [
       field,
-      offerDetails?.[field] ?? "",
+      formatNumberToGerman(offerDetails?.[field]) ?? "",
     ])
   );
 
@@ -128,7 +130,10 @@ export const AdditionalCostInitialValues = Object.fromEntries(
 
 export const mapAdditionalCostsInitialValues = (offerDetails: any) =>
   Object.fromEntries(
-    AdditionalCostsFields.map((field) => [field, offerDetails?.[field] ?? ""])
+    AdditionalCostsFields.map((field) => [
+      field,
+      formatNumberToGerman(offerDetails?.[field]) ?? "",
+    ])
   );
 
 //-------------------------------------------------
@@ -168,5 +173,8 @@ export const WorkCalculationInitialValues = Object.fromEntries(
 
 export const mapWorkCalculationInitialValues = (offerDetails: any) =>
   Object.fromEntries(
-    WorkCalculationFields.map((field) => [field, offerDetails?.[field] ?? ""])
+    WorkCalculationFields.map((field) => [
+      field,
+      formatNumberToGerman(offerDetails?.[field]) ?? "",
+    ])
   );

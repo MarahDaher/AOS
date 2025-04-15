@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useSaveFieldMutation } from "@hooks/useSaveFieldMutation";
+import { parseGermanNumber } from "@utils/formatNumbers";
 
 interface FormInputFieldProps extends Omit<TextFieldProps, "name" | "variant"> {
   name: string;
@@ -27,11 +28,21 @@ const FormInputSaveField: FunctionComponent<FormInputFieldProps> = ({
 
   const mutation = useSaveFieldMutation();
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let val = e.target.value;
+
+    // Optional: Remove all non-numeric (except comma, dot and minus)
+    val = val.replace(/[^0-9,.\-]/g, "");
+
+    // Keep input as-is for now
+    setFieldValue(name, val);
+  };
+
   const handleBlur = () => {
-    // Only send update if value is non-empty (optional)
-    if (field.value !== undefined && field.value !== "") {
+    const parsed = parseGermanNumber(field.value);
+    if (parsed !== null) {
       mutation.mutate(
-        { name, value: field.value },
+        { name, value: parsed },
         {
           onSuccess: () => {
             setJustSaved(true);
@@ -41,11 +52,6 @@ const FormInputSaveField: FunctionComponent<FormInputFieldProps> = ({
       );
     }
   };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFieldValue(name, e.target.value);
-  };
-
   const configTextField: TextFieldProps = {
     ...field,
     ...props,

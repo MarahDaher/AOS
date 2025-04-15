@@ -40,9 +40,31 @@ export function formatNumber(
   return formatter.format(value);
 }
 
-export function parseGermanNumber(value: string): number | null {
-  if (!value) return null;
-  const normalized = value.replace(/\./g, "").replace(",", ".");
+export const parseGermanNumber = (input: string): number | null => {
+  if (!input) return null;
+
+  // Remove thousands separator "." (only if followed by 3 digits)
+  const cleaned = input.replace(/\.(?=\d{3}(?:[,.]|$))/g, "");
+
+  // Replace German decimal comma with dot
+  const normalized = cleaned.replace(",", ".");
+
   const parsed = parseFloat(normalized);
   return isNaN(parsed) ? null : parsed;
-}
+};
+
+export const formatNumberToGerman = (
+  value: number | string | null | undefined
+): string => {
+  if (value === null || value === undefined || value === "") return "";
+
+  const num =
+    typeof value === "string" ? parseFloat(value.replace(",", ".")) : value;
+
+  return isNaN(num)
+    ? ""
+    : num.toLocaleString("de-DE", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 3,
+      });
+};

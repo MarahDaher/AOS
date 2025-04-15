@@ -6,6 +6,7 @@ import FormInputSaveField from "@components/FormInputSaveField";
 import { Box, useMediaQuery, useTheme } from "@mui/material";
 import { FormikProvider, useFormik } from "formik";
 import { useOfferContext } from "@contexts/OfferProvider";
+import { formatNumberToGerman } from "@utils/formatNumbers";
 
 // Left side fields (Kalkulationsmenge)
 const kalkulationsmengeRows = [
@@ -95,7 +96,11 @@ const CostOverviewCard: FC = () => {
       _pricing_costs_calc_raw_material_setup_quantity: "",
       _pricing_costs_calc_raw_material_quantity_total: "",
       _pricing_costs_calc_raw_material_price_total: "",
-      _pricing_costs_calc_price_additional_lfm: "",
+      _pricing_costs_calc_price_additional_lfm: offerDetails
+        ? formatNumberToGerman(
+            offerDetails._pricing_costs_calc_price_additional_lfm
+          )
+        : "",
       _pricing_costs_yearly_time_costs_quantity: "",
       _pricing_costs_yearly_raw_material_quantity: "",
       _pricing_costs_yearly_fixcosts: "",
@@ -199,7 +204,6 @@ const CostOverviewCard: FC = () => {
                       <FormInputSaveField
                         name={field.name}
                         label={field.label}
-                        type="number"
                         disabled={field.disabled}
                       />
                     </Box>
