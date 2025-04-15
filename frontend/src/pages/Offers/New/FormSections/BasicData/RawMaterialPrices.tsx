@@ -3,12 +3,13 @@ import FormInputField from "@components/FormInputField";
 import FormInputSaveField from "@components/FormInputSaveField";
 import Grid from "@mui/material/Grid2";
 import { FormikProvider } from "formik";
-import { Typography, Button } from "@mui/material";
+import { Typography, Button, Stack } from "@mui/material";
 import { Table, TableContainer, TableBody, Paper } from "@mui/material";
 import RawMaterialTableHead from "./RawMaterialSection/RawMaterialTableHead";
 import RawMaterialRow from "./RawMaterialSection/RawMaterialRow";
 import { useRawMaterialPricesTable } from "./RawMaterialSection/useRawMaterialPricesTable";
 import AdditiveModal from "./RawMaterialSection/AdditiveModal";
+import FormInputFallbackField from "@components/FormInputFallbackField";
 
 const RawMaterialPrices = () => {
   const {
@@ -86,19 +87,31 @@ const RawMaterialPrices = () => {
           </Grid>
         </Grid>
 
-        <Grid
-          container
-          spacing={2}
-          alignItems="center"
-          justifyContent="end"
-          mt={2}
-        >
-          <Grid size={{ xs: 3, md: 2 }}>
-            <FormInputSaveField
-              name="general_raw_material_price_total_overwritten"
-              label="Rohstoffpreis gesamt / kg [€]"
-            />
-            <Typography variant="caption">(überschrieben)</Typography>
+        <Grid container spacing={2} justifyContent="end" mt={2}>
+          <Grid size={{ xs: 3, md: 3 }}>
+            <Stack spacing={0.5}>
+              <FormInputFallbackField
+                name="general_raw_material_price_total_overwritten"
+                label="Rohstoffpreis gesamt / kg [€]"
+                fallbackValue={totalPriceShare.toFixed(2)}
+              />
+              <Typography variant="caption">(überschrieben)</Typography>
+
+              <Button
+                size="small"
+                variant="text"
+                color="secondary"
+                onClick={() =>
+                  formik.setFieldValue(
+                    "general_raw_material_price_total_overwritten",
+                    ""
+                  )
+                }
+                sx={{ alignSelf: "flex-start", textTransform: "none", pl: 0 }}
+              >
+                Zurücksetzen auf berechneten Wert
+              </Button>
+            </Stack>
           </Grid>
 
           <Grid size={{ xs: 3, md: 2 }}>
