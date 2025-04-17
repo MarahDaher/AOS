@@ -46,6 +46,7 @@ Route::middleware(['auth:api'])->group(function () {
         Route::post('/', [OfferController::class, 'store'])->middleware('check.permission:' . PermissionConstants::CREATE_OFFER);
         Route::patch('{id}', [OfferController::class, 'update'])->middleware('check.permission:' . PermissionConstants::UPDATE_OFFER);
         Route::post('{id}/duplicate', [OfferController::class, 'duplicate'])->middleware('check.permission:' . PermissionConstants::DUPLICAET_OFFER);
+        Route::delete('{id}', [OfferController::class, 'destroy']);
 
         // Offer Raw Materials calculated
         Route::get('{id}/raw-materials-calculated', [OfferRawMaterialCalculatedController::class, 'index'])->middleware('check.permission:' . PermissionConstants::VIEW_OFFER_RAW_MATERIAL);

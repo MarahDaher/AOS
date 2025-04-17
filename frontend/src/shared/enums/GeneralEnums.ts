@@ -4,6 +4,7 @@ export enum GeneralStatus {
   AUFTRAG = "Auftrag",
   PRODUZIERT = "Produziert",
   VERSANDT = "Versandt",
+  Gelöscht = "Gelöscht",
 }
 
 export enum DeliveryType {
@@ -18,6 +19,7 @@ export const GeneralStatusLabels = {
   [GeneralStatus.AUFTRAG]: "Auftrag",
   [GeneralStatus.PRODUZIERT]: "Produziert",
   [GeneralStatus.VERSANDT]: "Versandt",
+  [GeneralStatus.Gelöscht]: "Gelöscht",
 };
 
 export const DeliveryTypeLabels = {

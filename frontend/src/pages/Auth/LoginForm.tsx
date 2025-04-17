@@ -70,11 +70,11 @@ const LoginForm = ({ formik }: Props) => {
         {formik.isSubmitting ? "Signing in..." : "Sign in"}
       </Button>
 
-      <Box textAlign="center" mt={1}>
+      {/* <Box textAlign="center" mt={1}>
         <Link href="#" underline="hover" fontSize={14}>
           Forgot your password?
         </Link>
-      </Box>
+      </Box> */}
     </Box>
   );
 };

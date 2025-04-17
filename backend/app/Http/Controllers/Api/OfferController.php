@@ -95,4 +95,13 @@ class OfferController extends BaseController
             return ApiResponse::error('Failed to duplicate offer: ' . $e->getMessage(), 400);
         }
     }
+
+    public function destroy($id)
+    {
+        $offer = Offer::findOrFail($id);
+        $offer->general_status = 'Gelöscht';
+        $offer->save();
+
+        return response()->json(['message' => 'Angebot als gelöscht markiert']);
+    }
 }

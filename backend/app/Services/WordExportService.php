@@ -15,7 +15,7 @@ class WordExportService
 
         // 🔄 Replace placeholders in the DOCX with dynamic data
         $template->setValue('company_name', $data['company_name'] ?? 'Marah');
-        $template->setValue('color', $data['color'] ?? 'blue');
+        $template->setValue('color', $data['color'] ?? '');
         $template->setValue('profile_name', $data['profile_name'] ?? 'Daher');
         // $template->setValue('price_per_meter', $data['price_per_meter'] ?? '1,47');
         // $template->setValue('delivery_time', $data['delivery_time'] ?? 'ca. 15 AT');

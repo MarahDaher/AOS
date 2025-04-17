@@ -18,7 +18,7 @@ class OfferDrawingResource extends JsonResource
             'id' => $this->id,
             'offer_id' => $this->offer_id,
             'filename' => $this->filename,
-            'upload_date' => $this->upload_date?->format('Y-m-d'), // safe call + only date
+            'upload_date' => $this->upload_date?->format('Y-m-d'),
             'preview_url' => $this->preview_url,
         ];
     }
