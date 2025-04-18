@@ -20,8 +20,6 @@ interface Props {
 }
 
 export default function TieredPriceInklTable({ title, data }: Props) {
-  console.log(data);
-
   return (
     <>
       <Typography variant="subtitle1" fontWeight="bold" textAlign="center">

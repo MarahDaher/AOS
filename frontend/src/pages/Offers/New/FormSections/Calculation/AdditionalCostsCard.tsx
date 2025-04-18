@@ -9,6 +9,7 @@ import {
   mapAdditionalCostsInitialValues,
 } from "../../Index";
 import { useOfferContext } from "@contexts/OfferProvider";
+import { usePermissions } from "@hooks/usePermissions";
 
 const rows = [
   [
@@ -71,6 +72,8 @@ const rows = [
 
 const AdditionalCostsCard: FC = () => {
   const { offerDetails } = useOfferContext();
+  const { canEdit } = usePermissions();
+  const isEditable = canEdit("calculation");
 
   const theme = useTheme();
   const isMdUp = useMediaQuery(theme.breakpoints.up("md"));
@@ -101,7 +104,7 @@ const AdditionalCostsCard: FC = () => {
                   <FormInputSaveField
                     name={field.name}
                     label={field.label}
-                    disabled={field.disabled}
+                    disabled={field.disabled || !isEditable}
                   />
                 ) : null}
               </Grid>

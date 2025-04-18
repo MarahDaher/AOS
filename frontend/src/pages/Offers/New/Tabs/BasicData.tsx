@@ -9,6 +9,7 @@ import { FormikProvider, useFormik } from "formik";
 import { FunctionComponent } from "react";
 import { useCalculatedValues } from "@hooks/useCalculatedValues";
 import { useOfferContext } from "@contexts/OfferProvider";
+import { usePermissions } from "@hooks/usePermissions";
 
 type BasicDataTabProps = object;
 
@@ -16,6 +17,7 @@ const BasicDataTab: FunctionComponent<BasicDataTabProps> = () => {
   useCalculatedValues();
 
   const { offerDetails } = useOfferContext();
+  const { canEdit, canView } = usePermissions();
 
   const formik = useFormik({
     initialValues: {
@@ -26,41 +28,46 @@ const BasicDataTab: FunctionComponent<BasicDataTabProps> = () => {
 
   return (
     <>
-      <Grid container spacing={1}>
-        <Grid size={{ xs: 12, md: 5 }}>
-          <OfferCard />
-        </Grid>
-        <Grid size={{ xs: 12, md: 5 }}>
-          <CustomerCard />
-        </Grid>
-        <Grid size={{ xs: 12, md: 2 }}>
-          {offerDetails.general_creation_date &&
-            offerDetails.created_by_user && <HistoryCard />}
-        </Grid>
-      </Grid>
+      {canView("basic_data") && (
+        <>
+          <Grid container spacing={1}>
+            <Grid size={{ xs: 12, md: 5 }}>
+              <OfferCard />
+            </Grid>
+            <Grid size={{ xs: 12, md: 5 }}>
+              <CustomerCard />
+            </Grid>
+            <Grid size={{ xs: 12, md: 2 }}>
+              {offerDetails.general_creation_date &&
+                offerDetails.created_by_user && <HistoryCard />}
+            </Grid>
+          </Grid>
 
-      {/* Raw Materials */}
-      <Grid container spacing={1}>
-        <Grid size={{ xs: 12, md: 12 }}>
-          <RawMaterialPricesTable />
-        </Grid>
-      </Grid>
+          {/* /* Raw Materials */}
+          <Grid container spacing={1}>
+            <Grid size={{ xs: 12, md: 12 }}>
+              <RawMaterialPricesTable />
+            </Grid>
+          </Grid>
 
-      {/* Bemerkungen */}
-      <Grid container spacing={1}>
-        <Grid size={{ xs: 12, md: 12 }}>
-          <FormikProvider value={formik}>
-            <CardBox label="">
-              <FormInputSaveField
-                name="general_comments"
-                label="Bemerkungen"
-                multiline
-                rows={5}
-              />
-            </CardBox>
-          </FormikProvider>
-        </Grid>
-      </Grid>
+          {/* /* Bemerkungen */}
+          <Grid container spacing={1}>
+            <Grid size={{ xs: 12, md: 12 }}>
+              <FormikProvider value={formik}>
+                <CardBox label="">
+                  <FormInputSaveField
+                    name="general_comments"
+                    label="Bemerkungen"
+                    multiline
+                    rows={5}
+                    disabled={!canEdit("basic_data")}
+                  />
+                </CardBox>
+              </FormikProvider>
+            </Grid>
+          </Grid>
+        </>
+      )}
     </>
   );
 };

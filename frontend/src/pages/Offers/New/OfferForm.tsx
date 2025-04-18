@@ -11,21 +11,46 @@ import { initialValues } from "./Index";
 import { useParams } from "react-router-dom";
 import { useOfferContext } from "@contexts/OfferProvider";
 import { OffersApi } from "@api/offers";
+import { usePermissions } from "@hooks/usePermissions";
 
 type OfferFormProps = object;
 
-const tabs = [
-  { label: "Grunddaten", component: <BasicDataTab /> },
-  { label: "Kalkulation", component: <CalculationTab /> },
-  { label: "Preise", component: <PricesTab /> },
-  { label: "Zeichnung", component: <DrawingTab /> },
-  { label: "Laufkarte", component: <ProcessSheetTab /> },
+const allTabs = [
+  {
+    label: "Grunddaten",
+    component: <BasicDataTab />,
+    permission: { action: "view", subject: "basic_data" },
+  },
+  {
+    label: "Kalkulation",
+    component: <CalculationTab />,
+    permission: { action: "view", subject: "calculation" },
+  },
+  {
+    label: "Preise",
+    component: <PricesTab />,
+    permission: { action: "view", subject: "prices" },
+  },
+  {
+    label: "Zeichnung",
+    component: <DrawingTab />,
+    permission: { action: "view", subject: "drawing" },
+  },
+  {
+    label: "Laufkarte",
+    component: <ProcessSheetTab />,
+    permission: { action: "view", subject: "process_sheet" },
+  },
 ];
 
 const OfferForm: FunctionComponent<OfferFormProps> = () => {
+  // Hooks
   const { id } = useParams();
   const { setOfferId, setOfferData, resetOffer } = useOfferContext();
+  const { canView } = usePermissions();
+  const tabs = allTabs.filter((tab) => canView(tab.permission.subject));
 
+  // State
   const [selectedTab, setSelectedTab] = useState(() => {
     const saved = localStorage.getItem("offer_form_selected_tab");
     return saved !== null ? Number(saved) : 0;

@@ -12,6 +12,7 @@ import { OffersModel } from "@interfaces/Offers.model";
 import { useApiErrorHandler } from "@hooks/useApiErrorHandler";
 import { useNavigate } from "react-router-dom";
 import { useOfferContext } from "@contexts/OfferProvider";
+import { usePermissions } from "@hooks/usePermissions";
 
 type OffersPageProps = object;
 
@@ -20,6 +21,7 @@ const OffersPage: FunctionComponent<OffersPageProps> = () => {
   const navigate = useNavigate();
   const { showError } = useApiErrorHandler();
   const { resetOffer } = useOfferContext();
+  const { canEdit, canCreate, canDuplicate, canExport } = usePermissions();
 
   // State
   const [offers, setOffers] = useState<OffersModel[]>([]);
@@ -82,31 +84,36 @@ const OffersPage: FunctionComponent<OffersPageProps> = () => {
             loading={loading}
             actions={(row) => (
               <>
-                <IconAction
-                  tooltip="Als Word exportieren"
-                  onClick={() => handleExport(row.id)}
-                  disabled={exportingOfferId === row.id}
-                >
-                  {exportingOfferId === row.id ? (
-                    <CircularProgress size={20} />
-                  ) : (
-                    <ShoppingBasket fontSize="small" />
-                  )}
-                </IconAction>
+                {canExport("offer") && (
+                  <IconAction
+                    tooltip="Als Word exportieren"
+                    onClick={() => handleExport(row.id)}
+                    disabled={exportingOfferId === row.id}
+                  >
+                    {exportingOfferId === row.id ? (
+                      <CircularProgress size={20} />
+                    ) : (
+                      <ShoppingBasket fontSize="small" />
+                    )}
+                  </IconAction>
+                )}
+                {canDuplicate("offer") && (
+                  <IconAction
+                    tooltip="Angebot duplizieren"
+                    onClick={() => handleDuplicate(row.id)}
+                  >
+                    <ContentCopy fontSize="small" />
+                  </IconAction>
+                )}
 
-                <IconAction
-                  tooltip="Angebot duplizieren"
-                  onClick={() => handleDuplicate(row.id)}
-                >
-                  <ContentCopy fontSize="small" />
-                </IconAction>
-
-                <IconAction
-                  tooltip="Bearbeiten"
-                  onClick={() => navigate(`/angebote/${row.id}`)}
-                >
-                  <Edit fontSize="small" />
-                </IconAction>
+                {canEdit("offer") && (
+                  <IconAction
+                    tooltip="Bearbeiten"
+                    onClick={() => navigate(`/angebote/${row.id}`)}
+                  >
+                    <Edit fontSize="small" />
+                  </IconAction>
+                )}
                 {/* <IconAction tooltip="Löschen" onClick={() => handleDelete(row)}>
                          <Delete fontSize="small" />
                        </IconAction> */}
@@ -115,11 +122,13 @@ const OffersPage: FunctionComponent<OffersPageProps> = () => {
           />
 
           {/* Add Button */}
-          <RoundedIconButton
-            icon={<AddIcon fontSize="small" />}
-            label="NEU"
-            onClick={handleAdd}
-          />
+          {canCreate("offer") && (
+            <RoundedIconButton
+              icon={<AddIcon fontSize="small" />}
+              label="NEU"
+              onClick={handleAdd}
+            />
+          )}
         </CardBox>
       </Box>
     </>

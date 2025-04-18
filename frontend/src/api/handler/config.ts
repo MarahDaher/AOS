@@ -30,7 +30,7 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // window.location.href = "/login";
+      window.location.href = "/aos/anmelden";
     }
     if (error.response?.status === 403) {
       //   showErrorAlert("You don't have permission to perform this action");

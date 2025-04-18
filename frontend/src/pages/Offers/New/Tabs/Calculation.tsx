@@ -6,43 +6,50 @@ import ProcessingPerMeterCard from "../FormSections/Calculation/ProcessingPerMet
 import ProcessingPerPieceCard from "../FormSections/Calculation/ProcessingPerPieceCard";
 import AdditionalCostsCard from "../FormSections/Calculation/AdditionalCostsCard";
 import WorkCalculationCard from "../FormSections/Calculation/WorkCalculationCard";
+import { usePermissions } from "@hooks/usePermissions";
 
 interface CalculationTabProps {}
 
 const CalculationTab: FunctionComponent<CalculationTabProps> = () => {
+  const { canView } = usePermissions();
+
   return (
     <>
-      <Grid container spacing={1}>
-        {/* Row 1 */}
-        <Grid size={{ xs: 12, md: 12 }}>
+      {canView("calculation") && (
+        <>
           <Grid container spacing={1}>
-            <Grid size={{ xs: 12, md: 2 }}>
-              <QuantityStepsCard />
+            {/* Row 1 */}
+            <Grid size={{ xs: 12, md: 12 }}>
+              <Grid container spacing={1}>
+                <Grid size={{ xs: 12, md: 2 }}>
+                  <QuantityStepsCard />
+                </Grid>
+                <Grid size={{ xs: 12, md: 3 }}>
+                  <RawMaterialDemandCard />
+                </Grid>
+                <Grid size={{ xs: 12, md: 3.5 }}>
+                  <ProcessingPerMeterCard />
+                </Grid>
+                <Grid size={{ xs: 12, md: 3.5 }}>
+                  <ProcessingPerPieceCard />
+                </Grid>
+              </Grid>
             </Grid>
-            <Grid size={{ xs: 12, md: 3 }}>
-              <RawMaterialDemandCard />
-            </Grid>
-            <Grid size={{ xs: 12, md: 3.5 }}>
-              <ProcessingPerMeterCard />
-            </Grid>
-            <Grid size={{ xs: 12, md: 3.5 }}>
-              <ProcessingPerPieceCard />
+
+            {/* Row 2 */}
+            <Grid size={{ xs: 12, md: 12 }}>
+              <AdditionalCostsCard />
             </Grid>
           </Grid>
-        </Grid>
 
-        {/* Row 2 */}
-        <Grid size={{ xs: 12, md: 12 }}>
-          <AdditionalCostsCard />
-        </Grid>
-      </Grid>
-
-      {/* Row 3 */}
-      <Grid container spacing={1}>
-        <Grid size={{ xs: 12, md: 12 }}>
-          <WorkCalculationCard />
-        </Grid>
-      </Grid>
+          {/* Row 3 */}
+          <Grid container spacing={1}>
+            <Grid size={{ xs: 12, md: 12 }}>
+              <WorkCalculationCard />
+            </Grid>
+          </Grid>
+        </>
+      )}
     </>
   );
 };

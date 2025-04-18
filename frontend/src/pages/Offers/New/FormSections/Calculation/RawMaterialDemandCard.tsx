@@ -10,6 +10,7 @@ import { OfferRawMaterialCalculatedModel } from "@interfaces/RawMaterial.model";
 import { useOfferContext } from "@contexts/OfferProvider";
 import { useRawMaterials } from "@hooks/useRawMaterialsDemand";
 import debounce from "lodash.debounce";
+import { usePermissions } from "@hooks/usePermissions";
 
 interface FormValues {
   raw_materials: OfferRawMaterialCalculatedModel[];
@@ -19,6 +20,9 @@ interface FormValues {
 const RawMaterialDemandCard: FC = () => {
   const offerId = useOfferContext().offerId;
   const { data, updateRawMaterial, refetch } = useRawMaterials(offerId!);
+  // Permissions
+  const { canEdit } = usePermissions();
+  const isEditable = canEdit("calculation");
 
   const emptyMaterial = (id: number): OfferRawMaterialCalculatedModel => ({
     raw_material_id: id,
@@ -166,7 +170,7 @@ const RawMaterialDemandCard: FC = () => {
                   label={`Rohstoff ${index + 1} [mm²]`}
                   type="number"
                   onBlur={() => handleBlur(index, "absolut_demand")}
-                  disabled={isDisabled}
+                  disabled={isDisabled || !isEditable}
                 />
               </Grid>
               <Grid size={{ xs: 6, md: 6 }}>

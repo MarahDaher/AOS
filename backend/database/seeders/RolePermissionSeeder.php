@@ -66,10 +66,12 @@ class RolePermissionSeeder extends Seeder
             PermissionConstants::CREATE_OFFER,
             PermissionConstants::UPDATE_OFFER,
             PermissionConstants::DUPLICAET_OFFER,
+            PermissionConstants::DELETE_OFFER,
+            PermissionConstants::EXPORT_OFFER,
 
-            PermissionConstants::VIEW_GERNERAL_DATA,
-            PermissionConstants::CREATE_GERNERAL_DATA,
-            PermissionConstants::UPATE_GERNERAL_DATA,
+            PermissionConstants::VIEW_BASIC_DATA,
+            PermissionConstants::CREATE_BASIC_DATA,
+            PermissionConstants::UPDATE_BASIC_DATA,
 
             PermissionConstants::VIEW_CALCULATION,
             PermissionConstants::CREATE_CALCULATION,
@@ -79,9 +81,9 @@ class RolePermissionSeeder extends Seeder
             PermissionConstants::CREATE_PRICES,
             PermissionConstants::UPDATE_PRICES,
 
-            PermissionConstants::VIEW_DRAWERING,
-            PermissionConstants::CREATE_DRAWERING,
-            PermissionConstants::UPDATE_DRAWERING,
+            PermissionConstants::VIEW_DRAWING,
+            PermissionConstants::CREATE_DRAWING,
+            PermissionConstants::UPDATE_DRAWING,
 
             PermissionConstants::VIEW_PROCESS_SHEET,
             PermissionConstants::CREATE_PROCESS_SHEET,
@@ -117,6 +119,18 @@ class RolePermissionSeeder extends Seeder
             PermissionConstants::CREATE_OFFER_RAW_MATERIAL,
             PermissionConstants::UPDATE_OFFER_RAW_MATERIAL,
             PermissionConstants::DELETE_OFFER_RAW_MATERIAL,
+
+            PermissionConstants::VIEW_ADDITIVES,
+            PermissionConstants::VIEW_ADDITIVE,
+            PermissionConstants::CREATE_ADDITIVE,
+            PermissionConstants::UPDATE_ADDITIVE,
+            PermissionConstants::DELETE_ADDITIVE,
+
+            PermissionConstants::VIEW_ADDITIVE_RAW_MATERIALS,
+            PermissionConstants::VIEW_ADDITIVE_RAW_MATERIAL,
+            PermissionConstants::CREATE_ADDITIVE_RAW_MATERIAL,
+            PermissionConstants::UPDATE_ADDITIVE_RAW_MATERIAL,
+            PermissionConstants::DELETE_ADDITIVE_RAW_MATERIAL,
         ];
     }
 
@@ -125,15 +139,16 @@ class RolePermissionSeeder extends Seeder
         return [
             PermissionConstants::VIEW_OFFERS,
             PermissionConstants::VIEW_OFFER,
+            PermissionConstants::UPDATE_OFFER,
 
-            PermissionConstants::VIEW_GERNERAL_DATA,
-            PermissionConstants::UPATE_GERNERAL_DATA,
+            PermissionConstants::VIEW_BASIC_DATA,
+            PermissionConstants::UPDATE_BASIC_DATA,
 
             PermissionConstants::VIEW_CALCULATION,
             PermissionConstants::VIEW_PRICES,
 
-            PermissionConstants::VIEW_DRAWERING,
-            PermissionConstants::UPDATE_DRAWERING,
+            PermissionConstants::VIEW_DRAWING,
+            PermissionConstants::UPDATE_DRAWING,
 
             PermissionConstants::VIEW_PROCESS_SHEET,
 
@@ -141,6 +156,15 @@ class RolePermissionSeeder extends Seeder
 
             PermissionConstants::VIEW_RAW_MATERIALS,
             PermissionConstants::VIEW_RAW_MATERIAL,
+
+            PermissionConstants::VIEW_OFFER_RAW_MATERIALS,
+            PermissionConstants::VIEW_OFFER_RAW_MATERIAL,
+
+            PermissionConstants::VIEW_ADDITIVES,
+            PermissionConstants::VIEW_ADDITIVE,
+
+            PermissionConstants::VIEW_ADDITIVE_RAW_MATERIALS,
+            PermissionConstants::VIEW_ADDITIVE_RAW_MATERIAL,
 
         ];
     }
@@ -151,10 +175,10 @@ class RolePermissionSeeder extends Seeder
             PermissionConstants::VIEW_OFFERS,
             PermissionConstants::VIEW_OFFER,
 
-            PermissionConstants::VIEW_GERNERAL_DATA,
+            PermissionConstants::VIEW_BASIC_DATA,
             PermissionConstants::VIEW_CALCULATION,
             PermissionConstants::VIEW_PRICES,
-            PermissionConstants::VIEW_DRAWERING,
+            PermissionConstants::VIEW_DRAWING,
 
             PermissionConstants::VIEW_PROCESS_SHEET,
             PermissionConstants::UPDATE_PROCESS_SHEET,
@@ -163,6 +187,15 @@ class RolePermissionSeeder extends Seeder
 
             PermissionConstants::VIEW_RAW_MATERIALS,
             PermissionConstants::VIEW_RAW_MATERIAL,
+
+            PermissionConstants::VIEW_OFFER_RAW_MATERIALS,
+            PermissionConstants::VIEW_OFFER_RAW_MATERIAL,
+
+            PermissionConstants::VIEW_ADDITIVES,
+            PermissionConstants::VIEW_ADDITIVE,
+
+            PermissionConstants::VIEW_ADDITIVE_RAW_MATERIALS,
+            PermissionConstants::VIEW_ADDITIVE_RAW_MATERIAL,
         ];
     }
 }

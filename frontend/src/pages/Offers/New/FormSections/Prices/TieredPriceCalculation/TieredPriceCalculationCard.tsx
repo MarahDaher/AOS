@@ -5,9 +5,13 @@ import { FormikProvider, useFormik } from "formik";
 import FormInputSaveField from "@components/FormInputSaveField";
 import { useOfferContext } from "@contexts/OfferProvider";
 import { mapStaffelPricedataFromOffer } from ".";
+import { usePermissions } from "@hooks/usePermissions";
 
 const TieredPriceCalculationCard = () => {
   const { offerDetails } = useOfferContext();
+  // Permissions
+  const { canEdit } = usePermissions();
+  const isEditable = canEdit("calculation");
 
   const mappedData = offerDetails
     ? mapStaffelPricedataFromOffer(offerDetails)
@@ -31,7 +35,7 @@ const TieredPriceCalculationCard = () => {
               <FormInputSaveField
                 name="pricing_graduated_calculation_additional_setup_quantity"
                 label="zus. Einstellmenge [%]"
-                type="number"
+                disabled={!isEditable}
               />
             </FormikProvider>
           </Grid>

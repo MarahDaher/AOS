@@ -10,10 +10,14 @@ import {
   ProcessingPerPieceInitialValues,
 } from "../../Index";
 import { useOfferContext } from "@contexts/OfferProvider";
+import { usePermissions } from "@hooks/usePermissions";
 
 const ProcessingPerPieceCard: FC = () => {
   // Hooks
   const { offerDetails } = useOfferContext();
+  // Permissions
+  const { canEdit } = usePermissions();
+  const isEditable = canEdit("calculation");
 
   const formik = useFormik({
     initialValues: {
@@ -34,6 +38,7 @@ const ProcessingPerPieceCard: FC = () => {
             <FormInputSaveField
               name="calculation_processing_piece_hourly_rate"
               label="Stundensatz [€] / h"
+              disabled={!isEditable}
             />
           </Grid>
 
@@ -41,12 +46,14 @@ const ProcessingPerPieceCard: FC = () => {
             <FormInputSaveField
               name="calculation_processing_piece_runtime"
               label="Laufzeit / Stk [sek]"
+              disabled={!isEditable}
             />
           </Grid>
           <Grid size={{ xs: 4 }}>
             <FormInputSaveField
               name="calculation_processing_piece_runtime_factor"
               label="Faktor"
+              disabled={!isEditable}
             />
           </Grid>
 
@@ -54,12 +61,14 @@ const ProcessingPerPieceCard: FC = () => {
             <FormInputSaveField
               name="calculation_processing_piece_packing_time"
               label="Verpackungszeit / Stk [sek]"
+              disabled={!isEditable}
             />
           </Grid>
           <Grid size={{ xs: 4 }}>
             <FormInputSaveField
               name="calculation_processing_piece_packing_time_factor"
               label="Faktor"
+              disabled={!isEditable}
             />
           </Grid>
 

@@ -10,6 +10,7 @@ import {
   WorkCalculationInitialValues,
 } from "../../Index";
 import ProfileWeightTripleDisplay from "./ProfileWeightTripleDisplay";
+import { usePermissions } from "@hooks/usePermissions";
 
 const rows = [
   [
@@ -104,7 +105,8 @@ const rows = [
 
 const WorkCalculationCard: FC = () => {
   const { offerDetails } = useOfferContext();
-
+  const { canEdit } = usePermissions();
+  const isEditable = canEdit("calculation");
   // const theme = useTheme();
   // const isMdUp = useMediaQuery(theme.breakpoints.up("md"));
 
@@ -128,7 +130,7 @@ const WorkCalculationCard: FC = () => {
                   <FormInputSaveField
                     name={field.name}
                     label={field.label}
-                    disabled={field.disabled}
+                    disabled={field.disabled || !isEditable}
                   />
                 ) : rowIndex === 2 && colIndex === 4 ? (
                   <ProfileWeightTripleDisplay />

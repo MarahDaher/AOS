@@ -90,21 +90,37 @@ const CostOverviewCard: FC = () => {
 
   const formik = useFormik({
     initialValues: {
-      _pricing_costs_calc_production_time: "",
-      _pricing_costs_calc_time_costs_quantity: "",
-      _pricing_costs_calc_raw_material_quantity: "",
-      _pricing_costs_calc_raw_material_setup_quantity: "",
-      _pricing_costs_calc_raw_material_quantity_total: "",
-      _pricing_costs_calc_raw_material_price_total: "",
-      _pricing_costs_calc_price_additional_lfm: offerDetails
-        ? formatNumberToGerman(
-            offerDetails._pricing_costs_calc_price_additional_lfm
-          )
-        : "",
-      _pricing_costs_yearly_time_costs_quantity: "",
-      _pricing_costs_yearly_raw_material_quantity: "",
-      _pricing_costs_yearly_fixcosts: "",
-      ...(offerDetails ? { ...offerDetails } : {}),
+      _pricing_costs_calc_production_time:
+        offerDetails?._pricing_costs_calc_production_time ?? 0.0,
+
+      _pricing_costs_calc_time_costs_quantity:
+        offerDetails?._pricing_costs_calc_time_costs_quantity ?? 0.0,
+
+      _pricing_costs_calc_raw_material_quantity:
+        offerDetails?._pricing_costs_calc_raw_material_quantity ?? 0.0,
+
+      _pricing_costs_calc_raw_material_setup_quantity:
+        offerDetails?._pricing_costs_calc_raw_material_setup_quantity ?? 0.0,
+
+      _pricing_costs_calc_raw_material_quantity_total:
+        offerDetails?._pricing_costs_calc_raw_material_quantity_total ?? 0.0,
+
+      _pricing_costs_calc_raw_material_price_total:
+        offerDetails?._pricing_costs_calc_raw_material_price_total ?? 0.0,
+
+      pricing_costs_calc_price_additional_lfm:
+        formatNumberToGerman(
+          offerDetails?.pricing_costs_calc_price_additional_lfm
+        ) || "",
+
+      _pricing_costs_yearly_time_costs_quantity:
+        offerDetails?._pricing_costs_yearly_time_costs_quantity ?? 0.0,
+
+      _pricing_costs_yearly_raw_material_quantity:
+        offerDetails?._pricing_costs_yearly_raw_material_quantity ?? 0.0,
+
+      _pricing_costs_yearly_fixcosts:
+        offerDetails?._pricing_costs_yearly_fixcosts ?? 0.0,
     },
     enableReinitialize: true,
     onSubmit: () => {},
@@ -139,7 +155,6 @@ const CostOverviewCard: FC = () => {
                             <FormInputSaveField
                               name={field!.name}
                               label={field!.label}
-                              type="number"
                               disabled={field!.disabled}
                             />
                           </Box>
@@ -167,7 +182,6 @@ const CostOverviewCard: FC = () => {
                           <FormInputSaveField
                             name={field.name}
                             label={field.label}
-                            type="number"
                             disabled={field.disabled}
                           />
                         ) : null}

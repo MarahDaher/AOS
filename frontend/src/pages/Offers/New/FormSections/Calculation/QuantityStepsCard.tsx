@@ -10,10 +10,13 @@ import {
   QuantityStepsCardInitialValues,
 } from "../../Index";
 import { useOfferContext } from "@contexts/OfferProvider";
+import { usePermissions } from "@hooks/usePermissions";
 
 const QuantityStepsCard: FC = () => {
   // Hooks
   const { offerDetails } = useOfferContext();
+  const { canEdit } = usePermissions();
+  const isEditable = canEdit("calculation");
 
   const formik = useFormik({
     initialValues: {
@@ -35,6 +38,7 @@ const QuantityStepsCard: FC = () => {
               name="calculation_quantityA"
               label="Menge A (Kalkulation) [m]"
               type="number"
+              disabled={!isEditable}
             />
           </Grid>
           <Grid size={{ xs: 12 }}>
@@ -42,6 +46,7 @@ const QuantityStepsCard: FC = () => {
               name="calculation_quantityB"
               label="Menge B [m]"
               type="number"
+              disabled={!isEditable}
             />
           </Grid>
           <Grid size={{ xs: 12 }}>
@@ -49,6 +54,7 @@ const QuantityStepsCard: FC = () => {
               name="calculation_quantityC"
               label="Menge C [m]"
               type="number"
+              disabled={!isEditable}
             />
           </Grid>
           <Grid size={{ xs: 12 }}>
@@ -56,6 +62,7 @@ const QuantityStepsCard: FC = () => {
               name="calculation_quantityD"
               label="Menge D [m]"
               type="number"
+              disabled={!isEditable}
             />
           </Grid>
           <Grid size={{ xs: 12 }}>
@@ -63,6 +70,7 @@ const QuantityStepsCard: FC = () => {
               name="calculation_quantityE"
               label="Menge E [m]"
               type="number"
+              disabled={!isEditable}
             />
           </Grid>
         </Grid>

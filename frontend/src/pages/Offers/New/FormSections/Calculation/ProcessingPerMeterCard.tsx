@@ -7,10 +7,14 @@ import { Divider } from "@mui/material";
 import { useOfferContext } from "@contexts/OfferProvider";
 import { FormikProvider, useFormik } from "formik";
 import { mapInitialValues, ProcessingPerMeterInitialValues } from "../../Index";
+import { usePermissions } from "@hooks/usePermissions";
 
 const ProcessingPerMeterCard: FC = () => {
   // Hooks
   const { offerDetails } = useOfferContext();
+  // Permissions
+  const { canEdit } = usePermissions();
+  const isEditable = canEdit("calculation");
 
   const formik = useFormik({
     initialValues: {
@@ -29,6 +33,7 @@ const ProcessingPerMeterCard: FC = () => {
             <FormInputSaveField
               name="calculation_processing_lfm_hourly_rate"
               label="Stundensatz [€] / h"
+              disabled={!isEditable}
             />
           </Grid>
 
@@ -36,12 +41,14 @@ const ProcessingPerMeterCard: FC = () => {
             <FormInputSaveField
               name="calculation_processing_lfm_runtime"
               label="Laufzeit / m [sek]"
+              disabled={!isEditable}
             />
           </Grid>
           <Grid size={{ xs: 4 }}>
             <FormInputSaveField
               name="calculation_processing_lfm_runtime_factor"
               label="Faktor"
+              disabled={!isEditable}
             />
           </Grid>
 
@@ -49,12 +56,14 @@ const ProcessingPerMeterCard: FC = () => {
             <FormInputSaveField
               name="calculation_processing_lfm_packing_time"
               label="Verpackungszeit / m [sek]"
+              disabled={!isEditable}
             />
           </Grid>
           <Grid size={{ xs: 4 }}>
             <FormInputSaveField
               name="calculation_processing_lfm_packing_time_factor"
               label="Faktor"
+              disabled={!isEditable}
             />
           </Grid>
 

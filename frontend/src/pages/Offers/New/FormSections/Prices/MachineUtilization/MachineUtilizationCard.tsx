@@ -6,9 +6,13 @@ import FormInputSaveField from "@components/FormInputSaveField";
 import { Box } from "@mui/material";
 import { useOfferContext } from "@contexts/OfferProvider";
 import { mapMachineUtilizationData } from ".";
+import { usePermissions } from "@hooks/usePermissions";
 
 const MachineUtilizationCard = () => {
   const { offerDetails } = useOfferContext();
+  // Permissions
+  const { canEdit } = usePermissions();
+  const isEditable = canEdit("calculation");
 
   const mappedData = offerDetails
     ? mapMachineUtilizationData(offerDetails).rows
@@ -35,7 +39,7 @@ const MachineUtilizationCard = () => {
                 <FormInputSaveField
                   name="pricing_machine_utilization_annual_machine_capacity"
                   label="Maschinenkapazität [Std / Jahr]"
-                  type="number"
+                  disabled={!isEditable}
                 />
               </Box>
             </FormikProvider>

@@ -30,7 +30,7 @@ export const RoutePages = [
   {
     path: "/angebote/:id", // offer detials
     element: (
-      <ProtectedPermissionRoute action="create" subject="offer">
+      <ProtectedPermissionRoute action="update" subject="offer">
         <OfferForm />
       </ProtectedPermissionRoute>
     ),

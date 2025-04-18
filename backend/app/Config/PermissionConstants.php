@@ -12,12 +12,14 @@ class PermissionConstants
     public const CREATE_OFFER = 'create_offer';
     public const UPDATE_OFFER = 'update_offer';
     public const DUPLICAET_OFFER = 'duplicate_offer';
+    public const DELETE_OFFER = 'delete_offer';
+    public const EXPORT_OFFER = 'export_offer';
 
     // New Offer
     // General Data ( Tab 1 )
-    public const VIEW_GERNERAL_DATA = 'view_gerneral_data';
-    public const CREATE_GERNERAL_DATA = 'create_gerneral_data';
-    public const UPATE_GERNERAL_DATA = 'update_gerneral_data';
+    public const VIEW_BASIC_DATA = 'view_basic_data';
+    public const CREATE_BASIC_DATA = 'create_basic_data';
+    public const UPDATE_BASIC_DATA = 'update_basic_data';
 
     // Calculation ( Tab 2 )
     public const VIEW_CALCULATION = 'view_calculation';
@@ -30,10 +32,10 @@ class PermissionConstants
     public const UPDATE_PRICES = 'update_prices';
 
 
-    // Drawering ( Tab 4 )
-    public const VIEW_DRAWERING = 'view_drawering';
-    public const CREATE_DRAWERING = 'create_drawering';
-    public const UPDATE_DRAWERING = 'update_drawering';
+    // Drawing ( Tab 4 )
+    public const VIEW_DRAWING = 'view_drawing';
+    public const CREATE_DRAWING = 'create_drawing';
+    public const UPDATE_DRAWING = 'update_drawing';
 
     // Process Sheet ( Tab 5 )
     public const VIEW_PROCESS_SHEET = 'view_process_sheet';
@@ -75,6 +77,21 @@ class PermissionConstants
     public const CREATE_OFFER_RAW_MATERIAL = 'create_offer_raw_material';
     public const UPDATE_OFFER_RAW_MATERIAL = 'update_offer_raw_material';
     public const DELETE_OFFER_RAW_MATERIAL = 'delete_offer_raw_material';
+
+    //Additives
+    public const VIEW_ADDITIVES = 'view_additives';
+    public const VIEW_ADDITIVE = 'view_additive';
+    public const CREATE_ADDITIVE = 'create_additive';
+    public const UPDATE_ADDITIVE = 'update_additive';
+    public const DELETE_ADDITIVE = 'delete_additive';
+
+    // Additives Raw Materials
+    public const VIEW_ADDITIVE_RAW_MATERIALS = 'view_additive_raw_materials';
+    public const VIEW_ADDITIVE_RAW_MATERIAL = 'view_additive_raw_material';
+    public const CREATE_ADDITIVE_RAW_MATERIAL = 'create_additive_raw_material';
+    public const UPDATE_ADDITIVE_RAW_MATERIAL = 'update_additive_raw_material';
+    public const DELETE_ADDITIVE_RAW_MATERIAL = 'delete_additive_raw_material';
+
 
 
     public static function toArray(): array

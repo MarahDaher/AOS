@@ -15,6 +15,7 @@ import { FunctionComponent, useEffect, useRef, useState } from "react";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import Grid from "@mui/material/Grid2";
 import ClearIcon from "@mui/icons-material/Clear";
+import { usePermissions } from "@hooks/usePermissions";
 
 interface DrawingFormProps {}
 
@@ -22,6 +23,9 @@ const DrawingForm: FunctionComponent<DrawingFormProps> = () => {
   const { offerId, drawingFile, setDrawingFile } = useOfferContext();
 
   const { showError } = useApiErrorHandler();
+  const { canEdit, canView } = usePermissions();
+  const isEditable = canEdit("drawing");
+  const isViewable = canView("drawing");
 
   const [drawing, setDrawing] = useState<Drawing | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -63,6 +67,8 @@ const DrawingForm: FunctionComponent<DrawingFormProps> = () => {
   useEffect(() => {
     fetchDrawing();
   }, [offerId]);
+
+  if (!isViewable) return null;
 
   return (
     <CardBox>
@@ -113,7 +119,7 @@ const DrawingForm: FunctionComponent<DrawingFormProps> = () => {
                     border: "none",
                   },
                 },
-                startAdornment: drawingFile && (
+                startAdornment: isEditable && drawingFile && (
                   <InputAdornment position="start">
                     <IconButton
                       onClick={() => {
@@ -128,7 +134,7 @@ const DrawingForm: FunctionComponent<DrawingFormProps> = () => {
                     </IconButton>
                   </InputAdornment>
                 ),
-                endAdornment: (
+                endAdornment: isEditable && (
                   <InputAdornment position="end">
                     <IconButton
                       onClick={() => fileInputRef.current?.click()}
@@ -147,7 +153,7 @@ const DrawingForm: FunctionComponent<DrawingFormProps> = () => {
             <Button
               variant="contained"
               onClick={handleUpload}
-              disabled={!drawingFile || uploading}
+              disabled={!drawingFile || uploading || !isEditable}
             >
               Hochladen
             </Button>

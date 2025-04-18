@@ -61,10 +61,10 @@ export const formatNumberToGerman = (
   const num =
     typeof value === "string" ? parseFloat(value.replace(",", ".")) : value;
 
-  return isNaN(num)
-    ? ""
-    : num.toLocaleString("de-DE", {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 3,
-      });
+  if (typeof num !== "number" || isNaN(num)) return "";
+
+  return num.toLocaleString("de-DE", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 3,
+  });
 };

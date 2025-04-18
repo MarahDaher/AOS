@@ -46,7 +46,7 @@ Route::middleware(['auth:api'])->group(function () {
         Route::post('/', [OfferController::class, 'store'])->middleware('check.permission:' . PermissionConstants::CREATE_OFFER);
         Route::patch('{id}', [OfferController::class, 'update'])->middleware('check.permission:' . PermissionConstants::UPDATE_OFFER);
         Route::post('{id}/duplicate', [OfferController::class, 'duplicate'])->middleware('check.permission:' . PermissionConstants::DUPLICAET_OFFER);
-        Route::delete('{id}', [OfferController::class, 'destroy']);
+        Route::delete('{id}', [OfferController::class, 'destroy'])->middleware('check.permission:' . PermissionConstants::DELETE_OFFER);
 
         // Offer Raw Materials calculated
         Route::get('{id}/raw-materials-calculated', [OfferRawMaterialCalculatedController::class, 'index'])->middleware('check.permission:' . PermissionConstants::VIEW_OFFER_RAW_MATERIAL);
@@ -54,13 +54,13 @@ Route::middleware(['auth:api'])->group(function () {
         Route::patch('{offerId}/raw-materials-demand/{rawMaterialId}', [OfferRawMaterialCalculatedController::class, 'updateDemand'])->middleware('check.permission:' . PermissionConstants::UPDATE_OFFER_RAW_MATERIAL);;
         Route::delete('{offerId}/raw-materials/{rawMaterialId}', [OfferRawMaterialCalculatedController::class, 'destroy'])->middleware('check.permission:' . PermissionConstants::DELETE_OFFER_RAW_MATERIAL);;
         // Drawings
-        Route::get('{id}/drawing', [OfferDrawingController::class, 'show'])->middleware('check.permission:' . PermissionConstants::VIEW_DRAWERING);
-        Route::post('{id}/drawing', [OfferDrawingController::class, 'store'])->middleware('check.permission:' . PermissionConstants::CREATE_DRAWERING);
+        Route::get('{id}/drawing', [OfferDrawingController::class, 'show'])->middleware('check.permission:' . PermissionConstants::VIEW_DRAWING);
+        Route::post('{id}/drawing', [OfferDrawingController::class, 'store'])->middleware('check.permission:' . PermissionConstants::CREATE_DRAWING);
         //Export Offer
-        Route::get('{id}/export', [OfferExportController::class, 'export']);
+        Route::get('{id}/export', [OfferExportController::class, 'export'])->middleware('check.permission:' . PermissionConstants::EXPORT_OFFER);
     });
 
-    Route::post('offer-raw-materials', [OfferRawMaterialCalculatedController::class, 'store']);
+    Route::post('offer-raw-materials', [OfferRawMaterialCalculatedController::class, 'store'])->middleware('check.permission:' . PermissionConstants::CREATE_OFFER_RAW_MATERIAL);;
 
     // Raw Materials
     Route::prefix('raw-materials')->group(function () {
@@ -71,8 +71,8 @@ Route::middleware(['auth:api'])->group(function () {
     });
 
     // Additives
-    Route::get('additives', [AdditiveController::class, 'index']);
-    Route::get('additives-for-raw-material', [AdditiveOfferRawMaterialController::class, 'getAdditivesForRawMaterial']);
-    Route::post('additives-offers-raw-materials', [AdditiveOfferRawMaterialController::class, 'store']);
-    Route::delete('additives-offers-raw-materials', [AdditiveOfferRawMaterialController::class, 'destroy']);
+    Route::get('additives', [AdditiveController::class, 'index'])->middleware('check.permission:' . PermissionConstants::VIEW_ADDITIVES);;
+    Route::get('additives-for-raw-material', [AdditiveOfferRawMaterialController::class, 'getAdditivesForRawMaterial'])->middleware('check.permission:' . PermissionConstants::VIEW_ADDITIVE_RAW_MATERIAL);;
+    Route::post('additives-offers-raw-materials', [AdditiveOfferRawMaterialController::class, 'store'])->middleware('check.permission:' . PermissionConstants::CREATE_ADDITIVE_RAW_MATERIAL);;
+    Route::delete('additives-offers-raw-materials', [AdditiveOfferRawMaterialController::class, 'destroy'])->middleware('check.permission:' . PermissionConstants::DELETE_ADDITIVE_RAW_MATERIAL);;
 });
