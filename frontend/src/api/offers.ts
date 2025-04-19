@@ -75,4 +75,11 @@ export class OffersApi {
     link.click();
     document.body.removeChild(link);
   }
+
+  static async getEditableFields(offerId: number) {
+    return await handleRequest<string[]>({
+      method: "GET",
+      endpoint: `offers/${offerId}/editable-fields`,
+    });
+  }
 }

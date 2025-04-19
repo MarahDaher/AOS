@@ -13,6 +13,7 @@ import { parseGermanNumber } from "@utils/formatNumbers";
 interface FormInputFieldProps extends Omit<TextFieldProps, "name" | "variant"> {
   name: string;
   required?: boolean;
+  onSaved?: () => void;
 }
 
 const FormInputSaveField: FunctionComponent<FormInputFieldProps> = ({
@@ -20,6 +21,7 @@ const FormInputSaveField: FunctionComponent<FormInputFieldProps> = ({
   type = "text",
   required = false,
   disabled = false,
+  onSaved,
   ...props
 }) => {
   const [field, meta] = useField(name);
@@ -47,6 +49,7 @@ const FormInputSaveField: FunctionComponent<FormInputFieldProps> = ({
           onSuccess: () => {
             setJustSaved(true);
             setTimeout(() => setJustSaved(false), 2000);
+            onSaved?.();
           },
         }
       );

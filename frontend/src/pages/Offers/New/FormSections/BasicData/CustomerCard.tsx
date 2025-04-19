@@ -7,10 +7,16 @@ import { CustomerCardInitialValues } from "../../Index";
 import { FormikProvider, useFormik } from "formik";
 import { FunctionComponent } from "react";
 import { useOfferContext } from "@contexts/OfferProvider";
+import { useEditableFields } from "@hooks/useEditableFields";
 
 const CustomerCard: FunctionComponent = () => {
   // Hooks
-  const { offerDetails } = useOfferContext();
+  const { offerDetails, offerId } = useOfferContext();
+  // Permissions
+  const { data: editableFields = [] } = useEditableFields(offerId!);
+
+  const isFieldEditable = (fieldName: string) =>
+    editableFields.includes(fieldName);
 
   const mapOfferToCustomerInitialValues = (offer: any) => ({
     general_customer: offer.general_customer ?? "",
@@ -36,19 +42,25 @@ const CustomerCard: FunctionComponent = () => {
       <CardBox label="Kunde" height={CARD_HEIGHT}>
         <Grid container spacing={2}>
           <Grid size={{ xs: 6, md: 6 }}>
-            <FormInputSaveField name="general_customer" label="Kunde" />
+            <FormInputSaveField
+              name="general_customer"
+              label="Kunde"
+              disabled={!isFieldEditable("general_customer")}
+            />
           </Grid>
           <Grid size={{ xs: 6, md: 6 }}>
             <FormDatePicker
               name="general_request_date"
               label="Anfrage vom"
               required
+              disabled={!isFieldEditable("general_request_date")}
             />
           </Grid>
           <Grid size={{ xs: 6, md: 6 }}>
             <FormInputSaveField
               name="general_customer_contact_person"
               label="Ansprechpartner"
+              disabled={!isFieldEditable("general_customer_contact_person")}
             />
           </Grid>
           <Grid size={{ xs: 6, md: 6 }}>
@@ -56,12 +68,14 @@ const CustomerCard: FunctionComponent = () => {
               name="general_request_number"
               label="Anfragenummer"
               type="number"
+              disabled={!isFieldEditable("general_request_number")}
             />
           </Grid>
           <Grid size={{ xs: 6, md: 6 }}>
             <FormInputSaveField
               name="general_customer_article_number"
               label="Artikelnummer Kunde"
+              disabled={!isFieldEditable("general_customer_article_number")}
             />
           </Grid>
         </Grid>

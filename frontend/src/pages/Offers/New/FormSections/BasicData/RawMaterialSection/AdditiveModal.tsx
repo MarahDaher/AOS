@@ -1,4 +1,7 @@
+import * as Yup from "yup";
 import BaseDialog from "@components/BaseDialog";
+import ConfirmationDialog from "@components/ConfirmationDialog";
+import { AdditiveApi } from "@api/additives";
 import {
   Box,
   IconButton,
@@ -12,13 +15,12 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { Formik, Form, FieldArray } from "formik";
-import * as Yup from "yup";
 import { Close, Delete } from "@mui/icons-material";
-import { useEffect, useState } from "react";
-import { AdditiveApi } from "@api/additives";
+import { FieldArray, Form, Formik } from "formik";
 import { useApiErrorHandler } from "@hooks/useApiErrorHandler";
-import ConfirmationDialog from "@components/ConfirmationDialog";
+import { useEditableFields } from "@hooks/useEditableFields";
+import { useEffect, useState } from "react";
+import { useOfferContext } from "@contexts/OfferProvider";
 
 export interface AdditiveFormValue {
   id: number;
@@ -62,6 +64,14 @@ const AdditiveModal = ({
   selectedMaterial,
 }: AdditiveModalProps) => {
   const { showError } = useApiErrorHandler();
+  // Hooks
+  const { offerId } = useOfferContext();
+  // Permissions
+  const { data: editableFields = [] } = useEditableFields(offerId!);
+
+  const isFieldEditable = (fieldName: string) =>
+    editableFields.includes(fieldName);
+
   // State
   const [additivesList, setAdditivesList] = useState<any[]>([]);
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
@@ -137,6 +147,7 @@ const AdditiveModal = ({
                               </TableCell>
                               <TableCell>
                                 <TextField
+                                  disabled={!isFieldEditable("dosage_percent")}
                                   type="number"
                                   name={`additives.${index}.dosage_percent`}
                                   variant="standard"
@@ -148,6 +159,7 @@ const AdditiveModal = ({
                               </TableCell>
                               <TableCell>
                                 <IconButton
+                                  disabled={!isFieldEditable("dosage_percent")}
                                   onClick={() => {
                                     setDeletingItem({ id: item.id, index });
                                     setConfirmDeleteOpen(true);
@@ -166,6 +178,7 @@ const AdditiveModal = ({
                     <Box mt={2} display="flex" justifyContent="center" gap={1}>
                       <TextField
                         variant="filled"
+                        disabled={!isFieldEditable("dosage_percent")}
                         select
                         sx={{ width: "50%" }}
                         label="Additiv hinzufügen"

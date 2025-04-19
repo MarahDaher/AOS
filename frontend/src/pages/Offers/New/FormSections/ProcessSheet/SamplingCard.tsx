@@ -6,9 +6,13 @@ import { FormikProvider, useFormik } from "formik";
 import { useOfferContext } from "@contexts/OfferProvider";
 import { FunctionComponent } from "react";
 import NoteCard from "@components/NoteCard";
+import { usePermissions } from "@hooks/usePermissions";
 
 const SamplingCard: FunctionComponent = () => {
   const { offerDetails } = useOfferContext();
+  // Permissions
+  const { canEdit } = usePermissions();
+  const isEditable = canEdit("process_sheet");
 
   const mapInitialValues = (offer: any) => ({
     runningcard_sampling_date: offer.runningcard_sampling_date ?? "",
@@ -46,30 +50,35 @@ const SamplingCard: FunctionComponent = () => {
             <FormDatePicker
               name="runningcard_sampling_date"
               label="Termin Bemusterung"
+              disabled={!isEditable}
             />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>
             <FormInputSaveField
               name="runningcard_sampling_quantity"
               label="Menge"
+              disabled={!isEditable}
             />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>
             <FormInputSaveField
               name="runningcard_sampling_length"
               label="Länge"
+              disabled={!isEditable}
             />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>
             <FormInputSaveField
               name="runningcard_sampling_packing"
               label="Verpackung"
+              disabled={!isEditable}
             />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>
             <FormInputSaveField
               name="runningcard_sampling_indication"
               label="Hinweis"
+              disabled={!isEditable}
             />
           </Grid>
         </Grid>

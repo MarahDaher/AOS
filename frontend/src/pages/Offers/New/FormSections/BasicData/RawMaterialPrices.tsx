@@ -19,6 +19,7 @@ const RawMaterialPrices = () => {
     openModal,
     setOpenModal,
     rawMaterialRows,
+    isFieldEditable,
     handleOpenModal,
     handleChangeMaterial,
     handleUpdateField,
@@ -47,7 +48,10 @@ const RawMaterialPrices = () => {
             <FormInputSaveField
               name="general_raw_material_purchase_discount"
               label="Skonto [%]"
-              type="number"
+              onSaved={fetchOfferRawMaterials}
+              disabled={
+                !isFieldEditable("general_raw_material_purchase_discount")
+              }
             />
           </Grid>
         </Grid>
@@ -77,6 +81,9 @@ const RawMaterialPrices = () => {
         <Grid container justifyContent="flex-end" mt={2}>
           <Grid>
             <Button
+              disabled={
+                !isFieldEditable("general_raw_material_purchase_discount")
+              }
               variant="outlined"
               onClick={() =>
                 setRawMaterialRows((prev) => [...prev, createEmptyRow()])
@@ -94,11 +101,21 @@ const RawMaterialPrices = () => {
                 name="general_raw_material_price_total_overwritten"
                 label="Rohstoffpreis gesamt / kg [€]"
                 fallbackValue={totalPriceShare.toFixed(2)}
+                disabled={
+                  !isFieldEditable(
+                    "general_raw_material_price_total_overwritten"
+                  )
+                }
               />
               <Typography variant="caption">(überschrieben)</Typography>
 
               <Button
                 size="small"
+                disabled={
+                  !isFieldEditable(
+                    "general_raw_material_price_total_overwritten"
+                  )
+                }
                 variant="text"
                 color="secondary"
                 onClick={() =>

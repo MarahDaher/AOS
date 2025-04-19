@@ -12,7 +12,7 @@ const MachineUtilizationCard = () => {
   const { offerDetails } = useOfferContext();
   // Permissions
   const { canEdit } = usePermissions();
-  const isEditable = canEdit("calculation");
+  const isEditable = canEdit("prices");
 
   const mappedData = offerDetails
     ? mapMachineUtilizationData(offerDetails).rows

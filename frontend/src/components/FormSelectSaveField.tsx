@@ -18,6 +18,7 @@ interface FormSelectFieldProps {
   options: { label: string; value: any }[];
   required?: boolean;
   disabled?: boolean;
+  onSaved?: () => void;
 }
 
 const FormSelectSaveField: FunctionComponent<FormSelectFieldProps> = ({
@@ -26,6 +27,7 @@ const FormSelectSaveField: FunctionComponent<FormSelectFieldProps> = ({
   options,
   required = false,
   disabled = false,
+  onSaved,
 }) => {
   const [field, meta] = useField(name);
   const { setFieldValue } = useFormikContext();
@@ -43,6 +45,7 @@ const FormSelectSaveField: FunctionComponent<FormSelectFieldProps> = ({
         onSuccess: () => {
           setJustSaved(true);
           setTimeout(() => setJustSaved(false), 2000);
+          onSaved?.();
         },
       }
     );

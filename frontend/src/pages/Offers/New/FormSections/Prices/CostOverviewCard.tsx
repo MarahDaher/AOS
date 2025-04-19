@@ -7,6 +7,7 @@ import { Box, useMediaQuery, useTheme } from "@mui/material";
 import { FormikProvider, useFormik } from "formik";
 import { useOfferContext } from "@contexts/OfferProvider";
 import { formatNumberToGerman } from "@utils/formatNumbers";
+import { usePermissions } from "@hooks/usePermissions";
 
 // Left side fields (Kalkulationsmenge)
 const kalkulationsmengeRows = [
@@ -88,6 +89,10 @@ const CostOverviewCard: FC = () => {
   const theme = useTheme();
   const isMdDown = useMediaQuery(theme.breakpoints.down("md"));
 
+  // Permissions
+  const { canEdit } = usePermissions();
+  const isEditable = canEdit("prices");
+
   const formik = useFormik({
     initialValues: {
       _pricing_costs_calc_production_time:
@@ -155,7 +160,7 @@ const CostOverviewCard: FC = () => {
                             <FormInputSaveField
                               name={field!.name}
                               label={field!.label}
-                              disabled={field!.disabled}
+                              disabled={field!.disabled || !isEditable}
                             />
                           </Box>
                         </Grid>
@@ -182,7 +187,7 @@ const CostOverviewCard: FC = () => {
                           <FormInputSaveField
                             name={field.name}
                             label={field.label}
-                            disabled={field.disabled}
+                            disabled={field.disabled || !isEditable}
                           />
                         ) : null}
                       </Grid>
@@ -218,7 +223,7 @@ const CostOverviewCard: FC = () => {
                       <FormInputSaveField
                         name={field.name}
                         label={field.label}
-                        disabled={field.disabled}
+                        disabled={field!.disabled || !isEditable}
                       />
                     </Box>
                   </Grid>

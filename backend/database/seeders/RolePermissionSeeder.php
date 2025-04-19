@@ -140,6 +140,8 @@ class RolePermissionSeeder extends Seeder
             PermissionConstants::VIEW_OFFERS,
             PermissionConstants::VIEW_OFFER,
             PermissionConstants::UPDATE_OFFER,
+            PermissionConstants::DUPLICAET_OFFER,
+            PermissionConstants::EXPORT_OFFER,
 
             PermissionConstants::VIEW_BASIC_DATA,
             PermissionConstants::UPDATE_BASIC_DATA,
@@ -174,6 +176,7 @@ class RolePermissionSeeder extends Seeder
         return [
             PermissionConstants::VIEW_OFFERS,
             PermissionConstants::VIEW_OFFER,
+            PermissionConstants::UPDATE_OFFER,
 
             PermissionConstants::VIEW_BASIC_DATA,
             PermissionConstants::VIEW_CALCULATION,

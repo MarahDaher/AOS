@@ -4,16 +4,24 @@ import FormSelectSaveField from "@components/FormSelectSaveField";
 import Grid from "@mui/material/Grid2";
 import { CARD_HEIGHT } from "@utils/constantValue";
 import { DeliveryTypeLabels, GeneralStatusLabels } from "@enums/GeneralEnums";
-import { FormikProvider, useFormik } from "formik";
-import { FunctionComponent } from "react";
-import { OfferCardInitialValues } from "../../Index";
-import { useOfferContext } from "@contexts/OfferProvider";
 import { formatNumberToGerman } from "@utils/formatNumbers";
+import { FormikProvider, useFormik } from "formik";
+import { FunctionComponent, useEffect } from "react";
+import { OfferCardInitialValues } from "../../Index";
+import { useEditableFields } from "@hooks/useEditableFields";
+import { useOfferContext } from "@contexts/OfferProvider";
 
 const OfferCard: FunctionComponent = () => {
   // Hooks
-  const { offerDetails } = useOfferContext();
+  const { offerDetails, offerId } = useOfferContext();
+  // Permissions
+  const { data: editableFields = [], refetch: refetchEditableFields } =
+    useEditableFields(offerId!);
 
+  const isFieldEditable = (fieldName: string) =>
+    editableFields.includes(fieldName);
+
+  // Dropdowns
   const statusOptions = Object.entries(GeneralStatusLabels).map(
     ([value, label]) => ({ value, label })
   );
@@ -46,6 +54,16 @@ const OfferCard: FunctionComponent = () => {
     onSubmit: () => {},
   });
 
+  // Watch for changes to general_status
+  useEffect(() => {
+    if (
+      offerId &&
+      formik.values.general_status !== offerDetails?.general_status
+    ) {
+      refetchEditableFields();
+    }
+  }, [formik.values.general_status]);
+
   return (
     <FormikProvider value={formik}>
       <CardBox label="Angebot" height={CARD_HEIGHT}>
@@ -54,18 +72,21 @@ const OfferCard: FunctionComponent = () => {
             <FormInputSaveField
               name="general_offer_number"
               label="Angebotsnummer"
+              disabled={!isFieldEditable("general_offer_number")}
             />
           </Grid>
           <Grid size={{ xs: 4, md: 4 }}>
             <FormInputSaveField
               name="general_order_number"
               label="Auftragsnummer"
+              disabled={!isFieldEditable("general_order_number")}
             />
           </Grid>
           <Grid size={{ xs: 4, md: 4 }}>
             <FormInputSaveField
               name="general_profile_description"
               label="Profilbezeichnung"
+              disabled={!isFieldEditable("general_profile_description")}
             />
           </Grid>
 
@@ -74,6 +95,7 @@ const OfferCard: FunctionComponent = () => {
             <FormInputSaveField
               name="general_article_number"
               label="Artikelnummer"
+              disabled={!isFieldEditable("general_article_number")}
             />
           </Grid>
 
@@ -81,13 +103,16 @@ const OfferCard: FunctionComponent = () => {
             <FormSelectSaveField
               name="general_status"
               label="Status"
+              disabled={!isFieldEditable("general_status")}
               options={statusOptions}
+              onSaved={refetchEditableFields}
             />
           </Grid>
           <Grid size={{ xs: 4, md: 4 }}>
             <FormInputSaveField
               name="general_profile_crosssection"
               label="Profilquerschnitt [mm²]"
+              disabled={!isFieldEditable("general_profile_crosssection")}
             />
           </Grid>
 
@@ -96,6 +121,7 @@ const OfferCard: FunctionComponent = () => {
             <FormInputSaveField
               name="general_tool_number"
               label="Werkzeugnummer"
+              disabled={!isFieldEditable("general_tool_number")}
             />
           </Grid>
 
@@ -105,6 +131,7 @@ const OfferCard: FunctionComponent = () => {
             <FormInputSaveField
               name="general_packaging"
               label="Aufmachung [mm]"
+              disabled={!isFieldEditable("general_packaging")}
             />
           </Grid>
 
@@ -114,12 +141,17 @@ const OfferCard: FunctionComponent = () => {
               name="general_delivery_type"
               label="Lieferart"
               options={deliveryOptions}
+              disabled={!isFieldEditable("general_delivery_type")}
             />
           </Grid>
           <Grid size={{ xs: 4, md: 4 }}></Grid>
 
           <Grid size={{ xs: 4, md: 4 }}>
-            <FormInputSaveField name="general_color" label="Farbe" />
+            <FormInputSaveField
+              name="general_color"
+              label="Farbe"
+              disabled={!isFieldEditable("general_color")}
+            />
           </Grid>
         </Grid>
       </CardBox>

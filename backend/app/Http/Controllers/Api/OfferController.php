@@ -104,4 +104,15 @@ class OfferController extends BaseController
 
         return response()->json(['message' => 'Angebot als gelöscht markiert']);
     }
+
+
+    public function getEditableFields(int $id)
+    {
+        $user = Auth::user();
+        $offer = Offer::findOrFail($id);
+
+        $fields = $this->service->editableFieldsByRoleAndStatus($user, $offer);
+
+        return ApiResponse::success($fields, 'Editable fields retrieved successfully');
+    }
 }

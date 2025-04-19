@@ -10,7 +10,7 @@ const DemandCard: FC = () => {
   const { offerDetails } = useOfferContext();
   // Permissions
   const { canEdit } = usePermissions();
-  const isEditable = canEdit("calculation");
+  const isEditable = canEdit("prices");
 
   const formik = useFormik({
     initialValues: {

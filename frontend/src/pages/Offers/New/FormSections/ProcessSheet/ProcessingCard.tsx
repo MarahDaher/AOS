@@ -4,9 +4,13 @@ import { FunctionComponent } from "react";
 import Grid from "@mui/material/Grid2";
 import CardBox from "@components/CardBox";
 import FormInputSaveField from "@components/FormInputSaveField";
+import { usePermissions } from "@hooks/usePermissions";
 
 const ProcessingCard: FunctionComponent = () => {
   const { offerDetails } = useOfferContext();
+  // Permissions
+  const { canEdit } = usePermissions();
+  const isEditable = canEdit("process_sheet");
 
   const mapInitialValues = (offer: any) => ({
     runningcard_extrusion_speed_IST:
@@ -33,12 +37,14 @@ const ProcessingCard: FunctionComponent = () => {
               <FormInputSaveField
                 name="runningcard_extrusion_speed_IST"
                 label="Geschwindigkeit Eingefahren (IST) [m/min]"
+                disabled={!isEditable}
               />
             </Grid>
             <Grid size={{ xs: 12, md: 2.4 }}>
               <FormInputSaveField
                 name="runningcard_profile_weight_IST"
                 label="Metergewicht Eingefahren (IST) [g/m]"
+                disabled={!isEditable}
               />
             </Grid>
           </Grid>

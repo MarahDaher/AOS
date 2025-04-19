@@ -4,6 +4,7 @@ import { FormikProvider, useFormik } from "formik";
 import { useOfferContext } from "@contexts/OfferProvider";
 import { FunctionComponent } from "react";
 import Grid from "@mui/material/Grid2";
+import { usePermissions } from "@hooks/usePermissions";
 
 interface NoteCardProps {
   field: any;
@@ -12,7 +13,9 @@ interface NoteCardProps {
 
 const NoteCard: FunctionComponent<NoteCardProps> = ({ field, label }) => {
   const { offerDetails } = useOfferContext();
-
+  // Permissions
+  const { canEdit } = usePermissions();
+  const isEditable = canEdit("process_sheet");
   const formik = useFormik({
     initialValues: {
       [field]: offerDetails?.[field] ?? "",
@@ -32,6 +35,7 @@ const NoteCard: FunctionComponent<NoteCardProps> = ({ field, label }) => {
               multiline
               minRows={3}
               fullWidth
+              disabled={!isEditable}
             />
           </Grid>
         </Grid>

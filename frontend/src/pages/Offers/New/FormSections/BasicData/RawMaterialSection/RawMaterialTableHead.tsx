@@ -14,13 +14,13 @@ const RawMaterialTableHead = () => (
       {/* price_date */}
       <TableCell width={"80px"}>Preisstand</TableCell>
       {/* price */}
-      <TableCell width={"100px"}>Preis [€]</TableCell>
+      <TableCell width={"120px"}>Preis / kg [€]</TableCell>
+      {/* _price_minus_discount */}
+      <TableCell>Preis - Sko [€]</TableCell>
       {/* additives */}
       <TableCell>Additive</TableCell>
       {/* _additives_price_sum */}
       <TableCell>Preis Additive [€]</TableCell>
-      {/* _price_minus_discount */}
-      <TableCell>Preis - Sko [€]</TableCell>
       {/* _price_share */}
       <TableCell>Preis (anteilig) [€]</TableCell>
       {/* _price_minus_discount_share */}

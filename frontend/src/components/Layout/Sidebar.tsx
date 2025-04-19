@@ -35,15 +35,15 @@ const Sidebar = ({
   onTemporaryClose,
 }: Props) => {
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
 
   // Manage mini/full sidebar toggle for permanent variant
   const [collapsed, setCollapsed] = useState(true);
   const isPermanent = variant === "permanent";
 
-  const userName = "Michael Diebner";
+  const userName = user?.name;
   const userInitials = userName
-    .split(" ")
+    ?.split(" ")
     .map((p) => p[0])
     .join("")
     .toUpperCase();

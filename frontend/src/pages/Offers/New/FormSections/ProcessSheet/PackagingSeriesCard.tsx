@@ -4,9 +4,13 @@ import Grid from "@mui/material/Grid2";
 import { FormikProvider, useFormik } from "formik";
 import { useOfferContext } from "@contexts/OfferProvider";
 import { FunctionComponent } from "react";
+import { usePermissions } from "@hooks/usePermissions";
 
 const PackagingSeriesCard: FunctionComponent = () => {
   const { offerDetails } = useOfferContext();
+  // Permissions
+  const { canEdit } = usePermissions();
+  const isEditable = canEdit("process_sheet");
 
   const formik = useFormik({
     initialValues: {
@@ -34,30 +38,35 @@ const PackagingSeriesCard: FunctionComponent = () => {
             <FormInputSaveField
               name="runningcard_packing_type"
               label="Verpackungsart"
+              disabled={!isEditable}
             />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>
             <FormInputSaveField
               name="runningcard_packing_variant"
               label="Verpackungsvariante"
+              disabled={!isEditable}
             />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>
             <FormInputSaveField
               name="runningcard_packing_length"
               label="Länge"
+              disabled={!isEditable}
             />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>
             <FormInputSaveField
               name="runningcard_packing_packing_unit"
               label="Packeinheit"
+              disabled={!isEditable}
             />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>
             <FormInputSaveField
               name="runningcard_packing_quantity"
               label="Menge / Palette-Box-Karton"
+              disabled={!isEditable}
             />
           </Grid>
 
@@ -65,6 +74,7 @@ const PackagingSeriesCard: FunctionComponent = () => {
             <FormInputSaveField
               name="runningcard_packing_description"
               label="Anmerkung"
+              disabled={!isEditable}
               multiline
               minRows={3}
               fullWidth

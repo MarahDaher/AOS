@@ -19,6 +19,7 @@ import { OfferRawMaterialCalculatedApi } from "@api/offer-raw-material";
 import { useState } from "react";
 import ConfirmationDialog from "@components/ConfirmationDialog";
 import { useApiSuccessHandler } from "@hooks/useApiSuccessHandler";
+import { useEditableFields } from "@hooks/useEditableFields";
 
 interface RawMaterialRowProps {
   row: RawMaterialRowType;
@@ -48,10 +49,17 @@ const RawMaterialRow = ({
   onOpenModal,
   handleAddMaterial,
 }: RawMaterialRowProps) => {
-  const { offerDetails } = useOfferContext();
+  // Hooks
+  const { offerDetails, offerId } = useOfferContext();
   const { showError } = useApiErrorHandler();
 
   const { showSuccess } = useApiSuccessHandler();
+
+  // Permissions
+  const { data: editableFields = [] } = useEditableFields(offerId!);
+
+  const isFieldEditable = (fieldName: string) =>
+    editableFields.includes(fieldName);
 
   const [confirmOpen, setConfirmOpen] = useState(false);
 
@@ -102,6 +110,7 @@ const RawMaterialRow = ({
               onChangeMaterial(row, selectedId);
             }
           }}
+          disabled={!isFieldEditable("raw_material_id")}
         >
           {baseMaterials
             .filter((material) => !selectedMaterialIds.includes(material.id))
@@ -121,6 +130,7 @@ const RawMaterialRow = ({
       <TableCell>
         <TextField
           fullWidth
+          disabled={!isFieldEditable("supplier")}
           variant="standard"
           value={row.supplier ?? ""}
           onChange={(e) =>
@@ -135,6 +145,7 @@ const RawMaterialRow = ({
         <TextField
           type="number"
           variant="standard"
+          disabled={!isFieldEditable("share")}
           value={row.share ?? 0}
           onChange={(e) =>
             updateRowField(
@@ -153,6 +164,7 @@ const RawMaterialRow = ({
         <TextField
           type="month"
           variant="standard"
+          disabled={!isFieldEditable("price_date")}
           value={formatPriceDate(row.price_date) ?? ""}
           onChange={(e) =>
             updateRowField(
@@ -173,6 +185,7 @@ const RawMaterialRow = ({
         <TextField
           fullWidth
           type="number"
+          disabled={!isFieldEditable("price")}
           variant="standard"
           value={row.price ?? 0}
           onChange={(e) =>
@@ -182,6 +195,10 @@ const RawMaterialRow = ({
         />
       </TableCell>
 
+      <TableCell>
+        <Typography>{row._price_minus_discount ?? "-"}</Typography>
+      </TableCell>
+
       {/* Additive */}
       <TableCell>
         <Typography>{row._additives_concatenated || "-"}</Typography>
@@ -189,10 +206,6 @@ const RawMaterialRow = ({
 
       <TableCell>
         <Typography>{row._additives_price_sum || "-"}</Typography>
-      </TableCell>
-
-      <TableCell>
-        <Typography>{row._price_minus_discount ?? "-"}</Typography>
       </TableCell>
 
       <TableCell>
@@ -213,6 +226,7 @@ const RawMaterialRow = ({
             onClick={() => setConfirmOpen(true)}
             size="small"
             color="error"
+            disabled={!isFieldEditable("raw_material_id")}
           >
             <Delete />
           </IconButton>

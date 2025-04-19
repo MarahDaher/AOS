@@ -12,11 +12,18 @@ import { AdditiveApi } from "@api/additives";
 import { useApiSuccessHandler } from "@hooks/useApiSuccessHandler";
 import debounce from "lodash.debounce";
 import { formatNumberToGerman } from "@utils/formatNumbers";
+import { useEditableFields } from "@hooks/useEditableFields";
 
 export const useRawMaterialPricesTable = () => {
   const { showError } = useApiErrorHandler();
   const { showSuccess } = useApiSuccessHandler();
-  const { offerDetails } = useOfferContext();
+  // Hooks
+  const { offerDetails, offerId } = useOfferContext();
+  // Permissions
+  const { data: editableFields = [] } = useEditableFields(offerId!);
+
+  const isFieldEditable = (fieldName: string) =>
+    editableFields.includes(fieldName);
 
   const [baseMaterials, setRawMaterials] = useState<BaseMaterial[]>([]);
   const [rawMaterialRows, setRawMaterialRows] = useState<RawMaterialRow[]>([]);
@@ -218,6 +225,7 @@ export const useRawMaterialPricesTable = () => {
     rawMaterialRows,
     selectedMaterial,
     openModal,
+    isFieldEditable,
     setOpenModal,
     handleAddMaterial,
     handleOpenModal,
