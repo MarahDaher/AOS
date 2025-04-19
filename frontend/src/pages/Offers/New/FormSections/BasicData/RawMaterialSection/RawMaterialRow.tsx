@@ -180,7 +180,7 @@ const RawMaterialRow = ({
         />
       </TableCell>
 
-      {/* Preis [€] */}
+      {/* Preis [€] /kg  */}
       <TableCell>
         <TextField
           fullWidth

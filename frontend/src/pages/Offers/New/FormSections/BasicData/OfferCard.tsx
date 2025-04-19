@@ -112,6 +112,7 @@ const OfferCard: FunctionComponent = () => {
             <FormInputSaveField
               name="general_profile_crosssection"
               label="Profilquerschnitt [mm²]"
+              numeric
               disabled={!isFieldEditable("general_profile_crosssection")}
             />
           </Grid>
@@ -131,6 +132,7 @@ const OfferCard: FunctionComponent = () => {
             <FormInputSaveField
               name="general_packaging"
               label="Aufmachung [mm]"
+              numeric
               disabled={!isFieldEditable("general_packaging")}
             />
           </Grid>

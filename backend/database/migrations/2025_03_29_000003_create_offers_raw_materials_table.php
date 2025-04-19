@@ -10,33 +10,15 @@ return new class extends Migration {
         Schema::create('offers_raw_materials', function (Blueprint $table) {
             $table->unsignedBigInteger('offer_id');
             $table->unsignedBigInteger('raw_material_id');
-
             $table->float('absolut_demand')->default(0);
-            $table->float('share')->default(0);
+            $table->float('share')->default(0); // calculated
             $table->string('supplier', 63)->nullable();
             $table->float('price')->nullable();
             $table->date('price_date')->nullable();
 
-            // Composite Primary Key
             $table->primary(['offer_id', 'raw_material_id']);
-
-            // Foreign Keys
-            $table->foreign('offer_id')
-                ->references('id')
-                ->on('offers')
-                ->restrictOnDelete()
-                ->restrictOnUpdate();
-
-            $table->foreign('raw_material_id')
-                ->references('id')
-                ->on('raw_materials')
-                ->restrictOnDelete()
-                ->restrictOnUpdate();
-
-
-            $table->engine = 'InnoDB';
-            $table->charset = 'utf8mb4';
-            $table->collation = 'utf8mb4_0900_ai_ci';
+            $table->foreign('offer_id')->references('id')->on('offers')->restrictOnDelete()->restrictOnUpdate();
+            $table->foreign('raw_material_id')->references('id')->on('raw_materials')->restrictOnDelete()->restrictOnUpdate();
         });
     }
 

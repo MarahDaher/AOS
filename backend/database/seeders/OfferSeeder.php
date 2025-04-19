@@ -29,8 +29,7 @@ class OfferSeeder extends Seeder
                 'general_request_date' => '2025-04-01',
                 'general_request_number' => 1001,
                 'general_profile_crosssection' => 12.5,
-                'general_raw_material_price_total_overwritten' => 150.00,
-
+                'general_raw_material_price_total_overwritten' => 150.00
             ],
             [
                 'general_status' => 'Auftrag',
@@ -50,7 +49,7 @@ class OfferSeeder extends Seeder
                 'general_request_date' => '2025-04-02',
                 'general_request_number' => 1002,
                 'general_profile_crosssection' => 15.0,
-                'general_raw_material_price_total_overwritten' => 160.00,
+                'general_raw_material_price_total_overwritten' => 160.00
             ],
             [
                 'general_status' => 'Produziert',
@@ -70,8 +69,8 @@ class OfferSeeder extends Seeder
                 'general_request_date' => '2025-04-03',
                 'general_request_number' => 1003,
                 'general_profile_crosssection' => 14.0,
-                'general_raw_material_price_total_overwritten' => 155.00,
-            ],
+                'general_raw_material_price_total_overwritten' => 155.00
+            ]
         ]);
     }
 }

@@ -14,31 +14,11 @@ return new class extends Migration {
             $table->unsignedBigInteger('additives_id');
             $table->float('share')->default(0);
 
-            // Composite Primary Key
             $table->primary(['offer_id', 'raw_material_id', 'additives_id']);
 
-            // Foreign Keys
-            $table->foreign('offer_id')
-                ->references('id')
-                ->on('offers')
-                ->restrictOnDelete()
-                ->restrictOnUpdate();
-
-            $table->foreign('raw_material_id')
-                ->references('id')
-                ->on('raw_materials')
-                ->restrictOnDelete()
-                ->restrictOnUpdate();
-
-            $table->foreign('additives_id')
-                ->references('id')
-                ->on('additives')
-                ->restrictOnDelete()
-                ->restrictOnUpdate();
-
-            $table->engine = 'InnoDB';
-            $table->charset = 'utf8mb4';
-            $table->collation = 'utf8mb4_0900_ai_ci';
+            $table->foreign('offer_id')->references('id')->on('offers')->restrictOnDelete()->restrictOnUpdate();
+            $table->foreign('raw_material_id')->references('id')->on('raw_materials')->restrictOnDelete()->restrictOnUpdate();
+            $table->foreign('additives_id')->references('id')->on('additives')->restrictOnDelete()->restrictOnUpdate();
         });
     }
 

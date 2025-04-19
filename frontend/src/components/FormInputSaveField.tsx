@@ -9,10 +9,12 @@ import {
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useSaveFieldMutation } from "@hooks/useSaveFieldMutation";
 import { parseGermanNumber } from "@utils/formatNumbers";
+import { textFields } from "@utils/textFields";
 
 interface FormInputFieldProps extends Omit<TextFieldProps, "name" | "variant"> {
   name: string;
   required?: boolean;
+  numeric?: boolean;
   onSaved?: () => void;
 }
 
@@ -21,6 +23,7 @@ const FormInputSaveField: FunctionComponent<FormInputFieldProps> = ({
   type = "text",
   required = false,
   disabled = false,
+  numeric = false,
   onSaved,
   ...props
 }) => {
@@ -32,19 +35,17 @@ const FormInputSaveField: FunctionComponent<FormInputFieldProps> = ({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let val = e.target.value;
-
-    // Optional: Remove all non-numeric (except comma, dot and minus)
-    val = val.replace(/[^0-9,.\-]/g, "");
-
-    // Keep input as-is for now
+    if (numeric) {
+      val = val.replace(/[^0-9,.\-]/g, "");
+    }
     setFieldValue(name, val);
   };
 
   const handleBlur = () => {
-    const parsed = parseGermanNumber(field.value);
-    if (parsed !== null) {
+    if (textFields.includes(name)) {
+      // For string-based fields
       mutation.mutate(
-        { name, value: parsed },
+        { name, value: field.value },
         {
           onSuccess: () => {
             setJustSaved(true);
@@ -53,6 +54,21 @@ const FormInputSaveField: FunctionComponent<FormInputFieldProps> = ({
           },
         }
       );
+    } else {
+      // For numeric fields
+      const parsed = parseGermanNumber(field.value);
+      if (parsed !== null) {
+        mutation.mutate(
+          { name, value: parsed },
+          {
+            onSuccess: () => {
+              setJustSaved(true);
+              setTimeout(() => setJustSaved(false), 2000);
+              onSaved?.();
+            },
+          }
+        );
+      }
     }
   };
   const configTextField: TextFieldProps = {

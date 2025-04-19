@@ -1,12 +1,12 @@
 import { FC } from "react";
-import { useFormikContext } from "formik";
 import { TextField } from "@mui/material";
+import { useOfferContext } from "@contexts/OfferProvider";
 
 const ProfileWeightTripleDisplay: FC = () => {
-  const { values } = useFormikContext<any>();
-  const a = values._calculation_working_profile_weight_lowerborder;
-  const b = values.runningcard_profile_weight_IST;
-  const c = values._calculation_working_profile_weight_upperborder;
+  const { offerDetails } = useOfferContext();
+  const a = offerDetails._calculation_working_profile_weight_lowerborder;
+  const b = offerDetails._calculation_working_profile_weight_average;
+  const c = offerDetails._calculation_working_profile_weight_upperborder;
 
   const formatNumber = (value: any) => {
     const num = Number(value);

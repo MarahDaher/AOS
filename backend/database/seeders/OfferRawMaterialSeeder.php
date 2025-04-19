@@ -14,7 +14,7 @@ class OfferRawMaterialSeeder extends Seeder
             ['offer_id' => 1, 'raw_material_id' => 2, 'absolut_demand' => 1000.0, 'share' => 33.33, 'supplier' => 'Supplier A', 'price' => 200.00, 'price_date' => '2025-04-01'],
             ['offer_id' => 1, 'raw_material_id' => 3, 'absolut_demand' => 1000.0, 'share' => 33.33, 'supplier' => 'Supplier A', 'price' => 200.00, 'price_date' => '2025-04-01'],
             ['offer_id' => 2, 'raw_material_id' => 2, 'absolut_demand' => 500.0, 'share' => 25.0, 'supplier' => 'Supplier B', 'price' => 500.00, 'price_date' => '2025-04-01'],
-            ['offer_id' => 2, 'raw_material_id' => 3, 'absolut_demand' => 300.0, 'share' => 75.0, 'supplier' => 'Supplier C', 'price' => 100.00, 'price_date' => '2025-04-01'],
+            ['offer_id' => 2, 'raw_material_id' => 3, 'absolut_demand' => 300.0, 'share' => 75.0, 'supplier' => 'Supplier C', 'price' => 100.00, 'price_date' => '2025-04-01']
         ]);
     }
 }

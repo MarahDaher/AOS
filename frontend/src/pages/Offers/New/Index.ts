@@ -156,6 +156,7 @@ export const WorkCalculationFields = [
   "_calculation_working_density_total",
   "_calculation_working_profile_weight_lowerborder",
   "runningcard_profile_weight_IST",
+  "_calculation_working_profile_weight_average",
   "_calculation_working_profile_weight_upperborder",
 
   "calculation_working_setup_quantity_additional",

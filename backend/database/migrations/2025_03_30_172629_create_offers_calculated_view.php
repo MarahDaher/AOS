@@ -95,7 +95,7 @@ CREATE OR REPLACE VIEW offers_calculated AS
       * (100 - o.calculation_working_profile_cross_section_deviation_lower)/100
     ) AS `_calculation_working_profile_weight_lowerborder`,
 
--- _calculation_working_density_total * general_profile_crosssection
+-- _calculation_working_density_total * general_profile_crosssection      1,9625 + 0,9
     ((
       SELECT SUM(r.density * o_r.share/100)
       FROM offers_raw_materials o_r 
@@ -511,8 +511,8 @@ CREATE OR REPLACE VIEW offers_calculated AS
 
     (o.`runningcard_hourlyrecording_construction` + o.`runningcard_hourlyrecording_toolwork` + o.`runningcard_hourlyrecording_entry`) AS `_runningcard_hourlyrecording_total`
 
-  FROM offers o
-);
+
+  FROM `offers` o);
 SQL);
   }
 

@@ -67,7 +67,6 @@ const CustomerCard: FunctionComponent = () => {
             <FormInputSaveField
               name="general_request_number"
               label="Anfragenummer"
-              type="number"
               disabled={!isFieldEditable("general_request_number")}
             />
           </Grid>

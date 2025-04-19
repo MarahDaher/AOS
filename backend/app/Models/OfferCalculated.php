@@ -100,6 +100,7 @@ class OfferCalculated extends Model
             'calculation_working_profile_cross_section_deviation_upper',
             '_calculation_working_density_total',
             '_calculation_working_profile_weight_lowerborder',
+            '_calculation_working_profile_weight_average',
             '_calculation_working_profile_weight_upperborder',
             'calculation_working_setup_quantity_total',
             'calculation_working_hourly_rate',
@@ -268,7 +269,6 @@ class OfferCalculated extends Model
             '_pricing_piece_length_prices_length1333_quantityD',
             '_pricing_piece_length_prices_length1333_quantityE',
 
-            '_calculation_working_profile_weight_average',
 
 
             'runningcard_sampling_date',
