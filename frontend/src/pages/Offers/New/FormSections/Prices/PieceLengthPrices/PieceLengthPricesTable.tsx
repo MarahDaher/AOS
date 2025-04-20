@@ -7,7 +7,7 @@ import {
   TableContainer,
   Paper,
 } from "@mui/material";
-import { formatCurrency } from "@utils/formatNumbers";
+import { formatCurrency, formatNumber } from "@utils/formatNumbers";
 
 export interface PieceLengthPriceRow {
   menge: number;
@@ -45,7 +45,9 @@ export default function PieceLengthPricesTable({ data }: Props) {
         <TableBody>
           {data.map((row, idx) => (
             <TableRow key={idx}>
-              <TableCell>{row.menge.toLocaleString()}m</TableCell>
+              <TableCell>
+                {row.menge != null ? `${formatNumber(row.menge)}` : "-"}m
+              </TableCell>
               <TableCell>{formatCurrency(row.staffelM)}</TableCell>
               <TableCell>{formatCurrency(row.length625mm)} / stk</TableCell>
               <TableCell>{formatCurrency(row.length1000mm)} / stk</TableCell>

@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { TextField } from "@mui/material";
 import { useOfferContext } from "@contexts/OfferProvider";
+import { formatNumberToGerman } from "@utils/formatNumbers";
 
 const ProfileWeightTripleDisplay: FC = () => {
   const { offerDetails } = useOfferContext();
@@ -10,7 +11,7 @@ const ProfileWeightTripleDisplay: FC = () => {
 
   const formatNumber = (value: any) => {
     const num = Number(value);
-    return isNaN(num) ? "-" : num.toFixed(1);
+    return isNaN(num) ? "-" : formatNumberToGerman(num);
   };
 
   const displayValue = `(${formatNumber(a)}) ${formatNumber(b)} (${formatNumber(

@@ -195,12 +195,10 @@ export const useRawMaterialPricesTable = () => {
       ...RawMaterialPricesTableInitialValues,
       ...(offerDetails
         ? {
-            general_raw_material_price_total_overwritten: formatNumberToGerman(
-              offerDetails.general_raw_material_price_total_overwritten
-            ),
-            general_raw_material_purchase_discount: formatNumberToGerman(
-              offerDetails.general_raw_material_purchase_discount
-            ),
+            general_raw_material_price_total_overwritten:
+              offerDetails.general_raw_material_price_total_overwritten ?? "",
+            general_raw_material_purchase_discount:
+              offerDetails.general_raw_material_purchase_discount ?? "",
           }
         : {}),
     },

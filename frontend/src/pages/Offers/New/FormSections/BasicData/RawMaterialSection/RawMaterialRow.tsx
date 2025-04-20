@@ -1,4 +1,3 @@
-// 📁 RawMaterialRow.tsx
 import {
   IconButton,
   MenuItem,
@@ -16,10 +15,11 @@ import {
 import { useOfferContext } from "@contexts/OfferProvider";
 import { useApiErrorHandler } from "@hooks/useApiErrorHandler";
 import { OfferRawMaterialCalculatedApi } from "@api/offer-raw-material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ConfirmationDialog from "@components/ConfirmationDialog";
 import { useApiSuccessHandler } from "@hooks/useApiSuccessHandler";
 import { useEditableFields } from "@hooks/useEditableFields";
+import { formatNumberToGerman, parseGermanNumber } from "@utils/formatNumbers";
 
 interface RawMaterialRowProps {
   row: RawMaterialRowType;
@@ -49,19 +49,34 @@ const RawMaterialRow = ({
   onOpenModal,
   handleAddMaterial,
 }: RawMaterialRowProps) => {
-  // Hooks
   const { offerDetails, offerId } = useOfferContext();
   const { showError } = useApiErrorHandler();
-
   const { showSuccess } = useApiSuccessHandler();
-
-  // Permissions
   const { data: editableFields = [] } = useEditableFields(offerId!);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   const isFieldEditable = (fieldName: string) =>
     editableFields.includes(fieldName);
 
-  const [confirmOpen, setConfirmOpen] = useState(false);
+  // Local input values for formatting
+  const [priceInputValue, setPriceInputValue] = useState(
+    row.price != null ? formatNumberToGerman(row.price) : ""
+  );
+  const [shareInputValue, setShareInputValue] = useState(
+    row.share != null ? formatNumberToGerman(row.share) : ""
+  );
+
+  useEffect(() => {
+    setPriceInputValue(
+      row.price != null ? formatNumberToGerman(row.price) : ""
+    );
+  }, [row.price]);
+
+  useEffect(() => {
+    setShareInputValue(
+      row.share != null ? formatNumberToGerman(row.share) : ""
+    );
+  }, [row.share]);
 
   const handleConfirmDelete = async () => {
     if (!row.raw_material_id || !offerDetails?.id) return;
@@ -94,6 +109,7 @@ const RawMaterialRow = ({
         r.raw_material_id !== 0 && r.raw_material_id !== row.raw_material_id
     )
     .map((r) => r.raw_material_id);
+
   return (
     <TableRow>
       <TableCell>
@@ -126,7 +142,6 @@ const RawMaterialRow = ({
         <Typography>{row.type || "-"}</Typography>
       </TableCell>
 
-      {/* Lieferant */}
       <TableCell>
         <TextField
           fullWidth
@@ -143,19 +158,22 @@ const RawMaterialRow = ({
       {/* Anteil [%] */}
       <TableCell>
         <TextField
-          type="number"
-          variant="standard"
+          fullWidth
           disabled={!isFieldEditable("share")}
-          value={row.share ?? 0}
-          onChange={(e) =>
-            updateRowField(
-              setRawMaterialRows,
-              row,
-              "share",
-              Number(e.target.value)
-            )
-          }
-          onBlur={(e) => onUpdateField(row, "share", Number(e.target.value))}
+          variant="standard"
+          value={shareInputValue}
+          onChange={(e) => {
+            const val = e.target.value.replace(/[^0-9,.\-]/g, "");
+            setShareInputValue(val);
+          }}
+          onBlur={() => {
+            const parsed = parseGermanNumber(shareInputValue);
+            if (parsed !== null) {
+              updateRowField(setRawMaterialRows, row, "share", parsed);
+              onUpdateField(row, "share", parsed);
+              setShareInputValue(formatNumberToGerman(parsed));
+            }
+          }}
         />
       </TableCell>
 
@@ -180,43 +198,64 @@ const RawMaterialRow = ({
         />
       </TableCell>
 
-      {/* Preis [€] /kg  */}
+      {/* Preis [€] /kg */}
       <TableCell>
         <TextField
           fullWidth
-          type="number"
           disabled={!isFieldEditable("price")}
           variant="standard"
-          value={row.price ?? 0}
-          onChange={(e) =>
-            updateRowField(setRawMaterialRows, row, "price", e.target.value)
-          }
-          onBlur={(e) => onUpdateField(row, "price", Number(e.target.value))}
+          value={priceInputValue}
+          onChange={(e) => {
+            const val = e.target.value.replace(/[^0-9,.\-]/g, "");
+            setPriceInputValue(val);
+          }}
+          onBlur={() => {
+            const parsed = parseGermanNumber(priceInputValue);
+            if (parsed !== null) {
+              updateRowField(setRawMaterialRows, row, "price", parsed);
+              onUpdateField(row, "price", parsed);
+              setPriceInputValue(formatNumberToGerman(parsed));
+            }
+          }}
         />
       </TableCell>
 
       <TableCell>
-        <Typography>{row._price_minus_discount ?? "-"}</Typography>
+        <Typography>
+          {row._price_minus_discount != null
+            ? formatNumberToGerman(row._price_minus_discount)
+            : "-"}
+        </Typography>
       </TableCell>
 
-      {/* Additive */}
       <TableCell>
         <Typography>{row._additives_concatenated || "-"}</Typography>
       </TableCell>
 
       <TableCell>
-        <Typography>{row._additives_price_sum || "-"}</Typography>
+        <Typography>
+          {row._additives_price_sum != null
+            ? formatNumberToGerman(row._additives_price_sum)
+            : "-"}
+        </Typography>
       </TableCell>
 
       <TableCell>
-        <Typography>{row._price_share ?? "-"}</Typography>
+        <Typography>
+          {row._price_share != null
+            ? formatNumberToGerman(row._price_share)
+            : "-"}
+        </Typography>
       </TableCell>
 
       <TableCell>
-        <Typography>{row._price_minus_discount_share ?? "-"}</Typography>
+        <Typography>
+          {row._price_minus_discount_share != null
+            ? formatNumberToGerman(row._price_minus_discount_share)
+            : "-"}
+        </Typography>
       </TableCell>
 
-      {/* ➡️ Stack icons horizontally */}
       <TableCell>
         <Stack direction="row" spacing={1}>
           <IconButton onClick={() => onOpenModal(row)} size="small">

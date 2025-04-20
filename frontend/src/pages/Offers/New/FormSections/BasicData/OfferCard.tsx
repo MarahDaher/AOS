@@ -4,7 +4,6 @@ import FormSelectSaveField from "@components/FormSelectSaveField";
 import Grid from "@mui/material/Grid2";
 import { CARD_HEIGHT } from "@utils/constantValue";
 import { DeliveryTypeLabels, GeneralStatusLabels } from "@enums/GeneralEnums";
-import { formatNumberToGerman } from "@utils/formatNumbers";
 import { FormikProvider, useFormik } from "formik";
 import { FunctionComponent, useEffect } from "react";
 import { OfferCardInitialValues } from "../../Index";
@@ -33,9 +32,8 @@ const OfferCard: FunctionComponent = () => {
   const mapOfferToOfferCardInitialValues = (offer: any) => ({
     general_offer_number: offer.general_offer_number ?? "",
     general_status: offer.general_status ?? "",
-    general_profile_crosssection: formatNumberToGerman(
-      offer.general_profile_crosssection
-    ),
+    general_profile_crosssection: offer.general_profile_crosssection ?? "",
+
     general_profile_description: offer.general_profile_description ?? "",
     general_color: offer.general_color ?? "",
     general_packaging: offer.general_packaging ?? "",

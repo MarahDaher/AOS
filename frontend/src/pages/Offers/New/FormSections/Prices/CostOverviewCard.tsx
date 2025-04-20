@@ -6,16 +6,23 @@ import FormInputSaveField from "@components/FormInputSaveField";
 import { Box, useMediaQuery, useTheme } from "@mui/material";
 import { FormikProvider, useFormik } from "formik";
 import { useOfferContext } from "@contexts/OfferProvider";
-import { formatNumberToGerman } from "@utils/formatNumbers";
 import { usePermissions } from "@hooks/usePermissions";
 
+type FieldConfig = {
+  name: string;
+  label: string;
+  disabled?: boolean;
+  numeric?: boolean;
+};
+
 // Left side fields (Kalkulationsmenge)
-const kalkulationsmengeRows = [
+const kalkulationsmengeRows: Array<FieldConfig | null>[] = [
   [
     {
       name: "_pricing_costs_calc_production_time",
       label: "Produktionszeit [h]",
       disabled: true,
+      numeric: true,
     },
     null,
     null,
@@ -23,6 +30,7 @@ const kalkulationsmengeRows = [
       name: "_pricing_costs_calc_time_costs_quantity",
       label: "Zeitkosten gesamt [€]",
       disabled: true,
+      numeric: true,
     },
   ],
   [
@@ -30,21 +38,25 @@ const kalkulationsmengeRows = [
       name: "_pricing_costs_calc_raw_material_quantity",
       label: "Rohstoffmenge [kg]",
       disabled: true,
+      numeric: true, // ✅ Add this
     },
     {
       name: "_pricing_costs_calc_raw_material_setup_quantity",
       label: "Einstellmenge [kg]",
       disabled: true,
+      numeric: true,
     },
     {
       name: "_pricing_costs_calc_raw_material_quantity_total",
       label: "Rohstoffmenge gesamt [kg]",
       disabled: true,
+      numeric: true,
     },
     {
       name: "_pricing_costs_calc_raw_material_price_total",
       label: "Rohstoffpreis gesamt [€]",
       disabled: true,
+      numeric: true,
     },
   ],
   [null, null, null],
@@ -53,6 +65,7 @@ const kalkulationsmengeRows = [
       name: "pricing_costs_calc_price_additional_lfm",
       label: "Zusatzpreis / m [€]",
       disabled: false,
+      numeric: true,
     },
     null,
     null,
@@ -66,6 +79,7 @@ const jahresmengeRows = [
       name: "_pricing_costs_yearly_time_costs_quantity",
       label: "Zeiteinsatz [€]",
       disabled: true,
+      numeric: true,
     },
   ],
   [
@@ -73,6 +87,7 @@ const jahresmengeRows = [
       name: "_pricing_costs_yearly_raw_material_quantity",
       label: "Rohstoffeinsatz [€]",
       disabled: true,
+      numeric: true,
     },
   ],
   [
@@ -80,6 +95,7 @@ const jahresmengeRows = [
       name: "_pricing_costs_yearly_fixcosts",
       label: "Fixkosten [€]",
       disabled: true,
+      numeric: true,
     },
   ],
 ];
@@ -96,36 +112,34 @@ const CostOverviewCard: FC = () => {
   const formik = useFormik({
     initialValues: {
       _pricing_costs_calc_production_time:
-        offerDetails?._pricing_costs_calc_production_time ?? 0.0,
+        offerDetails?._pricing_costs_calc_production_time ?? "",
 
       _pricing_costs_calc_time_costs_quantity:
-        offerDetails?._pricing_costs_calc_time_costs_quantity ?? 0.0,
+        offerDetails?._pricing_costs_calc_time_costs_quantity ?? "",
 
       _pricing_costs_calc_raw_material_quantity:
-        offerDetails?._pricing_costs_calc_raw_material_quantity ?? 0.0,
+        offerDetails?._pricing_costs_calc_raw_material_quantity ?? "",
 
       _pricing_costs_calc_raw_material_setup_quantity:
-        offerDetails?._pricing_costs_calc_raw_material_setup_quantity ?? 0.0,
+        offerDetails?._pricing_costs_calc_raw_material_setup_quantity ?? "",
 
       _pricing_costs_calc_raw_material_quantity_total:
-        offerDetails?._pricing_costs_calc_raw_material_quantity_total ?? 0.0,
+        offerDetails?._pricing_costs_calc_raw_material_quantity_total ?? "",
 
       _pricing_costs_calc_raw_material_price_total:
-        offerDetails?._pricing_costs_calc_raw_material_price_total ?? 0.0,
+        offerDetails?._pricing_costs_calc_raw_material_price_total ?? "",
 
       pricing_costs_calc_price_additional_lfm:
-        formatNumberToGerman(
-          offerDetails?.pricing_costs_calc_price_additional_lfm
-        ) || "",
+        offerDetails?.pricing_costs_calc_price_additional_lfm ?? "",
 
       _pricing_costs_yearly_time_costs_quantity:
-        offerDetails?._pricing_costs_yearly_time_costs_quantity ?? 0.0,
+        offerDetails?._pricing_costs_yearly_time_costs_quantity ?? "",
 
       _pricing_costs_yearly_raw_material_quantity:
-        offerDetails?._pricing_costs_yearly_raw_material_quantity ?? 0.0,
+        offerDetails?._pricing_costs_yearly_raw_material_quantity ?? "",
 
       _pricing_costs_yearly_fixcosts:
-        offerDetails?._pricing_costs_yearly_fixcosts ?? 0.0,
+        offerDetails?._pricing_costs_yearly_fixcosts ?? "",
     },
     enableReinitialize: true,
     onSubmit: () => {},
@@ -160,6 +174,7 @@ const CostOverviewCard: FC = () => {
                             <FormInputSaveField
                               name={field!.name}
                               label={field!.label}
+                              numeric={field.numeric}
                               disabled={field!.disabled || !isEditable}
                             />
                           </Box>
@@ -187,6 +202,7 @@ const CostOverviewCard: FC = () => {
                           <FormInputSaveField
                             name={field.name}
                             label={field.label}
+                            numeric={field.numeric}
                             disabled={field.disabled || !isEditable}
                           />
                         ) : null}
@@ -223,6 +239,7 @@ const CostOverviewCard: FC = () => {
                       <FormInputSaveField
                         name={field.name}
                         label={field.label}
+                        numeric={field.numeric}
                         disabled={field!.disabled || !isEditable}
                       />
                     </Box>

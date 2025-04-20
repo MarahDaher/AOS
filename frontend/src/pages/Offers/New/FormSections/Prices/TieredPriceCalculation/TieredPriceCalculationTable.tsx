@@ -60,7 +60,9 @@ export default function TieredPriceCalculationTable({ data }: Props) {
           {data.map((row, idx) => (
             <TableRow key={idx}>
               <TableCell>{row.staffel}</TableCell>
-              <TableCell>{row.menge?.toLocaleString() ?? "-"}</TableCell>
+              <TableCell>
+                {row.menge != null ? `${formatNumber(row.menge)}` : "-"}
+              </TableCell>
               <TableCell>
                 {row.hourlyRateAddition != null
                   ? `${formatNumber(row.hourlyRateAddition)} %`

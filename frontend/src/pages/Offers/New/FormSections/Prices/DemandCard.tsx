@@ -42,6 +42,7 @@ const DemandCard: FC = () => {
               name="calculation_working_annual_requirement_estimated"
               label="Jahresbedarf, geschätzt [m]"
               type="number"
+              numeric
               disabled={!isEditable}
             />
           </Grid>

@@ -1,10 +1,12 @@
 import { FunctionComponent } from "react";
 import { useField } from "formik";
 import { FormControl, TextField, TextFieldProps } from "@mui/material";
+import { formatNumberToGerman } from "@utils/formatNumbers";
 
 interface FormInputFieldProps extends Omit<TextFieldProps, "name" | "variant"> {
   name: string;
   required?: boolean;
+  numeric?: boolean;
 }
 
 const FormInputField: FunctionComponent<FormInputFieldProps> = ({
@@ -14,6 +16,7 @@ const FormInputField: FunctionComponent<FormInputFieldProps> = ({
   disabled = false,
   value,
   onChange,
+  numeric = false,
   ...props
 }) => {
   const [field, meta] = useField(name);
@@ -28,7 +31,7 @@ const FormInputField: FunctionComponent<FormInputFieldProps> = ({
     onChange: onChange || field.onChange,
     error: !!meta.touched && !!meta.error,
     helperText: meta.touched && meta.error ? meta.error : undefined,
-    value: value ?? field.value,
+    value: value ?? (numeric ? formatNumberToGerman(field.value) : field.value),
     variant: "filled",
   };
 

@@ -11,19 +11,32 @@ import {
 import { useOfferContext } from "@contexts/OfferProvider";
 import { usePermissions } from "@hooks/usePermissions";
 
-const rows = [
+type FieldConfig = {
+  name: string;
+  label: string;
+  disabled?: boolean;
+  numeric?: boolean;
+};
+
+const rows: Array<FieldConfig | null>[] = [
   [
     { name: "calculation_additional_setup_time", label: "Rüstzeit [h]" },
-    { name: "calculation_additional_hourly_rate", label: "Stundensatz. [€]" },
+    {
+      name: "calculation_additional_hourly_rate",
+      label: "Stundensatz [€]",
+      numeric: true,
+    },
     {
       name: "_calculation_additional_setup_costs_total",
       label: "Rüstkosten gesamt [€]",
       disabled: true,
+      numeric: true,
     },
     {
       name: "_calculation_additional_setup_costs_lfm",
       label: "Rüstkosten / m [€]",
       disabled: true,
+      numeric: true,
     },
   ],
   [
@@ -32,11 +45,13 @@ const rows = [
     {
       name: "calculation_additional_transport_costs_total",
       label: "Transport [€]",
+      numeric: true,
     },
     {
       name: "_calculation_additional_transport_costs_lfm",
       label: "Transport / m [€]",
       disabled: true,
+      numeric: true,
     },
   ],
   [
@@ -44,28 +59,37 @@ const rows = [
     {
       name: "calculation_additional_box_price_per_piece",
       label: "Karton Preis / Stk [€]",
+      numeric: true,
     },
     {
       name: "calculation_additional_box_price_flat_additional",
       label: "Karton Pauschale [€]",
+      numeric: true,
     },
     {
       name: "_calculation_additional_box_costs_lfm",
       label: "Karton Preis / m [€]",
       disabled: true,
+      numeric: true,
     },
   ],
   [
-    { name: "calculation_additional_single_print", label: "Einzeldruck / m" },
+    {
+      name: "calculation_additional_single_print",
+      label: "Einzeldruck / m",
+      numeric: true,
+    },
     {
       name: "calculation_additional_single_print_price",
       label: "Einzeldruck Preis / m [€]",
+      numeric: true,
     },
     null,
     {
       name: "_calculation_additional_single_print_lfm",
       label: "Druckpreis / m [€]",
       disabled: true,
+      numeric: true,
     },
   ],
 ];
@@ -105,6 +129,7 @@ const AdditionalCostsCard: FC = () => {
                     name={field.name}
                     label={field.label}
                     disabled={field.disabled || !isEditable}
+                    numeric={field.numeric}
                   />
                 ) : null}
               </Grid>

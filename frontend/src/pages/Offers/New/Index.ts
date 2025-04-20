@@ -1,5 +1,3 @@
-import { formatNumberToGerman } from "@utils/formatNumbers";
-
 export const OfferCardInitialValues = {
   general_offer_number: "",
   general_status: "",
@@ -76,11 +74,12 @@ export const ProcessingPerMeterFields = [
 export const ProcessingPerMeterInitialValues = Object.fromEntries(
   ProcessingPerMeterFields.map((field) => [field, ""])
 );
+
 export const mapInitialValues = (offerDetails: any) =>
   Object.fromEntries(
     ProcessingPerMeterFields.map((field) => [
       field,
-      formatNumberToGerman(offerDetails?.[field]) ?? "",
+      offerDetails?.[field] ?? "",
     ])
   );
 
@@ -103,10 +102,9 @@ export const mapPerPieceInitialValuesInitialValues = (offerDetails: any) =>
   Object.fromEntries(
     ProcessingPerPieceFields.map((field) => [
       field,
-      formatNumberToGerman(offerDetails?.[field]) ?? "",
+      offerDetails?.[field] ?? "",
     ])
   );
-
 //-----------------------------------------------------------------
 export const AdditionalCostsFields = [
   "calculation_additional_setup_time",
@@ -130,10 +128,7 @@ export const AdditionalCostInitialValues = Object.fromEntries(
 
 export const mapAdditionalCostsInitialValues = (offerDetails: any) =>
   Object.fromEntries(
-    AdditionalCostsFields.map((field) => [
-      field,
-      formatNumberToGerman(offerDetails?.[field]) ?? "",
-    ])
+    AdditionalCostsFields.map((field) => [field, offerDetails?.[field] ?? ""])
   );
 
 //-------------------------------------------------
@@ -174,8 +169,5 @@ export const WorkCalculationInitialValues = Object.fromEntries(
 
 export const mapWorkCalculationInitialValues = (offerDetails: any) =>
   Object.fromEntries(
-    WorkCalculationFields.map((field) => [
-      field,
-      formatNumberToGerman(offerDetails?.[field]) ?? "",
-    ])
+    WorkCalculationFields.map((field) => [field, offerDetails?.[field] ?? ""])
   );

@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { useField, useFormikContext } from "formik";
 import {
   FormControl,
@@ -8,8 +8,7 @@ import {
 } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useSaveFieldMutation } from "@hooks/useSaveFieldMutation";
-import { parseGermanNumber } from "@utils/formatNumbers";
-import { textFields } from "@utils/textFields";
+import { parseGermanNumber, formatNumberToGerman } from "@utils/formatNumbers";
 
 interface FormInputFieldProps extends Omit<TextFieldProps, "name" | "variant"> {
   name: string;
@@ -30,74 +29,83 @@ const FormInputSaveField: FunctionComponent<FormInputFieldProps> = ({
   const [field, meta] = useField(name);
   const { setFieldValue } = useFormikContext();
   const [justSaved, setJustSaved] = useState(false);
+  const [inputValue, setInputValue] = useState(field.value || "");
 
   const mutation = useSaveFieldMutation();
 
+  useEffect(() => {
+    // Update visible input based on formik value
+    if (numeric && typeof field.value === "number") {
+      setInputValue(formatNumberToGerman(field.value));
+    } else if (!numeric) {
+      setInputValue(field.value || "");
+    }
+  }, [field.value, numeric]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let val = e.target.value;
+
     if (numeric) {
-      val = val.replace(/[^0-9,.\-]/g, "");
+      val = val.replace(/[^0-9,.\-]/g, ""); // Allow numbers, dots, commas, and minus
     }
-    setFieldValue(name, val);
+
+    setInputValue(val);
   };
 
   const handleBlur = () => {
-    if (textFields.includes(name)) {
-      // For string-based fields
-      mutation.mutate(
-        { name, value: field.value },
-        {
-          onSuccess: () => {
-            setJustSaved(true);
-            setTimeout(() => setJustSaved(false), 2000);
-            onSaved?.();
-          },
-        }
-      );
-    } else {
-      // For numeric fields
-      const parsed = parseGermanNumber(field.value);
-      if (parsed !== null) {
-        mutation.mutate(
-          { name, value: parsed },
-          {
-            onSuccess: () => {
-              setJustSaved(true);
-              setTimeout(() => setJustSaved(false), 2000);
-              onSaved?.();
-            },
-          }
-        );
+    let valueToSave: string | number = inputValue;
+
+    if (numeric) {
+      const parsed = parseGermanNumber(inputValue);
+      if (parsed === null) {
+        setFieldValue(name, inputValue); // Still update formik with invalid input
+        return;
       }
+      valueToSave = parsed;
     }
-  };
-  const configTextField: TextFieldProps = {
-    ...field,
-    ...props,
-    fullWidth: true,
-    type,
-    required,
-    disabled,
-    onChange: handleChange,
-    onBlur: handleBlur,
-    error: !!meta.touched && !!meta.error,
-    helperText: meta.touched && meta.error ? meta.error : undefined,
-    variant: "filled",
-    InputProps: {
-      endAdornment: justSaved ? (
-        <InputAdornment position="end">
-          <CheckCircleIcon sx={{ color: "green" }} fontSize="small" />
-        </InputAdornment>
-      ) : undefined,
-    },
+
+    setFieldValue(name, valueToSave);
+
+    mutation.mutate(
+      { name, value: valueToSave },
+      {
+        onSuccess: () => {
+          setJustSaved(true);
+          setTimeout(() => setJustSaved(false), 2000);
+          onSaved?.();
+        },
+      }
+    );
+
+    // Reformat the field after saving
+    if (numeric && typeof valueToSave === "number") {
+      setInputValue(formatNumberToGerman(valueToSave));
+    }
   };
 
   return (
     <FormControl fullWidth variant="outlined">
       <TextField
-        {...configTextField}
+        {...props}
+        value={inputValue}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        fullWidth
+        type={type}
+        required={required}
+        disabled={disabled}
+        error={!!meta.touched && !!meta.error}
+        helperText={meta.touched && meta.error ? meta.error : undefined}
+        variant="filled"
+        InputProps={{
+          endAdornment: justSaved ? (
+            <InputAdornment position="end">
+              <CheckCircleIcon sx={{ color: "green" }} fontSize="small" />
+            </InputAdornment>
+          ) : undefined,
+        }}
         sx={{
-          "& .MuiInputLabel-root. Mui-disabled": {
+          "& .MuiInputLabel-root.Mui-disabled": {
             color: "black",
           },
         }}

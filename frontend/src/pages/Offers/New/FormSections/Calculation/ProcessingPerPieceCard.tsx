@@ -38,6 +38,7 @@ const ProcessingPerPieceCard: FC = () => {
             <FormInputSaveField
               name="calculation_processing_piece_hourly_rate"
               label="Stundensatz [€] / h"
+              numeric
               disabled={!isEditable}
             />
           </Grid>
@@ -46,6 +47,7 @@ const ProcessingPerPieceCard: FC = () => {
             <FormInputSaveField
               name="calculation_processing_piece_runtime"
               label="Laufzeit / Stk [sek]"
+              numeric
               disabled={!isEditable}
             />
           </Grid>
@@ -62,6 +64,7 @@ const ProcessingPerPieceCard: FC = () => {
               name="calculation_processing_piece_packing_time"
               label="Verpackungszeit / Stk [sek]"
               disabled={!isEditable}
+              numeric
             />
           </Grid>
           <Grid size={{ xs: 4 }}>
@@ -81,6 +84,7 @@ const ProcessingPerPieceCard: FC = () => {
               name="_calculation_processing_piece_expense"
               label="Aufwand / Stk [sek]"
               disabled
+              numeric
             />
           </Grid>
 
@@ -89,6 +93,7 @@ const ProcessingPerPieceCard: FC = () => {
               name="_calculation_processing_piece_costs"
               label="Kosten / Stk [€]"
               disabled
+              numeric
             />
           </Grid>
         </Grid>

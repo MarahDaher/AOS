@@ -12,7 +12,14 @@ import {
 import ProfileWeightTripleDisplay from "./ProfileWeightTripleDisplay";
 import { usePermissions } from "@hooks/usePermissions";
 
-const rows = [
+type FieldConfig = {
+  name: string;
+  label: string;
+  disabled?: boolean;
+  numeric?: boolean;
+};
+
+const rows: Array<FieldConfig | null>[] = [
   [
     {
       name: "calculation_working_setup_quantity_relative",
@@ -21,16 +28,19 @@ const rows = [
     {
       name: "calculation_working_extrusion_speed",
       label: "Extrusionsgeschw. [m/min]",
+      numeric: true,
     },
     {
       name: "_calculation_working_setup_quantity_lfm",
       label: "Einstellmenge [m]",
       disabled: true,
+      numeric: true,
     },
     {
       name: "_calculation_working_setup_time",
       label: "Einstellzeit [min]",
       disabled: true,
+      numeric: true,
     },
     {
       name: "calculation_working_annual_requirement_estimated",
@@ -42,10 +52,12 @@ const rows = [
     {
       name: "calculation_working_tool_costs_total",
       label: "Werkzeugkosten gesamt [€]",
+      numeric: true,
     },
     {
       name: "calculation_working_tool_costs_customer",
       label: "Werkzeugkosten Kunde [€]",
+      numeric: true,
     },
     {
       name: "calculation_working_allocation_costs_additional",
@@ -59,6 +71,7 @@ const rows = [
       name: "_calculation_working_allocation_costs_lfm",
       label: "Umlage / m [€]",
       disabled: true,
+      numeric: true,
     },
     null,
   ],
@@ -67,6 +80,7 @@ const rows = [
       name: "general_profile_crosssection",
       label: "Profilquerschnitt [mm²]",
       disabled: true,
+      numeric: true,
     },
     {
       name: "calculation_working_profile_cross_section_deviation_lower",
@@ -80,6 +94,7 @@ const rows = [
       name: "_calculation_working_density_total",
       label: "Rohstoffdichte gesamt [gr/cm³]",
       disabled: true,
+      numeric: true,
     },
     null,
     null,
@@ -93,13 +108,22 @@ const rows = [
     {
       name: "calculation_working_additional_costs",
       label: "Zusatzkosten / m [€]",
+      numeric: true,
     },
     null,
   ],
   [
-    { name: "calculation_working_commission", label: "Provision [%]" },
-    { name: "calculation_working_profit", label: "Gewinn [%]" },
-    { name: "calculation_working_discount", label: "Skonto [%]" },
+    {
+      name: "calculation_working_commission",
+      label: "Provision [%]",
+      numeric: true,
+    },
+    { name: "calculation_working_profit", label: "Gewinn [%]", numeric: true },
+    {
+      name: "calculation_working_discount",
+      label: "Skonto [%]",
+      numeric: true,
+    },
   ],
 ];
 
@@ -131,6 +155,7 @@ const WorkCalculationCard: FC = () => {
                     name={field.name}
                     label={field.label}
                     disabled={field.disabled || !isEditable}
+                    numeric={field.numeric}
                   />
                 ) : rowIndex === 2 && colIndex === 4 ? (
                   <ProfileWeightTripleDisplay />

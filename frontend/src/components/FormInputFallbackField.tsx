@@ -1,9 +1,9 @@
-import { FunctionComponent, useState } from "react";
-import { useField, useFormikContext } from "formik";
-import { TextField, TextFieldProps, InputAdornment } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { formatNumberToGerman, parseGermanNumber } from "@utils/formatNumbers";
+import { FunctionComponent, useEffect, useState } from "react";
+import { InputAdornment, TextField, TextFieldProps } from "@mui/material";
+import { useField, useFormikContext } from "formik";
 import { useSaveFieldMutation } from "@hooks/useSaveFieldMutation";
-import { parseGermanNumber } from "@utils/formatNumbers";
 
 interface Props extends Omit<TextFieldProps, "name" | "variant"> {
   name: string;
@@ -18,28 +18,38 @@ const FormInputFallbackField: FunctionComponent<Props> = ({
   const [field, meta] = useField(name);
   const { setFieldValue } = useFormikContext();
   const [justSaved, setJustSaved] = useState(false);
+  const [inputValue, setInputValue] = useState<string>("");
+
   const mutation = useSaveFieldMutation();
 
   // Show fallback only when actual value is empty
-  const displayValue =
+  const effectiveValue =
     field.value === null || field.value === undefined || field.value === ""
       ? fallbackValue
       : field.value;
 
+  useEffect(() => {
+    if (typeof effectiveValue === "number") {
+      setInputValue(formatNumberToGerman(effectiveValue));
+    } else {
+      setInputValue(effectiveValue?.toString() || "");
+    }
+  }, [effectiveValue]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let val = e.target.value;
-
-    // Optional: Remove all non-numeric (except comma, dot and minus)
-    val = val.replace(/[^0-9,.\-]/g, "");
-
-    // Keep input as-is for now
-    setFieldValue(name, val);
+    val = val.replace(/[^0-9,.\-]/g, ""); // Clean input for numbers
+    setInputValue(val);
   };
 
   const handleBlur = () => {
-    if (field.value === "") {
+    const parsed = parseGermanNumber(inputValue);
+
+    if (inputValue === "" || parsed === null) {
+      // Send empty string if field was cleared or couldn't parse
+      setFieldValue(name, "");
       mutation.mutate(
-        { name, value: "" }, // Reset to fallback
+        { name, value: "" },
         {
           onSuccess: () => {
             setJustSaved(true);
@@ -48,25 +58,25 @@ const FormInputFallbackField: FunctionComponent<Props> = ({
         }
       );
     } else {
-      const parsedValue = parseGermanNumber(field.value);
-      if (parsedValue !== null) {
-        mutation.mutate(
-          { name, value: parsedValue },
-          {
-            onSuccess: () => {
-              setJustSaved(true);
-              setTimeout(() => setJustSaved(false), 2000);
-            },
-          }
-        );
-      }
+      // Send parsed number like 10000.3
+      setFieldValue(name, parsed);
+      mutation.mutate(
+        { name, value: parsed },
+        {
+          onSuccess: () => {
+            setJustSaved(true);
+            setTimeout(() => setJustSaved(false), 2000);
+          },
+        }
+      );
+      setInputValue(formatNumberToGerman(parsed));
     }
   };
 
   return (
     <TextField
       {...props}
-      value={displayValue}
+      value={inputValue}
       onChange={handleChange}
       onBlur={handleBlur}
       fullWidth

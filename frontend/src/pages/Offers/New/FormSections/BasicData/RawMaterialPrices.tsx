@@ -10,6 +10,7 @@ import RawMaterialRow from "./RawMaterialSection/RawMaterialRow";
 import { useRawMaterialPricesTable } from "./RawMaterialSection/useRawMaterialPricesTable";
 import AdditiveModal from "./RawMaterialSection/AdditiveModal";
 import FormInputFallbackField from "@components/FormInputFallbackField";
+import { formatNumberToGerman } from "@utils/formatNumbers";
 
 const RawMaterialPrices = () => {
   const {
@@ -48,6 +49,7 @@ const RawMaterialPrices = () => {
             <FormInputSaveField
               name="general_raw_material_purchase_discount"
               label="Skonto [%]"
+              numeric
               onSaved={fetchOfferRawMaterials}
               disabled={
                 !isFieldEditable("general_raw_material_purchase_discount")
@@ -135,8 +137,9 @@ const RawMaterialPrices = () => {
             <FormInputField
               name="general_raw_material_price_total_calculated"
               label="Rohstoffpreis gesamt / kg [€]"
-              value={totalPriceShare.toFixed(2)}
+              value={formatNumberToGerman(totalPriceShare)}
               disabled
+              numeric
             />
             <Typography variant="caption">(berechnet)</Typography>
           </Grid>
