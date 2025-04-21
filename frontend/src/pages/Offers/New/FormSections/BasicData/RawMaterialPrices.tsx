@@ -3,7 +3,7 @@ import FormInputField from "@components/FormInputField";
 import FormInputSaveField from "@components/FormInputSaveField";
 import Grid from "@mui/material/Grid2";
 import { FormikProvider } from "formik";
-import { Typography, Button, Stack } from "@mui/material";
+import { Typography, Button, Stack, TableRow, TableCell } from "@mui/material";
 import { Table, TableContainer, TableBody, Paper } from "@mui/material";
 import RawMaterialTableHead from "./RawMaterialSection/RawMaterialTableHead";
 import RawMaterialRow from "./RawMaterialSection/RawMaterialRow";
@@ -19,6 +19,7 @@ const RawMaterialPrices = () => {
     selectedMaterial,
     openModal,
     setOpenModal,
+    updateRawDemanMaterial,
     rawMaterialRows,
     isFieldEditable,
     handleOpenModal,
@@ -29,6 +30,11 @@ const RawMaterialPrices = () => {
     createEmptyRow,
     handleAddMaterial,
   } = useRawMaterialPricesTable();
+
+  const totalDemand = rawMaterialRows.reduce(
+    (sum, row) => sum + (parseFloat(String(row.absolut_demand)) || 0),
+    0
+  );
 
   const totalPriceShare = rawMaterialRows.reduce(
     (sum, row) => sum + (parseFloat(String(row._price_share)) || 0),
@@ -68,80 +74,119 @@ const RawMaterialPrices = () => {
                   row={row}
                   rawMaterialRows={rawMaterialRows}
                   baseMaterials={baseMaterials}
+                  updateDemand={updateRawDemanMaterial}
                   onChangeMaterial={handleChangeMaterial}
                   onUpdateField={handleUpdateField}
                   setRawMaterialRows={setRawMaterialRows}
                   onOpenModal={handleOpenModal}
                   handleAddMaterial={handleAddMaterial}
+                  fetchOfferRawMaterials={fetchOfferRawMaterials}
                 />
               ))}
+
+              {/* Sum row */}
+              <TableRow>
+                {/* Rohstoff, Typ, Lieferant */}
+                <TableCell colSpan={3} />
+
+                {/* Total Demand (Rohstoffbedarf [mm²]) */}
+                <TableCell align="left">
+                  <Typography fontWeight="bold">
+                    Summe {formatNumberToGerman(totalDemand)}
+                  </Typography>
+                </TableCell>
+
+                {/* Anteil [%], Preisstand, Preis [€/kg], Preis - Sko, Additive, Preis Additive */}
+                <TableCell colSpan={5} />
+
+                <TableCell>
+                  <Typography fontWeight="bold">Summe</Typography>
+                </TableCell>
+
+                {/* Preis (anteilig) */}
+                <TableCell align="right">
+                  <Stack spacing={0.5} alignItems="flex-end">
+                    <FormInputField
+                      name="general_raw_material_price_total_calculated"
+                      label=""
+                      value={formatNumberToGerman(totalPriceShare)}
+                      disabled
+                      numeric
+                    />
+                  </Stack>
+                </TableCell>
+
+                {/* Preis - Sko (anteilig) */}
+                <TableCell />
+              </TableRow>
+              {/* ⬇️ Overwritten Total (Summe überschrieben) */}
+              <TableRow>
+                <TableCell colSpan={10} align="right">
+                  <Typography fontWeight="bold">
+                    Summe (überschrieben)
+                  </Typography>
+                </TableCell>
+                <TableCell align="right">
+                  <Stack spacing={0.5}>
+                    <FormInputFallbackField
+                      name="general_raw_material_price_total_overwritten"
+                      label=""
+                      fallbackValue={totalPriceShare.toFixed(2)}
+                      disabled={
+                        !isFieldEditable(
+                          "general_raw_material_price_total_overwritten"
+                        )
+                      }
+                    />
+
+                    <Button
+                      size="small"
+                      disabled={
+                        !isFieldEditable(
+                          "general_raw_material_price_total_overwritten"
+                        )
+                      }
+                      variant="text"
+                      color="secondary"
+                      onClick={() =>
+                        formik.setFieldValue(
+                          "general_raw_material_price_total_overwritten",
+                          ""
+                        )
+                      }
+                      sx={{
+                        alignSelf: "center",
+                        textTransform: "none",
+                        pl: 0,
+                      }}
+                    >
+                      Zurücksetzen
+                    </Button>
+                  </Stack>
+                </TableCell>
+                <TableCell />
+              </TableRow>
             </TableBody>
           </Table>
         </TableContainer>
 
-        {/* ➡️ Add "Add Row" Button */}
+        {/* Add Row Button */}
         <Grid container justifyContent="flex-end" mt={2}>
           <Grid>
             <Button
               disabled={
-                !isFieldEditable("general_raw_material_purchase_discount")
+                !isFieldEditable("general_raw_material_purchase_discount") ||
+                rawMaterialRows.length >= 4
               }
               variant="outlined"
               onClick={() =>
-                setRawMaterialRows((prev) => [...prev, createEmptyRow()])
+                setRawMaterialRows((prev) =>
+                  prev.length < 4 ? [...prev, createEmptyRow()] : prev
+                )
               }
             >
               Neue Zeile hinzufügen
             </Button>
-          </Grid>
-        </Grid>
-
-        <Grid container spacing={2} justifyContent="end" mt={2}>
-          <Grid size={{ xs: 3, md: 3 }}>
-            <Stack spacing={0.5}>
-              <FormInputFallbackField
-                name="general_raw_material_price_total_overwritten"
-                label="Rohstoffpreis gesamt / kg [€]"
-                fallbackValue={totalPriceShare.toFixed(2)}
-                disabled={
-                  !isFieldEditable(
-                    "general_raw_material_price_total_overwritten"
-                  )
-                }
-              />
-              <Typography variant="caption">(überschrieben)</Typography>
-
-              <Button
-                size="small"
-                disabled={
-                  !isFieldEditable(
-                    "general_raw_material_price_total_overwritten"
-                  )
-                }
-                variant="text"
-                color="secondary"
-                onClick={() =>
-                  formik.setFieldValue(
-                    "general_raw_material_price_total_overwritten",
-                    ""
-                  )
-                }
-                sx={{ alignSelf: "flex-start", textTransform: "none", pl: 0 }}
-              >
-                Zurücksetzen auf berechneten Wert
-              </Button>
-            </Stack>
-          </Grid>
-
-          <Grid size={{ xs: 3, md: 2 }}>
-            <FormInputField
-              name="general_raw_material_price_total_calculated"
-              label="Rohstoffpreis gesamt / kg [€]"
-              value={formatNumberToGerman(totalPriceShare)}
-              disabled
-              numeric
-            />
-            <Typography variant="caption">(berechnet)</Typography>
           </Grid>
         </Grid>
       </CardBox>

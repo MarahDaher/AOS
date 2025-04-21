@@ -69,16 +69,34 @@ class OfferRawMaterialRepository
         $totalDemand = $allMaterials->sum('absolut_demand');
 
         if ($totalDemand > 0) {
+            // Step 2: Calculate initial unrounded shares
+            $shares = [];
             foreach ($allMaterials as $material) {
-                $newShare = ($material->absolut_demand / $totalDemand) * 100;
+                $unrounded = ($material->absolut_demand / $totalDemand) * 100;
+                $shares[] = [
+                    'material' => $material,
+                    'unrounded' => $unrounded,
+                    'rounded' => round($unrounded, 2),
+                ];
+            }
+
+            // Step 3: Adjust rounding to make sum = 100
+            $roundedSum = array_sum(array_column($shares, 'rounded'));
+            $diff = round(100 - $roundedSum, 2);
+
+            // Find the material with the highest unrounded value to absorb the diff
+            usort($shares, fn($a, $b) => $b['unrounded'] <=> $a['unrounded']);
+            $shares[0]['rounded'] += $diff;
+
+            // Step 4: Update DB
+            foreach ($shares as $s) {
                 OfferRawMaterial::where('offer_id', $offerId)
-                    ->where('raw_material_id', $material->raw_material_id)
+                    ->where('raw_material_id', $s['material']->raw_material_id)
                     ->update([
-                        'share' => round($newShare, 2),
+                        'share' => $s['rounded'],
                     ]);
             }
         }
-
         // 3. Try to get the updated material safely
         $updated = OfferRawMaterialCalculated::where('offer_id', $offerId)
             ->where('raw_material_id', $rawMaterialId)

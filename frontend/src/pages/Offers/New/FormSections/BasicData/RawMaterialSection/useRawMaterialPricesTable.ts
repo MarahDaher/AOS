@@ -1,24 +1,25 @@
-// 📁 useRawMaterialPricesTable.ts
-
-import { useFormik } from "formik";
-import { useEffect, useState, useCallback } from "react";
-import { useApiErrorHandler } from "@hooks/useApiErrorHandler";
+import debounce from "lodash.debounce";
+import { AdditiveApi } from "@api/additives";
+import { BaseMaterial, RawMaterialRow } from "@interfaces/RawMaterial.model";
 import { OfferRawMaterialCalculatedApi } from "@api/offer-raw-material";
 import { RawMaterialApi } from "@api/raw-materials";
-import { useOfferContext } from "@contexts/OfferProvider";
 import { RawMaterialPricesTableInitialValues } from "@pages/Offers/New/Index";
-import { BaseMaterial, RawMaterialRow } from "@interfaces/RawMaterial.model";
-import { AdditiveApi } from "@api/additives";
+import { useApiErrorHandler } from "@hooks/useApiErrorHandler";
 import { useApiSuccessHandler } from "@hooks/useApiSuccessHandler";
-import debounce from "lodash.debounce";
-import { formatNumberToGerman } from "@utils/formatNumbers";
+import { useCallback, useEffect, useState } from "react";
 import { useEditableFields } from "@hooks/useEditableFields";
+import { useFormik } from "formik";
+import { useOfferContext } from "@contexts/OfferProvider";
+import { useRawMaterials } from "@hooks/useRawMaterialsDemand";
 
 export const useRawMaterialPricesTable = () => {
   const { showError } = useApiErrorHandler();
   const { showSuccess } = useApiSuccessHandler();
+
   // Hooks
   const { offerDetails, offerId } = useOfferContext();
+  const { updateRawDemanMaterial } = useRawMaterials(offerId!);
+
   // Permissions
   const { data: editableFields = [] } = useEditableFields(offerId!);
 
@@ -223,6 +224,7 @@ export const useRawMaterialPricesTable = () => {
     rawMaterialRows,
     selectedMaterial,
     openModal,
+    updateRawDemanMaterial,
     isFieldEditable,
     setOpenModal,
     handleAddMaterial,

@@ -1,9 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { OfferRawMaterialCalculatedModel } from "@interfaces/RawMaterial.model";
 import { OfferRawMaterialCalculatedApi } from "@api/offer-raw-material";
+import { useApiSuccessHandler } from "./useApiSuccessHandler";
 
 export const useRawMaterials = (offerId: number) => {
   const queryClient = useQueryClient();
+  const { showSuccess } = useApiSuccessHandler();
 
   // Load raw materials
   const rawMaterialsQuery = useQuery<OfferRawMaterialCalculatedModel[]>({
@@ -32,6 +34,7 @@ export const useRawMaterials = (offerId: number) => {
           rawMaterialId,
           data
         );
+      showSuccess("Feld erfolgreich gespeichert.");
       return response.data;
     },
     onSuccess: () => {
@@ -42,7 +45,7 @@ export const useRawMaterials = (offerId: number) => {
 
   return {
     ...rawMaterialsQuery,
-    updateRawMaterial: updateMutation.mutate,
+    updateRawDemanMaterial: updateMutation.mutateAsync,
     updateStatus: updateMutation.status,
     updateError: updateMutation.error,
   };

@@ -8,13 +8,15 @@ const RawMaterialTableHead = () => (
       {/* type */}
       <TableCell>Typ</TableCell>
       {/* supplier */}
-      <TableCell width={"120px"}>Lieferant</TableCell>
+      <TableCell>Lieferant</TableCell>
+      {/* offers_raw_materials.total_demand */}
+      <TableCell>Rohstoffbedarf [mm²]</TableCell>
       {/* share */}
-      <TableCell width={"120px"}>Anteil [%]</TableCell>
+      <TableCell>Anteil [%]</TableCell>
       {/* price_date */}
-      <TableCell width={"80px"}>Preisstand</TableCell>
+      <TableCell>Preisstand</TableCell>
       {/* price */}
-      <TableCell width={"120px"}>Preis / kg [€]</TableCell>
+      <TableCell>Preis / kg [€]</TableCell>
       {/* _price_minus_discount */}
       <TableCell>Preis - Sko [€]</TableCell>
       {/* additives */}

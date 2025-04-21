@@ -104,6 +104,7 @@ class OfferService
             'share',
             'price',
             'price_date',
+            'absolut_demand',
             'type',
             'general_raw_material_purchase_discount',
             'general_raw_material_price_total_overwritten',

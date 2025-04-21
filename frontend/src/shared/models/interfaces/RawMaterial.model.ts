@@ -34,6 +34,7 @@ export interface RawMaterialRow {
   share: number;
   price?: number;
   price_date?: string;
+  absolut_demand?: number;
 
   // ✅ Newly added fields:
   _additives_concatenated?: string;

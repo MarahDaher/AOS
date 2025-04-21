@@ -11,6 +11,7 @@ import { Delete, PlaylistAdd } from "@mui/icons-material";
 import {
   RawMaterialRow as RawMaterialRowType,
   BaseMaterial,
+  OfferRawMaterialCalculatedModel,
 } from "@interfaces/RawMaterial.model";
 import { useOfferContext } from "@contexts/OfferProvider";
 import { useApiErrorHandler } from "@hooks/useApiErrorHandler";
@@ -37,6 +38,14 @@ interface RawMaterialRowProps {
   onOpenModal: (row: RawMaterialRowType) => void;
   handleAddMaterial: (newMaterialId: number) => void;
   rawMaterialRows: RawMaterialRowType[];
+  updateDemand: ({
+    rawMaterialId,
+    data,
+  }: {
+    rawMaterialId: number;
+    data: Partial<OfferRawMaterialCalculatedModel>;
+  }) => void;
+  fetchOfferRawMaterials: () => void;
 }
 
 const RawMaterialRow = ({
@@ -47,7 +56,9 @@ const RawMaterialRow = ({
   onUpdateField,
   setRawMaterialRows,
   onOpenModal,
+  updateDemand,
   handleAddMaterial,
+  fetchOfferRawMaterials,
 }: RawMaterialRowProps) => {
   const { offerDetails, offerId } = useOfferContext();
   const { showError } = useApiErrorHandler();
@@ -62,8 +73,8 @@ const RawMaterialRow = ({
   const [priceInputValue, setPriceInputValue] = useState(
     row.price != null ? formatNumberToGerman(row.price) : ""
   );
-  const [shareInputValue, setShareInputValue] = useState(
-    row.share != null ? formatNumberToGerman(row.share) : ""
+  const [totalDemandInputValue, setTotalDemandInputValue] = useState(
+    row.absolut_demand != null ? formatNumberToGerman(row.absolut_demand) : ""
   );
 
   useEffect(() => {
@@ -73,10 +84,10 @@ const RawMaterialRow = ({
   }, [row.price]);
 
   useEffect(() => {
-    setShareInputValue(
-      row.share != null ? formatNumberToGerman(row.share) : ""
+    setTotalDemandInputValue(
+      row.absolut_demand != null ? formatNumberToGerman(row.absolut_demand) : ""
     );
-  }, [row.share]);
+  }, [row.absolut_demand]);
 
   const handleConfirmDelete = async () => {
     if (!row.raw_material_id || !offerDetails?.id) return;
@@ -155,26 +166,38 @@ const RawMaterialRow = ({
         />
       </TableCell>
 
-      {/* Anteil [%] */}
+      {/* Rohstoffbedarf [mm²] absolut_demand*/}
       <TableCell>
         <TextField
           fullWidth
-          disabled={!isFieldEditable("share")}
+          disabled={!isFieldEditable("absolut_demand")}
           variant="standard"
-          value={shareInputValue}
+          value={totalDemandInputValue}
           onChange={(e) => {
             const val = e.target.value.replace(/[^0-9,.\-]/g, "");
-            setShareInputValue(val);
+            setTotalDemandInputValue(val);
           }}
-          onBlur={() => {
-            const parsed = parseGermanNumber(shareInputValue);
+          onBlur={async () => {
+            const parsed = parseGermanNumber(totalDemandInputValue);
             if (parsed !== null) {
-              updateRowField(setRawMaterialRows, row, "share", parsed);
-              onUpdateField(row, "share", parsed);
-              setShareInputValue(formatNumberToGerman(parsed));
+              await updateDemand({
+                rawMaterialId: row.raw_material_id,
+                data: { absolut_demand: parsed },
+              });
+              updateRowField(setRawMaterialRows, row, "absolut_demand", parsed);
+              setTotalDemandInputValue(formatNumberToGerman(parsed));
+              await fetchOfferRawMaterials();
             }
           }}
         />
+      </TableCell>
+
+      {/* Anteil [%] */}
+
+      <TableCell>
+        <Typography>
+          {row.share != null ? formatNumberToGerman(row.share) : "-"}
+        </Typography>
       </TableCell>
 
       {/* Preisstand */}
