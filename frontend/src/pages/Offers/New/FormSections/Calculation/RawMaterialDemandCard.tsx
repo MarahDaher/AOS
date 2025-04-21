@@ -19,7 +19,7 @@ interface FormValues {
 
 const RawMaterialDemandCard: FC = () => {
   const offerId = useOfferContext().offerId;
-  const { data, updateRawMaterial, refetch } = useRawMaterials(offerId!);
+  const { data, updateRawDemanMaterial, refetch } = useRawMaterials(offerId!);
   // Permissions
   const { canEdit } = usePermissions();
   const isEditable = canEdit("calculation");
@@ -86,7 +86,7 @@ const RawMaterialDemandCard: FC = () => {
         field: "absolut_demand" | "share",
         value: number
       ) => {
-        updateRawMaterial(
+        updateRawDemanMaterial(
           {
             rawMaterialId: rawMaterialId,
             data: { [field]: value },
