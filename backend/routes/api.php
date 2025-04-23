@@ -75,5 +75,6 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('additives', [AdditiveController::class, 'index'])->middleware('check.permission:' . PermissionConstants::VIEW_ADDITIVES);;
     Route::get('additives-for-raw-material', [AdditiveOfferRawMaterialController::class, 'getAdditivesForRawMaterial'])->middleware('check.permission:' . PermissionConstants::VIEW_ADDITIVE_RAW_MATERIAL);;
     Route::post('additives-offers-raw-materials', [AdditiveOfferRawMaterialController::class, 'store'])->middleware('check.permission:' . PermissionConstants::CREATE_ADDITIVE_RAW_MATERIAL);;
+    Route::post('additives-offers-raw-materials/update', [AdditiveOfferRawMaterialController::class, 'update'])->middleware('check.permission:' . PermissionConstants::UPDATE_ADDITIVE_RAW_MATERIAL);;
     Route::delete('additives-offers-raw-materials', [AdditiveOfferRawMaterialController::class, 'destroy'])->middleware('check.permission:' . PermissionConstants::DELETE_ADDITIVE_RAW_MATERIAL);;
 });

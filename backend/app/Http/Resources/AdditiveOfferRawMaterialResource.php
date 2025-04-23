@@ -12,9 +12,9 @@ class AdditiveOfferRawMaterialResource extends JsonResource
             'id' => $this->additive->id,
             'name' => $this->additive->name,
             'category' => $this->additive->category,
-            'price_per_kg' => $this->additive->price,
+            'price' => $this->price,
             'price_date' => $this->additive->price_date?->format('d.m.Y'),
-            'dosage_percent' => $this->share,
+            'share' => $this->share,
         ];
     }
 }

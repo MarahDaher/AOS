@@ -17,6 +17,7 @@ class AdditiveOfferRawMaterial extends Pivot
         'raw_material_id',
         'additives_id',
         'share',
+        'price',
     ];
 
     public function additive()
@@ -27,5 +28,10 @@ class AdditiveOfferRawMaterial extends Pivot
     public function offer()
     {
         return $this->belongsTo(Offer::class, 'offer_id');
+    }
+
+    public function getKeyName()
+    {
+        return ['offer_id', 'raw_material_id', 'additives_id'];
     }
 }

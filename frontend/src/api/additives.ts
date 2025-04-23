@@ -31,6 +31,20 @@ export class AdditiveApi {
     });
   }
 
+  static async updateAdditiveOffer(data: {
+    offer_id: number;
+    raw_material_id: number;
+    additives_id: number;
+    price?: number;
+    share?: number;
+  }) {
+    return await handleRequest<any>({
+      method: "POST",
+      endpoint: "additives-offers-raw-materials/update",
+      data,
+    });
+  }
+
   static async deleteAdditiveFromRawMaterial(data: {
     offer_id: number;
     raw_material_id: number;

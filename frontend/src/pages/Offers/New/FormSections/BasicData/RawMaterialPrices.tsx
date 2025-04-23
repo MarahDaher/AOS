@@ -8,7 +8,7 @@ import { Table, TableContainer, TableBody, Paper } from "@mui/material";
 import RawMaterialTableHead from "./RawMaterialSection/RawMaterialTableHead";
 import RawMaterialRow from "./RawMaterialSection/RawMaterialRow";
 import { useRawMaterialPricesTable } from "./RawMaterialSection/useRawMaterialPricesTable";
-import AdditiveModal from "./RawMaterialSection/AdditiveModal";
+import AdditiveModal from "./Additives/AdditiveModal";
 import FormInputFallbackField from "@components/FormInputFallbackField";
 import { formatNumberToGerman } from "@utils/formatNumbers";
 
@@ -18,9 +18,9 @@ const RawMaterialPrices = () => {
     baseMaterials,
     selectedMaterial,
     openModal,
+    rawMaterialRows,
     setOpenModal,
     updateRawDemanMaterial,
-    rawMaterialRows,
     isFieldEditable,
     handleOpenModal,
     handleChangeMaterial,
