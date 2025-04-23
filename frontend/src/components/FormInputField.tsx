@@ -7,6 +7,7 @@ interface FormInputFieldProps extends Omit<TextFieldProps, "name" | "variant"> {
   name: string;
   required?: boolean;
   numeric?: boolean;
+  hiddenLabel?: boolean;
 }
 
 const FormInputField: FunctionComponent<FormInputFieldProps> = ({
@@ -17,6 +18,7 @@ const FormInputField: FunctionComponent<FormInputFieldProps> = ({
   value,
   onChange,
   numeric = false,
+  hiddenLabel = false,
   ...props
 }) => {
   const [field, meta] = useField(name);
@@ -33,11 +35,19 @@ const FormInputField: FunctionComponent<FormInputFieldProps> = ({
     helperText: meta.touched && meta.error ? meta.error : undefined,
     value: value ?? (numeric ? formatNumberToGerman(field.value) : field.value),
     variant: "filled",
+    hiddenLabel: hiddenLabel,
   };
 
   return (
     <FormControl fullWidth variant="outlined">
-      <TextField {...configTextField} />
+      <TextField
+        {...configTextField}
+        sx={{
+          ".MuiInputBase-input": {
+            padding: hiddenLabel ? "5px" : null,
+          },
+        }}
+      />
     </FormControl>
   );
 };

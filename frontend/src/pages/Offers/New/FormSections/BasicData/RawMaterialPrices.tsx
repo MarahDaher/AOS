@@ -108,7 +108,7 @@ const RawMaterialPrices = () => {
                   <Stack spacing={0.5} alignItems="flex-end">
                     <FormInputField
                       name="general_raw_material_price_total_calculated"
-                      label=""
+                      hiddenLabel={true}
                       value={formatNumberToGerman(totalPriceShare)}
                       disabled
                       numeric
@@ -132,6 +132,7 @@ const RawMaterialPrices = () => {
                       name="general_raw_material_price_total_overwritten"
                       label=""
                       fallbackValue={totalPriceShare.toFixed(2)}
+                      hiddenLabel={true}
                       disabled={
                         !isFieldEditable(
                           "general_raw_material_price_total_overwritten"

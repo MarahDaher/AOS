@@ -243,6 +243,7 @@ const RawMaterialRow = ({
         />
       </TableCell>
 
+      {/* Preis - Sko [€] */}
       <TableCell>
         <Typography>
           {row._price_minus_discount != null

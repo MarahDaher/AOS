@@ -55,6 +55,7 @@ const ProcessingPerPieceCard: FC = () => {
             <FormInputSaveField
               name="calculation_processing_piece_runtime_factor"
               label="Faktor"
+              type="number"
               disabled={!isEditable}
             />
           </Grid>
@@ -71,6 +72,7 @@ const ProcessingPerPieceCard: FC = () => {
             <FormInputSaveField
               name="calculation_processing_piece_packing_time_factor"
               label="Faktor"
+              type="number"
               disabled={!isEditable}
             />
           </Grid>

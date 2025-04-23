@@ -45,6 +45,7 @@ const rows: Array<FieldConfig | null>[] = [
     {
       name: "calculation_working_annual_requirement_estimated",
       label: "Jahresbedarf (schätz) [m]",
+      numeric: true,
     },
     null,
   ],

@@ -18,11 +18,16 @@ export const mapOfferDetailsToFinalPriceData = (offerDetails: any) => {
       offerDetails._pricing_endprices_calc_confection_stk_costs || 0,
     _pricing_endprices_calc_price_additional_lfm_total:
       offerDetails._pricing_endprices_calc_price_additional_lfm_total || 0,
-    calculation_working_commission:
-      offerDetails.calculation_working_commission || 0,
-    calculation_working_profit: offerDetails.calculation_working_profit || 0,
-    calculation_working_discount:
-      offerDetails.calculation_working_discount || 0,
+
+    _calculation_working_commission_total:
+      offerDetails._calculation_working_commission_total || 0,
+
+    _calculation_working_profit_total:
+      offerDetails._calculation_working_profit_total || 0,
+
+    _calculation_working_discount_total:
+      offerDetails._calculation_working_discount_total || 0,
+
     _pricing_endprices_calc_sum: offerDetails._pricing_endprices_calc_sum || 0,
   };
 

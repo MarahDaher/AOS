@@ -15,9 +15,9 @@ const LABELS: Record<string, string> = {
   _pricing_endprices_calc_confection_lfm_costs: "Konfektion / m",
   _pricing_endprices_calc_confection_stk_costs: "Konfektion / Stk",
   _pricing_endprices_calc_price_additional_lfm_total: "Zusatz",
-  calculation_working_commission: "Provision",
-  calculation_working_profit: "Gewinn",
-  calculation_working_discount: "Zahlungsziel",
+  _calculation_working_commission_total: "Provision",
+  _calculation_working_profit_total: "Gewinn",
+  _calculation_working_discount_total: "Zahlungsziel",
 };
 
 export default function CalculationSummary({ calculation }: Props) {

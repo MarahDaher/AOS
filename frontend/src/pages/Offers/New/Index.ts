@@ -169,5 +169,13 @@ export const WorkCalculationInitialValues = Object.fromEntries(
 
 export const mapWorkCalculationInitialValues = (offerDetails: any) =>
   Object.fromEntries(
-    WorkCalculationFields.map((field) => [field, offerDetails?.[field] ?? ""])
+    WorkCalculationFields.map((field) => {
+      const value = offerDetails?.[field];
+      return [
+        field,
+        typeof value === "string" && !isNaN(Number(value))
+          ? Number(value)
+          : value ?? "",
+      ];
+    })
   );

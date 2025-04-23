@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('raw_material_id');
             $table->unsignedBigInteger('additives_id');
             $table->float('share')->default(0);
+            $table->decimal('price', 10, 2)->nullable();
 
             $table->primary(['offer_id', 'raw_material_id', 'additives_id']);
 

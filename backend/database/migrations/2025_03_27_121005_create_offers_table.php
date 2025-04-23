@@ -95,7 +95,7 @@ return new class extends Migration {
             $table->unsignedInteger('pricing_grad_qtyE_add_transport')->nullable();
 
             $table->integer('pricing_machine_utilization_annual_machine_capacity')->nullable();
-
+            // Running Card
             $table->integer('runningcard_extrusion_speed_IST')->nullable();
             $table->integer('runningcard_profile_weight_IST')->nullable();
             $table->date('runningcard_sampling_date')->nullable();

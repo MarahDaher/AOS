@@ -50,6 +50,7 @@ const ProcessingPerMeterCard: FC = () => {
             <FormInputSaveField
               name="calculation_processing_lfm_runtime_factor"
               label="Faktor"
+              type="number"
               disabled={!isEditable}
             />
           </Grid>
@@ -66,6 +67,7 @@ const ProcessingPerMeterCard: FC = () => {
             <FormInputSaveField
               name="calculation_processing_lfm_packing_time_factor"
               label="Faktor"
+              type="number"
               disabled={!isEditable}
             />
           </Grid>

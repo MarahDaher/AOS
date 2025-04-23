@@ -8,11 +8,13 @@ import { useSaveFieldMutation } from "@hooks/useSaveFieldMutation";
 interface Props extends Omit<TextFieldProps, "name" | "variant"> {
   name: string;
   fallbackValue: number | string;
+  hiddenLabel?: boolean;
 }
 
 const FormInputFallbackField: FunctionComponent<Props> = ({
   name,
   fallbackValue,
+  hiddenLabel = false,
   ...props
 }) => {
   const [field, meta] = useField(name);
@@ -79,10 +81,15 @@ const FormInputFallbackField: FunctionComponent<Props> = ({
       value={inputValue}
       onChange={handleChange}
       onBlur={handleBlur}
-      fullWidth
+      hiddenLabel={hiddenLabel}
       variant="filled"
       error={!!meta.touched && !!meta.error}
       helperText={meta.touched && meta.error}
+      sx={{
+        ".MuiInputBase-input": {
+          padding: "5px",
+        },
+      }}
       InputProps={{
         endAdornment: justSaved ? (
           <InputAdornment position="end">
