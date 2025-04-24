@@ -4,4 +4,5 @@ export interface OffersModel {
   general_customer: string;
   general_profile_description: string;
   general_creation_date: string;
+  status: string;
 }

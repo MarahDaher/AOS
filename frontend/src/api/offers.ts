@@ -82,4 +82,12 @@ export class OffersApi {
       endpoint: `offers/${offerId}/editable-fields`,
     });
   }
+
+  // Offer status
+  static async getAllOfferStatus() {
+    return await handleRequest<any[]>({
+      method: "GET",
+      endpoint: "/offer-status",
+    });
+  }
 }

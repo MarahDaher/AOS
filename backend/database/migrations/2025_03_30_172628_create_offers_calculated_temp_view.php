@@ -424,7 +424,7 @@ CREATE OR REPLACE VIEW offers_calculated_temp2 AS
     o_c.general_raw_material_purchase_discount,
     o_c.general_request_date,
     o_c.general_request_number,
-    o_c.general_status,
+    o_c.general_status_id,
     o_c.general_tool_number,
     o_c.id,
     o_c.pricing_annual_requirement,

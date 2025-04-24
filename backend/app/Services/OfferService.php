@@ -21,7 +21,7 @@ class OfferService
 
     public function getOfferById(int $id): OfferCalculated
     {
-        return OfferCalculated::with('createdByUser')->findOrFail($id);
+        return OfferCalculated::with(['createdByUser', 'status'])->findOrFail($id);
     }
 
     public function duplicateOffer(int $id)
@@ -49,6 +49,7 @@ class OfferService
         $data = [
             $field => $value,
             'general_created_by_user_id' => $userId,
+            'general_status_id' => 1,
             'general_creation_date' => now(),
         ];
 
@@ -112,6 +113,21 @@ class OfferService
             //Additives
             'dosage_percent',
             'additives_price_sum',
+
+            'pricing_grad_qtyB_add_hourlyrate',
+            'pricing_grad_qtyC_add_hourlyrate',
+            'pricing_grad_qtyD_add_hourlyrate',
+            'pricing_grad_qtyE_add_hourlyrate',
+
+            'pricing_grad_qtyB_add_setupcosts',
+            'pricing_grad_qtyC_add_setupcosts',
+            'pricing_grad_qtyD_add_setupcosts',
+            'pricing_grad_qtyE_add_setupcosts',
+
+            'pricing_grad_qtyB_add_transport',
+            'pricing_grad_qtyC_add_transport',
+            'pricing_grad_qtyD_add_transport',
+            'pricing_grad_qtyE_add_transport',
 
         ];
 

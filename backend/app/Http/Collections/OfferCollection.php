@@ -18,6 +18,7 @@ class OfferCollection extends ResourceCollection
                 'general_creation_date' => $offer->general_creation_date
                     ? $offer->general_creation_date->format('d.m.Y')
                     : null,
+                'status' => $offer->status?->name
             ];
         })->toArray();
     }

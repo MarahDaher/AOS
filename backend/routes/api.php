@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\OfferController;
 use App\Http\Controllers\Api\OfferDrawingController;
 use App\Http\Controllers\Api\OfferExportController;
 use App\Http\Controllers\Api\OfferRawMaterialCalculatedController;
+use App\Http\Controllers\Api\OfferStatusController;
 use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\RawMaterialController;
 use App\Http\Controllers\Api\UserController;
@@ -62,6 +63,7 @@ Route::middleware(['auth:api'])->group(function () {
     });
 
     Route::post('offer-raw-materials', [OfferRawMaterialCalculatedController::class, 'store'])->middleware('check.permission:' . PermissionConstants::CREATE_OFFER_RAW_MATERIAL);;
+    Route::get('offer-status', [OfferStatusController::class, 'index']);
 
     // Raw Materials
     Route::prefix('raw-materials')->group(function () {

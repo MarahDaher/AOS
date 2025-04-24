@@ -1,3 +1,4 @@
+import FormInputSaveField from "@components/FormInputSaveField";
 import {
   Table,
   TableHead,
@@ -28,9 +29,13 @@ interface StaffelPriceRow {
 
 interface Props {
   data: StaffelPriceRow[];
+  isEditable: boolean;
 }
 
-export default function TieredPriceCalculationTable({ data }: Props) {
+export default function TieredPriceCalculationTable({
+  data,
+  isEditable,
+}: Props) {
   return (
     <TableContainer component={Paper}>
       <Table
@@ -71,9 +76,20 @@ export default function TieredPriceCalculationTable({ data }: Props) {
               </TableCell>
 
               <TableCell>
-                {row.AufschlagStundensatz != null
-                  ? `${formatNumber(row.AufschlagStundensatz)} %`
-                  : "-"}
+                {row.staffel !== "A" && isEditable ? (
+                  <FormInputSaveField
+                    variant={"standard"}
+                    name={`pricing_grad_qty${row.staffel}_add_hourlyrate`}
+                    fullWidth
+                    hiddenLabel={true}
+                    alignText="right"
+                    numeric
+                  />
+                ) : row.AufschlagStundensatz != null ? (
+                  `${formatNumber(row.AufschlagStundensatz)} %`
+                ) : (
+                  "-"
+                )}
               </TableCell>
               <TableCell>{formatCurrency(row.Stundensatz)}</TableCell>
 
@@ -82,8 +98,41 @@ export default function TieredPriceCalculationTable({ data }: Props) {
                   ? `${formatNumber(row.Zeitkostenanteil)} %`
                   : "-"}
               </TableCell>
-              <TableCell>{formatCurrency(row.Rüstkosten)}</TableCell>
-              <TableCell>{formatCurrency(row.Transport)}</TableCell>
+
+              <TableCell>
+                {row.staffel !== "A" && isEditable ? (
+                  <FormInputSaveField
+                    name={`pricing_grad_qty${row.staffel}_add_setupcosts`}
+                    variant={"standard"}
+                    fullWidth
+                    hiddenLabel={true}
+                    alignText="right"
+                    numeric
+                  />
+                ) : row.Rüstkosten != null ? (
+                  `${formatCurrency(row.Rüstkosten)}`
+                ) : (
+                  "-"
+                )}
+              </TableCell>
+
+              <TableCell>
+                {row.staffel !== "A" && isEditable ? (
+                  <FormInputSaveField
+                    name={`pricing_grad_qty${row.staffel}_add_transport`}
+                    fullWidth
+                    variant={"standard"}
+                    hiddenLabel={true}
+                    alignText="right"
+                    numeric
+                  />
+                ) : row.Transport != null ? (
+                  `${formatCurrency(row.Transport)}`
+                ) : (
+                  "-"
+                )}
+              </TableCell>
+
               <TableCell>
                 {row.Produktionszeit != null
                   ? `${formatNumber(row.Produktionszeit, {

@@ -5,6 +5,8 @@ export type Column<T> = {
 };
 export const OfferColumns: Column<OffersModel>[] = [
   { label: "Angebotsnummer", render: (row) => row.general_offer_number },
+  { label: "Status", render: (row) => row.status },
+
   { label: "Auftraggeber", render: (row) => row.general_customer },
   {
     label: "Profilbezeichnung",

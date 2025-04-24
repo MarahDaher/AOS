@@ -10,9 +10,13 @@ class OfferSeeder extends Seeder
 {
     public function run(): void
     {
+
+        $statusIds = DB::table('offer_status')
+            ->pluck('id', 'name');
+
         DB::table('offers')->insert([
             [
-                'general_status' => 'Angebot',
+                'general_status_id' => $statusIds['Angebot'],
                 'general_offer_number' => 'OF12345',
                 'general_profile_description' => 101,
                 'general_creation_date' => '2025-04-08 09:00:00',
@@ -32,7 +36,7 @@ class OfferSeeder extends Seeder
                 'general_raw_material_price_total_overwritten' => 150.00
             ],
             [
-                'general_status' => 'Auftrag',
+                'general_status_id' => $statusIds['Auftrag'],
                 'general_offer_number' => 'OF12346',
                 'general_profile_description' => 102,
                 'general_creation_date' => '2025-04-08 10:00:00',
@@ -52,7 +56,7 @@ class OfferSeeder extends Seeder
                 'general_raw_material_price_total_overwritten' => 160.00
             ],
             [
-                'general_status' => 'Produziert',
+                'general_status_id' => $statusIds['Produziert'],
                 'general_offer_number' => 'OF12347',
                 'general_profile_description' => 103,
                 'general_creation_date' => '2025-04-08 11:00:00',

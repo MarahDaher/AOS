@@ -43,7 +43,7 @@ export const mapStaffelPricedataFromOffer = (offer: any): StaffelPriceRow[] => {
       Zwischensumme2:
         offer[`_pricing_graduated_calculation_subtotal2_quantity${suffix}`],
       Zwischensumme2m:
-        offer[`_pricing_graduated_calc_subtotal_lfm_qty${suffix}`],
+        offer[`_pricing_graduated_calculation_subtotal_lfm_quantity${suffix}`],
     };
   });
 };

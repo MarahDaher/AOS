@@ -9,11 +9,11 @@ class Offer extends Model
 {
     use HasFactory;
 
-    public $timestamps = false; // ✅ لازم لأنه مافي created_at ولا updated_at
+    public $timestamps = false;
 
     protected $fillable = [
         // 🧹 General Info
-        'general_status',
+        'general_status_id',
         'general_offer_number',
         'general_profile_description',
         'general_creation_date',
@@ -86,6 +86,7 @@ class Offer extends Model
         'pricing_graduated_calculation_additional_setup_quantity',
         'pricing_costs_calc_price_additional_lfm',
 
+        'pricing_grad_qtyA_add_hourlyrate',
         'pricing_grad_qtyB_add_hourlyrate',
         'pricing_grad_qtyC_add_hourlyrate',
         'pricing_grad_qtyD_add_hourlyrate',
@@ -152,5 +153,10 @@ class Offer extends Model
     public function createdByUser()
     {
         return $this->belongsTo(User::class, 'general_created_by_user_id');
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(OfferStatus::class, 'general_status_id');
     }
 }

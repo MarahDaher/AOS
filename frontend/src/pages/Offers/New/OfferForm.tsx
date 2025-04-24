@@ -56,6 +56,8 @@ const OfferForm: FunctionComponent<OfferFormProps> = () => {
     return saved !== null ? Number(saved) : 0;
   });
 
+  const isNew = !id;
+
   const formik = useFormik({
     initialValues,
     onSubmit: () => {},
@@ -77,7 +79,12 @@ const OfferForm: FunctionComponent<OfferFormProps> = () => {
   };
 
   useEffect(() => {
-    loadOffer();
+    if (!isNew) {
+      loadOffer();
+    } else {
+      resetOffer();
+    }
+
     return () => localStorage.removeItem("offer_form_selected_tab");
   }, [id]);
 

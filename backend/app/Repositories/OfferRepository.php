@@ -14,7 +14,9 @@ class OfferRepository
             'general_customer',
             'general_profile_description',
             'general_creation_date',
-        ])->get();
+            'general_status_id'
+        ])->with('status')
+            ->get();
     }
 
     public function getOfferById(int $id): Offer

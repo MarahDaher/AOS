@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             RolePermissionSeeder::class,
             AdminSeeder::class,
             // OfferRawMaterialSeeder::class,
+            OfferStatusSeeder::class,
             OfferSeeder::class,
             RawMaterialSeeder::class,
             OfferRawMaterialSeeder::class,

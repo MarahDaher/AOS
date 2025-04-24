@@ -3,12 +3,13 @@ import FormInputSaveField from "@components/FormInputSaveField";
 import FormSelectSaveField from "@components/FormSelectSaveField";
 import Grid from "@mui/material/Grid2";
 import { CARD_HEIGHT } from "@utils/constantValue";
-import { DeliveryTypeLabels, GeneralStatusLabels } from "@enums/GeneralEnums";
+import { DeliveryTypeLabels } from "@enums/GeneralEnums";
 import { FormikProvider, useFormik } from "formik";
-import { FunctionComponent, useEffect } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import { OfferCardInitialValues } from "../../Index";
 import { useEditableFields } from "@hooks/useEditableFields";
 import { useOfferContext } from "@contexts/OfferProvider";
+import { OffersApi } from "@api/offers";
 
 const OfferCard: FunctionComponent = () => {
   // Hooks
@@ -17,13 +18,37 @@ const OfferCard: FunctionComponent = () => {
   const { data: editableFields = [], refetch: refetchEditableFields } =
     useEditableFields(offerId!);
 
-  const isFieldEditable = (fieldName: string) =>
-    editableFields.includes(fieldName);
+  const isCreateMode = !offerId;
+
+  const isFieldEditable = (fieldName: string) => {
+    return isCreateMode
+      ? fieldName === "general_offer_number"
+      : editableFields.includes(fieldName);
+  };
 
   // Dropdowns
-  const statusOptions = Object.entries(GeneralStatusLabels).map(
-    ([value, label]) => ({ value, label })
-  );
+  const [statusOptions, setStatusOptions] = useState<
+    { value: number; label: string }[]
+  >([]);
+
+  const fetchStatusOptions = async () => {
+    try {
+      const res = await OffersApi.getAllOfferStatus();
+      if (res) {
+        const options = res.map((status: any) => ({
+          value: status.id,
+          label: status.name,
+        }));
+        setStatusOptions(options);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchStatusOptions();
+  }, []);
 
   const deliveryOptions = Object.entries(DeliveryTypeLabels).map(
     ([value, label]) => ({ value, label })
@@ -31,7 +56,7 @@ const OfferCard: FunctionComponent = () => {
 
   const mapOfferToOfferCardInitialValues = (offer: any) => ({
     general_offer_number: offer.general_offer_number ?? "",
-    general_status: offer.general_status ?? "",
+    general_status_id: offer.general_status_id ?? "",
     general_profile_crosssection: offer.general_profile_crosssection ?? "",
 
     general_profile_description: offer.general_profile_description ?? "",
@@ -99,7 +124,7 @@ const OfferCard: FunctionComponent = () => {
 
           <Grid size={{ xs: 4, md: 4 }}>
             <FormSelectSaveField
-              name="general_status"
+              name="general_status_id"
               label="Status"
               disabled={!isFieldEditable("general_status")}
               options={statusOptions}

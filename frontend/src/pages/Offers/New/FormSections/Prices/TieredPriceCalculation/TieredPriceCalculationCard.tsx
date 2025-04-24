@@ -7,6 +7,24 @@ import { useOfferContext } from "@contexts/OfferProvider";
 import { mapStaffelPricedataFromOffer } from ".";
 import { usePermissions } from "@hooks/usePermissions";
 
+export interface TieredPriceFormValues {
+  pricing_graduated_calculation_additional_setup_quantity: string;
+  pricing_grad_qtyB_add_hourlyrate: string;
+  pricing_grad_qtyC_add_hourlyrate: string;
+  pricing_grad_qtyD_add_hourlyrate: string;
+  pricing_grad_qtyE_add_hourlyrate: string;
+
+  pricing_grad_qtyB_add_setupcosts: string;
+  pricing_grad_qtyC_add_setupcosts: string;
+  pricing_grad_qtyD_add_setupcosts: string;
+  pricing_grad_qtyE_add_setupcosts: string;
+
+  pricing_grad_qtyB_add_transport: string;
+  pricing_grad_qtyC_add_transport: string;
+  pricing_grad_qtyD_add_transport: string;
+  pricing_grad_qtyE_add_transport: string;
+}
+
 const TieredPriceCalculationCard = () => {
   const { offerDetails } = useOfferContext();
   // Permissions
@@ -17,11 +35,37 @@ const TieredPriceCalculationCard = () => {
     ? mapStaffelPricedataFromOffer(offerDetails)
     : [];
 
-  const formik = useFormik({
+  const formik = useFormik<TieredPriceFormValues>({
     initialValues: {
       pricing_graduated_calculation_additional_setup_quantity:
         offerDetails?.pricing_graduated_calculation_additional_setup_quantity ??
         "",
+      pricing_grad_qtyB_add_hourlyrate:
+        offerDetails?.pricing_grad_qtyB_add_hourlyrate ?? "",
+      pricing_grad_qtyC_add_hourlyrate:
+        offerDetails?.pricing_grad_qtyC_add_hourlyrate ?? "",
+      pricing_grad_qtyD_add_hourlyrate:
+        offerDetails?.pricing_grad_qtyD_add_hourlyrate ?? "",
+      pricing_grad_qtyE_add_hourlyrate:
+        offerDetails?.pricing_grad_qtyE_add_hourlyrate ?? "",
+
+      pricing_grad_qtyB_add_setupcosts:
+        offerDetails?.pricing_grad_qtyB_add_setupcosts ?? "",
+      pricing_grad_qtyC_add_setupcosts:
+        offerDetails?.pricing_grad_qtyC_add_setupcosts ?? "",
+      pricing_grad_qtyD_add_setupcosts:
+        offerDetails?.pricing_grad_qtyD_add_setupcosts ?? "",
+      pricing_grad_qtyE_add_setupcosts:
+        offerDetails?.pricing_grad_qtyE_add_setupcosts ?? "",
+
+      pricing_grad_qtyB_add_transport:
+        offerDetails?.pricing_grad_qtyB_add_transport ?? "",
+      pricing_grad_qtyC_add_transport:
+        offerDetails?.pricing_grad_qtyC_add_transport ?? "",
+      pricing_grad_qtyD_add_transport:
+        offerDetails?.pricing_grad_qtyD_add_transport ?? "",
+      pricing_grad_qtyE_add_transport:
+        offerDetails?.pricing_grad_qtyE_add_transport ?? "",
     },
     enableReinitialize: true,
     onSubmit: () => {},
@@ -29,22 +73,25 @@ const TieredPriceCalculationCard = () => {
 
   return (
     <>
-      <CardBox label="Staffelpreisberechnung">
-        <Grid container spacing={5} display="flex" justifyContent="end">
-          <Grid size={{ xs: 12, md: 2 }}>
-            <FormikProvider value={formik}>
+      <FormikProvider value={formik}>
+        <CardBox label="Staffelpreisberechnung">
+          <Grid container spacing={5} display="flex" justifyContent="end">
+            <Grid size={{ xs: 12, md: 2 }}>
               <FormInputSaveField
                 name="pricing_graduated_calculation_additional_setup_quantity"
                 label="zus. Einstellmenge [%]"
                 disabled={!isEditable}
               />
-            </FormikProvider>
+            </Grid>
+            <Grid size={{ xs: 12, md: 12 }}>
+              <TieredPriceCalculationTable
+                data={mappedData}
+                isEditable={isEditable}
+              />
+            </Grid>
           </Grid>
-          <Grid size={{ xs: 12, md: 12 }}>
-            <TieredPriceCalculationTable data={mappedData} />
-          </Grid>
-        </Grid>
-      </CardBox>
+        </CardBox>
+      </FormikProvider>
     </>
   );
 };

@@ -19,6 +19,11 @@ class OfferCalculated extends Model
         return $this->belongsTo(User::class, 'general_created_by_user_id');
     }
 
+    public function status()
+    {
+        return $this->belongsTo(OfferStatus::class, 'general_status_id');
+    }
+
     /**
      * List of fields that are allowed to be updated individually.
      */
@@ -27,7 +32,7 @@ class OfferCalculated extends Model
         return [
             // General
             'general_offer_number',
-            'general_status',
+            'general_status_id',
             'general_profile_description',
             'general_color',
             'general_packaging',
@@ -113,6 +118,7 @@ class OfferCalculated extends Model
             // 'calculation_working_setup_quantity_additional',
 
             // Pricing Graduated Additions
+            'pricing_grad_qtyA_add_hourlyrate',
             'pricing_grad_qtyB_add_hourlyrate',
             'pricing_grad_qtyC_add_hourlyrate',
             'pricing_grad_qtyD_add_hourlyrate',

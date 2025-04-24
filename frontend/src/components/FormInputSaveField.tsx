@@ -9,12 +9,16 @@ import {
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useSaveFieldMutation } from "@hooks/useSaveFieldMutation";
 import { parseGermanNumber, formatNumberToGerman } from "@utils/formatNumbers";
+import { useNavigate } from "react-router-dom";
 
-interface FormInputFieldProps extends Omit<TextFieldProps, "name" | "variant"> {
+interface FormInputFieldProps extends Omit<TextFieldProps, "name"> {
   name: string;
   required?: boolean;
   numeric?: boolean;
   onSaved?: () => void;
+  hiddenLabel?: boolean;
+  variant?: "standard" | "outlined" | "filled";
+  alignText?: string;
 }
 
 const FormInputSaveField: FunctionComponent<FormInputFieldProps> = ({
@@ -23,6 +27,9 @@ const FormInputSaveField: FunctionComponent<FormInputFieldProps> = ({
   required = false,
   disabled = false,
   numeric = false,
+  hiddenLabel = false,
+  variant = "filled",
+  alignText,
   onSaved,
   ...props
 }) => {
@@ -30,8 +37,9 @@ const FormInputSaveField: FunctionComponent<FormInputFieldProps> = ({
   const { setFieldValue } = useFormikContext();
   const [justSaved, setJustSaved] = useState(false);
   const [inputValue, setInputValue] = useState(field.value || "");
+  const navigate = useNavigate();
 
-  const mutation = useSaveFieldMutation();
+  const mutation = useSaveFieldMutation(navigate);
 
   useEffect(() => {
     // Update visible input based on formik value
@@ -93,10 +101,11 @@ const FormInputSaveField: FunctionComponent<FormInputFieldProps> = ({
         fullWidth
         type={type}
         required={required}
+        hiddenLabel={hiddenLabel}
         disabled={disabled}
         error={!!meta.touched && !!meta.error}
         helperText={meta.touched && meta.error ? meta.error : undefined}
-        variant="filled"
+        variant={variant}
         InputProps={{
           endAdornment: justSaved ? (
             <InputAdornment position="end">
@@ -107,6 +116,10 @@ const FormInputSaveField: FunctionComponent<FormInputFieldProps> = ({
         sx={{
           "& .MuiInputLabel-root.Mui-disabled": {
             color: "black",
+          },
+          ".MuiInputBase-input": {
+            padding: hiddenLabel ? "5px" : null,
+            textAlign: alignText ? "left" : null,
           },
         }}
       />
