@@ -110,7 +110,7 @@ class OfferCalculated extends Model
             'calculation_working_commission',
             'calculation_working_profit',
             'calculation_working_discount',
-            'calculation_working_setup_quantity_additional',
+            // 'calculation_working_setup_quantity_additional',
 
             // Pricing Graduated Additions
             'pricing_grad_qtyB_add_hourlyrate',
@@ -359,7 +359,12 @@ class OfferCalculated extends Model
             "_calculation_working_discount_profit_commssion_total",
             "_pricing_endprices_calc_sum_lfm",
             "_pricing_endprices_calc_sum",
-            ""
+
+            "_pricing_graduated_calculation_subtotal2_quantityA",
+            "_pricing_graduated_calculation_subtotal2_quantityB",
+            "_pricing_graduated_calculation_subtotal2_quantityC",
+            "_pricing_graduated_calculation_subtotal2_quantityD",
+            "_pricing_graduated_calculation_subtotal2_quantityE",
 
 
 
