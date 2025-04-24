@@ -7,7 +7,7 @@ import {
   TableContainer,
   Paper,
 } from "@mui/material";
-import { formatCurrency, formatNumber } from "@utils/formatNumbers";
+import { formatCurrency } from "@utils/formatNumbers";
 
 export interface PieceLengthPriceRow {
   menge: number;
@@ -29,25 +29,23 @@ export default function PieceLengthPricesTable({ data }: Props) {
         size="small"
         sx={{
           "& td, & th": { textAlign: "right" },
-          "& td:first-of-type, & th:first-of-type": { textAlign: "left" },
+          "& td:first-of-type, & th:first-of-type": { textAlign: "right" },
         }}
       >
         <TableHead>
           <TableRow>
-            <TableCell>Menge</TableCell>
-            <TableCell>Staffel / m</TableCell>
-            <TableCell>Länge 625mm</TableCell>
-            <TableCell>Länge 1.000mm</TableCell>
-            <TableCell>Länge 1.250mm</TableCell>
-            <TableCell>Länge 1.333mm</TableCell>
+            <TableCell width={125}>Menge</TableCell>
+            <TableCell width={125}>Staffel / m</TableCell>
+            <TableCell width={125}>Länge 625mm</TableCell>
+            <TableCell width={125}>Länge 1.000mm</TableCell>
+            <TableCell width={125}>Länge 1.250mm</TableCell>
+            <TableCell width={125}>Länge 1.333mm</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {data.map((row, idx) => (
             <TableRow key={idx}>
-              <TableCell>
-                {row.menge != null ? `${formatNumber(row.menge)}` : "-"}m
-              </TableCell>
+              <TableCell>{row.menge != null ? `${row.menge}` : "-"}m</TableCell>
               <TableCell>{formatCurrency(row.staffelM)}</TableCell>
               <TableCell>{formatCurrency(row.length625mm)} / stk</TableCell>
               <TableCell>{formatCurrency(row.length1000mm)} / stk</TableCell>

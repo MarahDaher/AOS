@@ -119,7 +119,7 @@ const FormInputSaveField: FunctionComponent<FormInputFieldProps> = ({
           },
           ".MuiInputBase-input": {
             padding: hiddenLabel ? "5px" : null,
-            textAlign: alignText ? "left" : null,
+            textAlign: alignText ? alignText : null,
           },
         }}
       />

@@ -20,7 +20,8 @@ const MachineUtilizationCard = () => {
 
   const formik = useFormik({
     initialValues: {
-      pricing_machine_utilization_annual_machine_capacity: 0,
+      pricing_machine_utilization_annual_machine_capacity:
+        offerDetails?.pricing_machine_utilization_annual_machine_capacity ?? "",
     },
     onSubmit: () => {},
   });

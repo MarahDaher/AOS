@@ -21,17 +21,17 @@ export default function MachineUtilizationTable({ data }: Props) {
           size="small"
           sx={{
             "& td, & th": { textAlign: "right" },
-            "& td:first-of-type, & th:first-of-type": { textAlign: "left" },
+            "& td:first-of-type, & th:first-of-type": { textAlign: "right" },
           }}
         >
           <TableHead>
             <TableRow>
-              <TableCell></TableCell>
-              <TableCell>Stunden</TableCell>
-              <TableCell>Tage</TableCell>
-              <TableCell>Wochen à 5 Tage</TableCell>
-              <TableCell>Monate</TableCell>
-              <TableCell>Maschine / Jahr</TableCell>
+              <TableCell width={125}></TableCell>
+              <TableCell width={125}>Stunden</TableCell>
+              <TableCell width={125}>Tage</TableCell>
+              <TableCell width={125}>Wochen à 5 Tage</TableCell>
+              <TableCell width={125}>Monate</TableCell>
+              <TableCell width={125}>Maschine / Jahr</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
