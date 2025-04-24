@@ -154,7 +154,7 @@ export const WorkCalculationFields = [
   "_calculation_working_profile_weight_average",
   "_calculation_working_profile_weight_upperborder",
 
-  "calculation_working_setup_quantity_additional",
+  // "calculation_working_setup_quantity_additional",
   "calculation_working_hourly_rate",
   "calculation_working_additional_costs",
 

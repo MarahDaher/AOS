@@ -41,9 +41,7 @@ export const mapOfferDetailsToFinalPriceData = (offerDetails: any) => {
       staffel_stk:
         offerDetails._pricing_endprices_graduated_without_confection_stk_quantityA ||
         0,
-      stueck:
-        offerDetails._pricing_endprices_graduated_with_confection_stk_quantityA ||
-        0,
+      stueck: offerDetails._pricing_endprices_graduated_pieces_quantityA || 0,
     },
     {
       staffel: "B",
@@ -54,9 +52,7 @@ export const mapOfferDetailsToFinalPriceData = (offerDetails: any) => {
       staffel_stk:
         offerDetails._pricing_endprices_graduated_without_confection_stk_quantityB ||
         0,
-      stueck:
-        offerDetails._pricing_endprices_graduated_with_confection_stk_quantityB ||
-        0,
+      stueck: offerDetails._pricing_endprices_graduated_pieces_quantityB || 0,
     },
     {
       staffel: "C",
@@ -67,9 +63,7 @@ export const mapOfferDetailsToFinalPriceData = (offerDetails: any) => {
       staffel_stk:
         offerDetails._pricing_endprices_graduated_without_confection_stk_quantityC ||
         0,
-      stueck:
-        offerDetails._pricing_endprices_graduated_with_confection_stk_quantityC ||
-        0,
+      stueck: offerDetails._pricing_endprices_graduated_pieces_quantityC || 0,
     },
     {
       staffel: "D",
@@ -80,9 +74,7 @@ export const mapOfferDetailsToFinalPriceData = (offerDetails: any) => {
       staffel_stk:
         offerDetails._pricing_endprices_graduated_without_confection_stk_quantityD ||
         0,
-      stueck:
-        offerDetails._pricing_endprices_graduated_with_confection_stk_quantityD ||
-        0,
+      stueck: offerDetails._pricing_endprices_graduated_pieces_quantityD || 0,
     },
     {
       staffel: "E",
@@ -93,9 +85,7 @@ export const mapOfferDetailsToFinalPriceData = (offerDetails: any) => {
       staffel_stk:
         offerDetails._pricing_endprices_graduated_without_confection_stk_quantityE ||
         0,
-      stueck:
-        offerDetails._pricing_endprices_graduated_with_confection_stk_quantityE ||
-        0,
+      stueck: offerDetails._pricing_endprices_graduated_pieces_quantityE || 0,
     },
   ];
 

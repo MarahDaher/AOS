@@ -22,7 +22,7 @@ const CalculationTab: FunctionComponent<CalculationTabProps> = () => {
           <Grid container spacing={1}>
             {/* Row 1 */}
             <Grid size={{ xs: 12, md: 12 }}>
-              <Grid container spacing={isMdUp ? 10 : 2}>
+              <Grid container spacing={isMdUp ? 8 : 2}>
                 <Grid size={{ xs: 12, md: 4 }}>
                   <QuantityStepsCard />
                 </Grid>

@@ -48,7 +48,7 @@ export const useAdditiveModal = (
     const priceMap: Record<number, string> = {};
     const shareMap: Record<number, string> = {};
 
-    initialValues.additives.forEach((item, i) => {
+    (initialValues.additives ?? []).forEach((item, i) => {
       priceMap[i] = item.price ? formatNumberToGerman(item.price) : "";
       shareMap[i] = item.share ? formatNumberToGerman(item.share) : "";
     });

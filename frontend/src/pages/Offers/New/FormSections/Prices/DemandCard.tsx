@@ -14,19 +14,10 @@ const DemandCard: FC = () => {
 
   const formik = useFormik({
     initialValues: {
-      ...{
-        calculation_working_annual_requirement_estimated: "",
-        _pricing_requirement_annual_sales: "",
-      },
-      ...(offerDetails
-        ? {
-            calculation_working_annual_requirement_estimated:
-              offerDetails.calculation_working_annual_requirement_estimated ??
-              0,
-            _pricing_requirement_annual_sales:
-              offerDetails._pricing_requirement_annual_sales ?? "",
-          }
-        : {}),
+      calculation_working_annual_requirement_estimated:
+        offerDetails.calculation_working_annual_requirement_estimated ?? "",
+      _pricing_requirement_annual_sales:
+        offerDetails._pricing_requirement_annual_sales ?? "",
     },
 
     enableReinitialize: true,
@@ -41,7 +32,6 @@ const DemandCard: FC = () => {
             <FormInputSaveField
               name="calculation_working_annual_requirement_estimated"
               label="Jahresbedarf, geschätzt [m]"
-              type="number"
               numeric
               disabled={!isEditable}
             />

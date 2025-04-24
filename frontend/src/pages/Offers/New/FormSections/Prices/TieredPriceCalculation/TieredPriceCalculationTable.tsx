@@ -11,16 +11,19 @@ import { formatNumber, formatCurrency } from "@utils/formatNumbers";
 
 interface StaffelPriceRow {
   staffel: string;
-  menge?: number;
-  hourlyRateAddition?: number;
-  hourlyRate?: number;
-  timeCostShare?: number;
-  setupCosts?: number;
-  transport?: number;
-  productionTime?: number;
-  rawMaterialQuantity?: number;
-  subtotal?: number;
-  subtotalM?: number;
+  Menge?: number;
+  AufschlagStundensatz?: number;
+  Stundensatz?: number;
+  Zeitkostenanteil?: number;
+  Rüstkosten?: number;
+  Transport?: number;
+  Produktionszeit?: number;
+  Rohstoffmenge?: number;
+  Zwischensumme?: number;
+  Zeitkosten?: number;
+  Rohstoffpreis?: number;
+  Zwischensumme2?: number;
+  Zwischensumme2m?: number;
 }
 
 interface Props {
@@ -53,7 +56,10 @@ export default function TieredPriceCalculationTable({ data }: Props) {
             <TableCell>Produktionszeit</TableCell>
             <TableCell>Rohstoffmenge</TableCell>
             <TableCell>Zwischensumme</TableCell>
-            <TableCell>Zwischensumme / m</TableCell>
+            <TableCell>Zeitkosten</TableCell>
+            <TableCell>Rohstoffpreis</TableCell>
+            <TableCell>Zwischensumme 2</TableCell>
+            <TableCell>Zwischensumme 2 / m</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -61,32 +67,38 @@ export default function TieredPriceCalculationTable({ data }: Props) {
             <TableRow key={idx}>
               <TableCell>{row.staffel}</TableCell>
               <TableCell>
-                {row.menge != null ? `${formatNumber(row.menge)}` : "-"}
+                {row.Menge != null ? `${formatNumber(row.Menge)}` : "-"}
               </TableCell>
+
               <TableCell>
-                {row.hourlyRateAddition != null
-                  ? `${formatNumber(row.hourlyRateAddition)} %`
+                {row.AufschlagStundensatz != null
+                  ? `${formatNumber(row.AufschlagStundensatz)} %`
                   : "-"}
               </TableCell>
-              <TableCell>{formatCurrency(row.hourlyRate)}</TableCell>
+              <TableCell>{formatCurrency(row.Stundensatz)}</TableCell>
+
               <TableCell>
-                {row.timeCostShare != null
-                  ? `${formatNumber(row.timeCostShare)} %`
+                {row.Zeitkostenanteil != null
+                  ? `${formatNumber(row.Zeitkostenanteil)} %`
                   : "-"}
               </TableCell>
-              <TableCell>{formatCurrency(row.setupCosts)}</TableCell>
-              <TableCell>{formatCurrency(row.transport)}</TableCell>
+              <TableCell>{formatCurrency(row.Rüstkosten)}</TableCell>
+              <TableCell>{formatCurrency(row.Transport)}</TableCell>
               <TableCell>
-                {row.productionTime != null
-                  ? `${formatNumber(row.productionTime, {
+                {row.Produktionszeit != null
+                  ? `${formatNumber(row.Produktionszeit, {
                       minimumFractionDigits: 1,
                       maximumFractionDigits: 1,
                     })} h`
                   : "-"}
               </TableCell>
-              <TableCell>{formatNumber(row.rawMaterialQuantity)} kg</TableCell>
-              <TableCell>{formatCurrency(row.subtotal)}</TableCell>
-              <TableCell>{formatCurrency(row.subtotalM)}</TableCell>
+              <TableCell>{formatNumber(row.Rohstoffmenge)} kg</TableCell>
+              <TableCell>{formatCurrency(row.Zwischensumme)}</TableCell>
+              <TableCell>{formatCurrency(row.Zeitkosten)}</TableCell>
+              <TableCell>{formatCurrency(row.Rohstoffpreis)}</TableCell>
+              <TableCell>{formatCurrency(row.Zwischensumme2)}</TableCell>
+
+              <TableCell>{formatCurrency(row.Zwischensumme2m)}</TableCell>
             </TableRow>
           ))}
         </TableBody>

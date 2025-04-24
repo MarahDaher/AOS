@@ -101,10 +101,10 @@ const rows: Array<FieldConfig | null>[] = [
     null,
   ],
   [
-    {
-      name: "calculation_working_setup_quantity_additional",
-      label: "Einstellmenge Zusatz [%]",
-    },
+    // {
+    //   name: "calculation_working_setup_quantity_additional",
+    //   label: "Einstellmenge Zusatz [%]",
+    // },
     { name: "calculation_working_hourly_rate", label: "Stundensatz [€]" },
     {
       name: "calculation_working_additional_costs",
