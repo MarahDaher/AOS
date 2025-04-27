@@ -2,6 +2,19 @@
 
 ---
 
+## 📚 Overview
+
+-   [Project Setup](#-project-setup)
+-   [Artisan Useful Commands](#⚡️-artisan-useful-commands)
+-   [Roles and Permissions](#-roles-and-permissions)
+-   [Offer Statuses Management](#-offer-statuses-management)
+-   [Offer Deletion Policy](#-offer-deletion-policy)
+-   [API Overview](#-api-overview)
+-   [Folder Structure](#-folder-structure)
+-   [Default Users](#-default-users)
+
+---
+
 ## 🛠 Project Setup
 
 1. Clone the repository.
@@ -35,10 +48,10 @@ php artisan serve
 
 ---
 
-## ⚙️ Artisan Useful Commands
+## ⚡️ Artisan Useful Commands
 
 | Command                           | Purpose                              |
-| :-------------------------------- | :----------------------------------- |
+| --------------------------------- | ------------------------------------ |
 | `php artisan migrate --seed`      | Fresh migrate and seed database      |
 | `php artisan sync:offer-statuses` | Sync offer statuses from config file |
 | `php artisan cache:clear`         | Clear application cache              |
@@ -85,16 +98,16 @@ No manual database changes needed anymore! 🚀
 
 ## ❌ Offer Deletion Policy
 
-    1. Never hard delete an offer from the database.
+-   **Never hard delete** an offer from the database.
+-   Instead, set the `general_status_id` to the "Gelöscht" (Deleted) status.
+-   This ensures that the offer remains archived and traceable.
 
-    2. Instead, set the general_status_id to the "Gelöscht" (Deleted) status.
-
-    3. This ensures that the offer remains archived and traceable.
+---
 
 ## 📚 API Overview
 
 | API Group       | Description                                                   |
-| :-------------- | :------------------------------------------------------------ |
+| --------------- | ------------------------------------------------------------- |
 | `Auth`          | Login, Get Me, Get User Permissions                           |
 | `Users`         | CRUD operations on users                                      |
 | `Roles`         | View roles and their details                                  |
@@ -105,10 +118,10 @@ No manual database changes needed anymore! 🚀
 
 ---
 
-## 🧩 Folder Structure
+## 🧰 Folder Structure
 
 | Folder      | Purpose                                   |
-| :---------- | :---------------------------------------- |
+| ----------- | ----------------------------------------- |
 | `app/`      | Core logic: controllers, models, services |
 | `routes/`   | API and Web routes                        |
 | `config/`   | Project configuration                     |
@@ -120,11 +133,11 @@ No manual database changes needed anymore! 🚀
 
 ## 👤 Default Users
 
-| Role       | Email              | Password |
-| :--------- | :----------------- | :------- |
-| Admin      | admin@aos.com      | 123123   |
-| Sales      | sales@aos.com      | 123123   |
-| Production | production@aos.com | 123123   |
+| Role       | Email                                           | Password |
+| ---------- | ----------------------------------------------- | -------- |
+| Admin      | [admin@aos.com](mailto:admin@aos.com)           | 123123   |
+| Sales      | [sales@aos.com](mailto:sales@aos.com)           | 123123   |
+| Production | [production@aos.com](mailto:production@aos.com) | 123123   |
 
 ---
 
