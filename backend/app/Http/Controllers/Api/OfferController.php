@@ -7,6 +7,7 @@ use App\Http\Collections\OfferCollection;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\Offer\UpdateOfferFieldRequest;
 use App\Models\Offer;
+use App\Models\OfferStatus;
 use App\Services\OfferService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -98,12 +99,24 @@ class OfferController extends BaseController
 
     public function destroy($id)
     {
-        $offer = Offer::findOrFail($id);
-        $offer->general_status = 'Gelöscht';
-        $offer->save();
+        try {
+            $offer = Offer::findOrFail($id);
 
-        return response()->json(['message' => 'Angebot als gelöscht markiert']);
+            $deletedStatus = OfferStatus::where('name', 'Gelöscht')->first();
+
+            if (!$deletedStatus) {
+                return ApiResponse::error('Status "Gelöscht" nicht gefunden', 404);
+            }
+
+            $offer->general_status_id = $deletedStatus->id;
+            $offer->save();
+
+            return ApiResponse::success(null, 'Angebot als gelöscht markiert');
+        } catch (\Exception $e) {
+            return ApiResponse::error('Fehler beim Löschen des Angebots: ' . $e->getMessage(), 400);
+        }
     }
+
 
 
     public function getEditableFields(int $id)

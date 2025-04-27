@@ -90,4 +90,12 @@ export class OffersApi {
       endpoint: "/offer-status",
     });
   }
+
+  // Delete Offer
+  static async deleteOffer(offerId: number) {
+    return await handleRequest<any>({
+      method: "DELETE",
+      endpoint: `offers/${offerId}`,
+    });
+  }
 }

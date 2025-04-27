@@ -3,7 +3,7 @@ import CardBox from "../../components/CardBox";
 import IconAction from "@components/IconAction";
 import RoundedIconButton from "@components/RoundedIconButton";
 import { Box, CircularProgress } from "@mui/material";
-import { ContentCopy, Edit, ShoppingBasket } from "@mui/icons-material";
+import { ContentCopy, Delete, Edit, ShoppingBasket } from "@mui/icons-material";
 import { FunctionComponent, useEffect, useState } from "react";
 import { MTable } from "@components/MTable";
 import { OfferColumns } from "./Columns";
@@ -13,6 +13,8 @@ import { useApiErrorHandler } from "@hooks/useApiErrorHandler";
 import { useNavigate } from "react-router-dom";
 import { useOfferContext } from "@contexts/OfferProvider";
 import { usePermissions } from "@hooks/usePermissions";
+import { useApiSuccessHandler } from "@hooks/useApiSuccessHandler";
+import ConfirmationDialog from "@components/ConfirmationDialog";
 
 type OffersPageProps = object;
 
@@ -20,13 +22,18 @@ const OffersPage: FunctionComponent<OffersPageProps> = () => {
   // Hooks
   const navigate = useNavigate();
   const { showError } = useApiErrorHandler();
+  const { showSuccess } = useApiSuccessHandler();
+
   const { resetOffer } = useOfferContext();
-  const { canEdit, canCreate, canDuplicate, canExport } = usePermissions();
+  const { canEdit, canCreate, canDuplicate, canExport, canDelete } =
+    usePermissions();
 
   // State
   const [offers, setOffers] = useState<OffersModel[]>([]);
   const [loading, setLoading] = useState(false);
   const [exportingOfferId, setExportingOfferId] = useState<number | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [selectedOffer, setSelectedOffer] = useState<OffersModel | null>(null);
 
   const handleAdd = () => {
     resetOffer();
@@ -68,6 +75,27 @@ const OffersPage: FunctionComponent<OffersPageProps> = () => {
       setExportingOfferId(null);
     }
   };
+
+  const handleDelete = (offer: OffersModel) => {
+    setSelectedOffer(offer);
+    setDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (selectedOffer?.id) {
+      try {
+        await OffersApi.deleteOffer(selectedOffer.id);
+        showSuccess("Angebot erfolgreich gelöscht");
+        await fetchOffers();
+      } catch (error) {
+        showError(error);
+      } finally {
+        setDeleteDialogOpen(false);
+        setSelectedOffer(null);
+      }
+    }
+  };
+
   //LifeCycles
   useEffect(() => {
     fetchOffers();
@@ -114,9 +142,14 @@ const OffersPage: FunctionComponent<OffersPageProps> = () => {
                     <Edit fontSize="small" />
                   </IconAction>
                 )}
-                {/* <IconAction tooltip="Löschen" onClick={() => handleDelete(row)}>
-                         <Delete fontSize="small" />
-                       </IconAction> */}
+                {canDelete("offer") && (
+                  <IconAction
+                    tooltip="Löschen"
+                    onClick={() => handleDelete(row)}
+                  >
+                    <Delete fontSize="small" />
+                  </IconAction>
+                )}
               </>
             )}
           />
@@ -129,6 +162,15 @@ const OffersPage: FunctionComponent<OffersPageProps> = () => {
               onClick={handleAdd}
             />
           )}
+
+          {/* Delete Dialog */}
+          <ConfirmationDialog
+            open={deleteDialogOpen}
+            onClose={() => setDeleteDialogOpen(false)}
+            onConfirm={confirmDelete}
+            title="Angebot löschen"
+            message="Möchten Sie dieses Angebot wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden."
+          />
         </CardBox>
       </Box>
     </>

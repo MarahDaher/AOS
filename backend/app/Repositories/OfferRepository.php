@@ -15,9 +15,14 @@ class OfferRepository
             'general_profile_description',
             'general_creation_date',
             'general_status_id'
-        ])->with('status')
+        ])
+            ->with('status')
+            ->whereHas('status', function ($query) {
+                $query->where('name', '!=', 'Gelöscht');
+            })
             ->get();
     }
+
 
     public function getOfferById(int $id): Offer
     {
