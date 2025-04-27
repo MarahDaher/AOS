@@ -142,6 +142,13 @@ export const useRawMaterialPricesTable = () => {
     field: keyof RawMaterialRow,
     value: string | number
   ) => {
+    const currentValue = row[field];
+
+    // 🛡️ Only update if the value changed
+    if (currentValue === value) {
+      return;
+    }
+
     setRawMaterialRows((prev) =>
       prev.map((r) =>
         r.offer_id === row.offer_id && r.raw_material_id === row.raw_material_id

@@ -179,15 +179,22 @@ const RawMaterialRow = ({
           }}
           onBlur={async () => {
             const parsed = parseGermanNumber(totalDemandInputValue);
-            if (parsed !== null) {
-              await updateDemand({
-                rawMaterialId: row.raw_material_id,
-                data: { absolut_demand: parsed },
-              });
-              updateRowField(setRawMaterialRows, row, "absolut_demand", parsed);
-              setTotalDemandInputValue(formatNumberToGerman(parsed));
-              await fetchOfferRawMaterials();
+            if (parsed === null) {
+              return;
             }
+
+            if (parsed === row.absolut_demand) {
+              return; // 🛡️ No change, do not call updateDemand
+            }
+
+            await updateDemand({
+              rawMaterialId: row.raw_material_id,
+              data: { absolut_demand: parsed },
+            });
+
+            updateRowField(setRawMaterialRows, row, "absolut_demand", parsed);
+            setTotalDemandInputValue(formatNumberToGerman(parsed));
+            await fetchOfferRawMaterials();
           }}
         />
       </TableCell>

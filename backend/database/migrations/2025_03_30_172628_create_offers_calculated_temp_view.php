@@ -355,7 +355,6 @@ class CreateOffersCalculatedTempView extends Migration
 
             (o.`runningcard_hourlyrecording_construction` + o.`runningcard_hourlyrecording_toolwork` + o.`runningcard_hourlyrecording_entry`) AS `_runningcard_hourlyrecording_total`
 
-
           FROM `offers` o
       SQL
     );

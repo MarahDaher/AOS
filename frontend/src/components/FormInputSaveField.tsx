@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent, useEffect, useState, useRef } from "react";
 import { useField, useFormikContext } from "formik";
 import {
   FormControl,
@@ -35,14 +35,13 @@ const FormInputSaveField: FunctionComponent<FormInputFieldProps> = ({
 }) => {
   const [field, meta] = useField(name);
   const { setFieldValue } = useFormikContext();
-  const [justSaved, setJustSaved] = useState(false);
   const [inputValue, setInputValue] = useState(field.value || "");
+  const [justSaved, setJustSaved] = useState(false);
   const navigate = useNavigate();
-
   const mutation = useSaveFieldMutation(navigate);
+  const debounceTimer = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    // Update visible input based on formik value
     if (numeric && typeof field.value === "number") {
       setInputValue(formatNumberToGerman(field.value));
     } else if (!numeric) {
@@ -54,22 +53,38 @@ const FormInputSaveField: FunctionComponent<FormInputFieldProps> = ({
     let val = e.target.value;
 
     if (numeric) {
-      val = val.replace(/[^0-9,.\-]/g, ""); // Allow numbers, dots, commas, and minus
+      val = val.replace(/[^0-9,.\-]/g, "");
     }
 
     setInputValue(val);
+
+    if (debounceTimer.current) {
+      clearTimeout(debounceTimer.current);
+    }
+
+    debounceTimer.current = setTimeout(() => {
+      saveField(val);
+    }, 500); // Save after 500ms delay
   };
 
-  const handleBlur = () => {
-    let valueToSave: string | number = inputValue;
+  const saveField = (value: string) => {
+    let valueToSave: string | number = value;
 
     if (numeric) {
-      const parsed = parseGermanNumber(inputValue);
+      const parsed = parseGermanNumber(value);
       if (parsed === null) {
-        setFieldValue(name, inputValue); // Still update formik with invalid input
+        setFieldValue(name, value);
         return;
       }
       valueToSave = parsed;
+    }
+
+    const normalizedCurrentValue = numeric
+      ? parseGermanNumber(field.value?.toString() || "")
+      : field.value;
+
+    if (valueToSave === normalizedCurrentValue) {
+      return; // No change
     }
 
     setFieldValue(name, valueToSave);
@@ -85,7 +100,6 @@ const FormInputSaveField: FunctionComponent<FormInputFieldProps> = ({
       }
     );
 
-    // Reformat the field after saving
     if (numeric && typeof valueToSave === "number") {
       setInputValue(formatNumberToGerman(valueToSave));
     }
@@ -97,7 +111,6 @@ const FormInputSaveField: FunctionComponent<FormInputFieldProps> = ({
         {...props}
         value={inputValue}
         onChange={handleChange}
-        onBlur={handleBlur}
         fullWidth
         type={type}
         required={required}

@@ -1,4 +1,8 @@
+import { OfferRawMaterialCalculatedApi } from "@api/offer-raw-material";
 import CardBox from "@components/CardBox";
+import { useOfferContext } from "@contexts/OfferProvider";
+import { useApiErrorHandler } from "@hooks/useApiErrorHandler";
+import { RawMaterialRow } from "@interfaces/RawMaterial.model";
 import {
   Table,
   TableHead,
@@ -8,36 +12,65 @@ import {
   TableContainer,
   Paper,
 } from "@mui/material";
+import { useEffect, useState } from "react";
 
-interface Props {
-  materials: {
-    name: string;
-    color: string;
-    type: string;
-    supplier: string;
-  }[];
-}
+export default function RawMaterialTable() {
+  // Hooks
+  const { showError } = useApiErrorHandler();
+  const { offerId } = useOfferContext();
 
-export default function RawMaterialTable({ materials }: Props) {
+  // State
+  const [materials, setMaterials] = useState<RawMaterialRow[]>([]);
+
+  const fetchMaterials = async () => {
+    try {
+      const res =
+        await OfferRawMaterialCalculatedApi.getRawMaterialCalculatedByOfferId(
+          offerId!
+        );
+      setMaterials(res);
+    } catch (error) {
+      showError(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchMaterials();
+  }, []);
+
   return (
     <CardBox label="Rohstoffe">
       <TableContainer component={Paper}>
-        <Table size="small">
+        <Table
+          size="small"
+          sx={{
+            "& td, & th": {
+              textAlign: "right",
+            },
+            "& td:first-of-type, & th:first-of-type": {
+              textAlign: "right",
+            },
+          }}
+        >
           <TableHead>
             <TableRow>
               <TableCell>Bezeichnung</TableCell>
-              <TableCell>Farbe</TableCell>
               <TableCell>Typ</TableCell>
               <TableCell>Lieferant</TableCell>
+              <TableCell>Additives</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {materials.map((mat, idx) => (
               <TableRow key={idx}>
                 <TableCell>{mat.name}</TableCell>
-                <TableCell>{mat.color}</TableCell>
                 <TableCell>{mat.type}</TableCell>
                 <TableCell>{mat.supplier}</TableCell>
+                <TableCell>
+                  {mat._additives_concatenated
+                    ? mat._additives_concatenated
+                    : "-"}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

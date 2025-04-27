@@ -5,6 +5,7 @@ import PackagingSeriesCard from "./PackagingSeriesCard";
 import WorkHoursCard from "./WorkHoursCard";
 import ToolingCard from "./ToolingCard";
 import ProcessingCard from "./ProcessingCard";
+import RawMaterialTable from "./RawMaterialTable";
 
 type Props = {
   data: any;
@@ -56,7 +57,7 @@ export default function OrderProfileProcessingView({ data }: Props) {
         </Grid>
       </Grid>
 
-      {/* <RawMaterialTable materials={raw_materials} /> */}
+      <RawMaterialTable />
 
       <Grid size={{ xs: 12, md: 12 }}>
         <ProcessingCard />

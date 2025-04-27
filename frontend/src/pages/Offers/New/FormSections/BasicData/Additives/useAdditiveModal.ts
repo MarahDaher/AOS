@@ -77,30 +77,39 @@ export const useAdditiveModal = (
     item: AdditiveFormValue
   ) => {
     const parsed = parseGermanNumber(value);
-    if (parsed !== null) {
-      setFieldValue(`additives.${index}.${type}`, parsed);
+    if (parsed === null) {
+      return;
+    }
 
-      const formatter =
-        type === "price" ? setFormattedPriceInputs : setFormattedShareInputs;
+    const currentValue = item[type];
 
-      formatter((prev) => ({
-        ...prev,
-        [index]: formatNumberToGerman(parsed),
-      }));
+    // 🛡️ Only send update if value has actually changed
+    if (Number(parsed) === Number(currentValue)) {
+      return;
+    }
 
-      try {
-        await AdditiveApi.updateAdditiveOffer({
-          offer_id: selectedMaterial.offer_id,
-          raw_material_id: selectedMaterial.raw_material_id,
-          additives_id: item.id,
-          [type]: parsed,
-        });
-        showSuccess(
-          `${type === "price" ? "Preis" : "Prozentsatz"} wurde aktualisiert`
-        );
-      } catch (err) {
-        showError(err);
-      }
+    setFieldValue(`additives.${index}.${type}`, parsed);
+
+    const formatter =
+      type === "price" ? setFormattedPriceInputs : setFormattedShareInputs;
+
+    formatter((prev) => ({
+      ...prev,
+      [index]: formatNumberToGerman(parsed),
+    }));
+
+    try {
+      await AdditiveApi.updateAdditiveOffer({
+        offer_id: selectedMaterial.offer_id,
+        raw_material_id: selectedMaterial.raw_material_id,
+        additives_id: item.id,
+        [type]: parsed,
+      });
+      showSuccess(
+        `${type === "price" ? "Preis" : "Prozentsatz"} wurde aktualisiert`
+      );
+    } catch (err) {
+      showError(err);
     }
   };
 
