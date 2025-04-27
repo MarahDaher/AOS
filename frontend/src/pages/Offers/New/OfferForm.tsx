@@ -5,7 +5,7 @@ import CalculationTab from "./Tabs/Calculation";
 import PricesTab from "./Tabs/Prices";
 import DrawingTab from "./Tabs/Drawing";
 import ProcessSheetTab from "./Tabs/ProcessSheet";
-import { Box, Tab, Tabs } from "@mui/material";
+import { Box, CircularProgress, Tab, Tabs } from "@mui/material";
 import { FormikProvider, useFormik } from "formik";
 import { initialValues } from "./Index";
 import { useParams } from "react-router-dom";
@@ -46,7 +46,13 @@ const allTabs = [
 const OfferForm: FunctionComponent<OfferFormProps> = () => {
   // Hooks
   const { id } = useParams();
-  const { setOfferId, setOfferData, resetOffer } = useOfferContext();
+  const {
+    setOfferId,
+    setOfferData,
+    resetOffer,
+    setIsLoadingOfferDetails,
+    isLoadingOfferDetails,
+  } = useOfferContext();
   const { canView } = usePermissions();
   const tabs = allTabs.filter((tab) => canView(tab.permission.subject));
 
@@ -66,6 +72,8 @@ const OfferForm: FunctionComponent<OfferFormProps> = () => {
   // Functions
   const loadOffer = async () => {
     try {
+      setIsLoadingOfferDetails(true); // 🛡️ Start spinner
+
       if (id) {
         const res = await OffersApi.getOfferById(Number(id));
         setOfferId(res.id);
@@ -75,18 +83,37 @@ const OfferForm: FunctionComponent<OfferFormProps> = () => {
       }
     } catch (err) {
       console.error("Failed to load offer", err);
+    } finally {
+      setIsLoadingOfferDetails(false);
     }
   };
 
   useEffect(() => {
+    setIsLoadingOfferDetails(true); // 🛡️ Always start loading first
+
     if (!isNew) {
       loadOffer();
     } else {
       resetOffer();
+      setIsLoadingOfferDetails(false); // 🛡️ manually stop loading after reset
     }
 
     return () => localStorage.removeItem("offer_form_selected_tab");
   }, [id]);
+
+  // 🛡️ Show spinner if loading
+  if (isLoadingOfferDetails) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="50vh"
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <FormikProvider value={formik}>

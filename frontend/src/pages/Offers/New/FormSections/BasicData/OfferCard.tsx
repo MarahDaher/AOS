@@ -10,6 +10,7 @@ import { OfferCardInitialValues } from "../../Index";
 import { useEditableFields } from "@hooks/useEditableFields";
 import { useOfferContext } from "@contexts/OfferProvider";
 import { OffersApi } from "@api/offers";
+import { Skeleton } from "@mui/material";
 
 const OfferCard: FunctionComponent = () => {
   // Hooks
@@ -123,14 +124,19 @@ const OfferCard: FunctionComponent = () => {
           </Grid>
 
           <Grid size={{ xs: 4, md: 4 }}>
-            <FormSelectSaveField
-              name="general_status_id"
-              label="Status"
-              disabled={!isFieldEditable("general_status")}
-              options={statusOptions}
-              onSaved={refetchEditableFields}
-            />
-          </Grid>
+  {statusOptions.length > 0 ? (
+    <FormSelectSaveField
+      name="general_status_id"
+      label="Status"
+      disabled={!isFieldEditable("general_status")}
+      options={statusOptions}
+      onSaved={refetchEditableFields}
+    />
+  ) : (
+    <Skeleton variant="rectangular" height={56} /> // or any spinner
+  )}
+</Grid>
+
           <Grid size={{ xs: 4, md: 4 }}>
             <FormInputSaveField
               name="general_profile_crosssection"
