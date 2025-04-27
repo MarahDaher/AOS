@@ -4,14 +4,15 @@ import Grid from "@mui/material/Grid2";
 import { FormikProvider, useFormik } from "formik";
 import { useOfferContext } from "@contexts/OfferProvider";
 import { FunctionComponent } from "react";
+import { useFieldEditable } from "@hooks/useFieldEditable";
 import { usePermissions } from "@hooks/usePermissions";
 
 const ToolingCard: FunctionComponent = () => {
-  const { offerDetails } = useOfferContext();
+  const { offerDetails, offerId } = useOfferContext();
   // Permissions
+  const { isFieldEditable } = useFieldEditable(offerId!);
   const { canEdit } = usePermissions();
   const isEditable = canEdit("process_sheet");
-
   const formik = useFormik({
     initialValues: {
       runningcard_tool_costs: offerDetails?.runningcard_tool_costs ?? "",
@@ -31,7 +32,9 @@ const ToolingCard: FunctionComponent = () => {
             <FormInputSaveField
               name="runningcard_tool_costs"
               label="Kosten"
-              disabled={!isEditable}
+              disabled={
+                !isFieldEditable("runningcard_tool_costs") || !isEditable
+              }
             />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>
@@ -51,7 +54,9 @@ const ToolingCard: FunctionComponent = () => {
               name="runningcard_tool_hint"
               label=""
               multiline
-              disabled={!isEditable}
+              disabled={
+                !isFieldEditable("runningcard_tool_hint") || !isEditable
+              }
               minRows={3}
               fullWidth
             />

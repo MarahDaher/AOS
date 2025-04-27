@@ -1,8 +1,7 @@
-import { OffersApi } from "@api/offers";
 import CardBox from "@components/CardBox";
-import { useOfferContext } from "@contexts/OfferProvider";
-import { useApiErrorHandler } from "@hooks/useApiErrorHandler";
-import { Drawing } from "@interfaces/Drawing.model";
+import ClearIcon from "@mui/icons-material/Clear";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import Grid from "@mui/material/Grid2";
 import {
   Box,
   Button,
@@ -11,10 +10,12 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { Drawing } from "@interfaces/Drawing.model";
 import { FunctionComponent, useEffect, useRef, useState } from "react";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import Grid from "@mui/material/Grid2";
-import ClearIcon from "@mui/icons-material/Clear";
+import { OffersApi } from "@api/offers";
+import { useApiErrorHandler } from "@hooks/useApiErrorHandler";
+import { useDrawingEditable } from "@hooks/useDrawingEditable";
+import { useOfferContext } from "@contexts/OfferProvider";
 import { usePermissions } from "@hooks/usePermissions";
 
 interface DrawingFormProps {}
@@ -23,9 +24,13 @@ const DrawingForm: FunctionComponent<DrawingFormProps> = () => {
   const { offerId, drawingFile, setDrawingFile } = useOfferContext();
 
   const { showError } = useApiErrorHandler();
-  const { canEdit, canView } = usePermissions();
-  const isEditable = canEdit("drawing");
+  // Permissions
+  const { canView, canEdit } = usePermissions();
+  const { isDrawingEditable } = useDrawingEditable();
   const isViewable = canView("drawing");
+  const isEditable = canEdit("drawing");
+
+  const editable = isDrawingEditable();
 
   const [drawing, setDrawing] = useState<Drawing | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -98,11 +103,13 @@ const DrawingForm: FunctionComponent<DrawingFormProps> = () => {
               accept="application/pdf"
               ref={fileInputRef}
               style={{ display: "none" }}
+              disabled={!drawingFile || uploading || !editable}
               onChange={handleFileChange}
             />
 
             {/* TextField styled like Figma */}
             <TextField
+              disabled={!drawingFile || uploading || !editable}
               variant="outlined"
               size="small"
               label="neue Datei"
@@ -119,7 +126,7 @@ const DrawingForm: FunctionComponent<DrawingFormProps> = () => {
                     border: "none",
                   },
                 },
-                startAdornment: isEditable && drawingFile && (
+                startAdornment: editable && drawingFile && (
                   <InputAdornment position="start">
                     <IconButton
                       onClick={() => {
@@ -134,7 +141,7 @@ const DrawingForm: FunctionComponent<DrawingFormProps> = () => {
                     </IconButton>
                   </InputAdornment>
                 ),
-                endAdornment: isEditable && (
+                endAdornment: editable && isEditable && (
                   <InputAdornment position="end">
                     <IconButton
                       onClick={() => fileInputRef.current?.click()}
@@ -153,7 +160,7 @@ const DrawingForm: FunctionComponent<DrawingFormProps> = () => {
             <Button
               variant="contained"
               onClick={handleUpload}
-              disabled={!drawingFile || uploading || !isEditable}
+              disabled={!drawingFile || uploading || !editable}
             >
               Hochladen
             </Button>

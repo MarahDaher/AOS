@@ -4,18 +4,20 @@ import { FormikProvider, useFormik } from "formik";
 import { useOfferContext } from "@contexts/OfferProvider";
 import { FunctionComponent } from "react";
 import Grid from "@mui/material/Grid2";
-import { usePermissions } from "@hooks/usePermissions";
 
 interface NoteCardProps {
   field: any;
   label: string;
+  disabled?: boolean;
 }
 
-const NoteCard: FunctionComponent<NoteCardProps> = ({ field, label }) => {
+const NoteCard: FunctionComponent<NoteCardProps> = ({
+  field,
+  label,
+  disabled = false,
+}) => {
   const { offerDetails } = useOfferContext();
-  // Permissions
-  const { canEdit } = usePermissions();
-  const isEditable = canEdit("process_sheet");
+
   const formik = useFormik({
     initialValues: {
       [field]: offerDetails?.[field] ?? "",
@@ -31,11 +33,11 @@ const NoteCard: FunctionComponent<NoteCardProps> = ({ field, label }) => {
           <Grid size={{ xs: 12 }}>
             <FormInputSaveField
               name={field}
-              label=""
               multiline
+              hiddenLabel
               minRows={3}
               fullWidth
-              disabled={!isEditable}
+              disabled={disabled}
             />
           </Grid>
         </Grid>

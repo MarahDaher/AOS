@@ -79,115 +79,41 @@ class OfferService
 
     public function editableFieldsByRoleAndStatus(User $user, Offer $offer): array
     {
-        $role = $user->getRoleNames()->first();
-        $status = $offer->general_status;
+        $role = strtolower($user->getRoleNames()->first());
+        $statusName = $offer->status?->name;
 
-        $allSalesFields = [
-            'general_offer_number',
-            'general_status',
-            'general_profile_crosssection',
-            'general_profile_description',
-            'general_color',
-            'general_packaging',
-            'general_article_number',
-            'general_tool_number',
-            'general_delivery_type',
-            'general_order_number',
-            'general_customer',
-            'general_customer_contact_person',
-            'general_customer_article_number',
-            'general_request_date',
-            'general_request_number',
+        $allFields = $this->allowedFields();
+        $statuses = config('offer_statuses.statuses');
+        $editableRules = config('offer_statuses.editable_fields');
 
-            // raw material fields
-            'raw_material_id',
-            'supplier',
-            'share',
-            'price',
-            'price_date',
-            'absolut_demand',
-            'type',
-            'general_raw_material_purchase_discount',
-            'general_raw_material_price_total_overwritten',
-
-            //Additives
-            'dosage_percent',
-            'additives_price_sum',
-
-            'pricing_grad_qtyB_add_hourlyrate',
-            'pricing_grad_qtyC_add_hourlyrate',
-            'pricing_grad_qtyD_add_hourlyrate',
-            'pricing_grad_qtyE_add_hourlyrate',
-
-            'pricing_grad_qtyB_add_setupcosts',
-            'pricing_grad_qtyC_add_setupcosts',
-            'pricing_grad_qtyD_add_setupcosts',
-            'pricing_grad_qtyE_add_setupcosts',
-
-            'pricing_grad_qtyB_add_transport',
-            'pricing_grad_qtyC_add_transport',
-            'pricing_grad_qtyD_add_transport',
-            'pricing_grad_qtyE_add_transport',
-
-            // Tab 5
-            'runningcard_extrusion_speed_IST',
-            'runningcard_profile_weight_IST',
-            'runningcard_sampling_date',
-            'runningcard_sampling_quantity',
-            'runningcard_sampling_length',
-            'runningcard_sampling_packing',
-            'runningcard_sampling_indication',
-            'runningcard_qualitity_indication',
-            'runningcard_printing',
-            // 
-            'runningcard_packing_type',
-            'runningcard_packing_variant',
-            'runningcard_packing_length',
-            'runningcard_packing_packing_unit',
-            'runningcard_packing_quantity',
-            'runningcard_packing_description',
-            //
-            'runningcard_hourlyrecording_construction',
-            'runningcard_hourlyrecording_toolwork',
-            'runningcard_hourlyrecording_entry',
-            'runningcard_hourlyrecording_entrystitches',
-            'runningcard_hourlyrecording_entrydriver_user_id',
-            'runningcard_hourlyrecording_toolmaker_user_id',
-            'runningcard_tool_costs',
-            'runningcard_tool_hint'
-
-        ];
-
-        if ($role === RoleConstants::ADMIN_ROLE) {
-            return $allSalesFields;
+        // Admin
+        if ($editableRules[$role] === 'ALL') {
+            return $allFields;
         }
 
-        if ($role === RoleConstants::SALES_ROLE) {
-            if (in_array($status, [null, 'Vorkalkulation'])) {
-                return $allSalesFields;
-            }
-
-            if ($status === 'Angebot') {
-                return ['general_status', 'general_order_number'];
-            }
-
-            if (in_array($status, ['Auftrag', 'Produziert'])) {
-                return ['general_status'];
-            }
-
-            if ($status === 'Versandt') {
-                return [];
-            }
+        // If no status (new offer), treat as VORKALKULATION
+        if (!$statusName) {
+            $statusKey = 'VORKALKULATION';
+        } else {
+            // Find the status key (example: 'VORKALKULATION', 'AUFTRAG')
+            $statusKey = array_search($statusName, $statuses, true);
         }
 
-        if ($role === RoleConstants::PRODUCTION_ROLE) {
-            if ($status === 'Versandt') {
-                return [];
-            }
-
-            // You can add editable fields for production if needed
+        // If no matching statusKey found
+        if (!$statusKey) {
+            return [];
         }
 
-        return [];
+        $roleRules = $editableRules[$role] ?? [];
+
+        // Handle production DEFAULT case
+        if ($role === 'production' && !isset($roleRules[$statusKey])) {
+            return $roleRules['DEFAULT'] === 'ALL' ? $allFields : $roleRules['DEFAULT'];
+        }
+
+        // Normal cases
+        $fields = $roleRules[$statusKey] ?? [];
+
+        return $fields === 'ALL' ? $allFields : $fields;
     }
 }

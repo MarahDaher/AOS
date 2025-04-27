@@ -4,14 +4,16 @@ import Grid from "@mui/material/Grid2";
 import { FormikProvider, useFormik } from "formik";
 import { useOfferContext } from "@contexts/OfferProvider";
 import { FunctionComponent } from "react";
+import { useFieldEditable } from "@hooks/useFieldEditable";
 import { usePermissions } from "@hooks/usePermissions";
 
 const WorkHoursCard: FunctionComponent = () => {
-  const { offerDetails } = useOfferContext();
+  const { offerDetails, offerId } = useOfferContext();
   // Permissions
+  // Permissions
+  const { isFieldEditable } = useFieldEditable(offerId!);
   const { canEdit } = usePermissions();
   const isEditable = canEdit("process_sheet");
-
   const formik = useFormik({
     initialValues: {
       runningcard_hourlyrecording_construction:
@@ -41,21 +43,30 @@ const WorkHoursCard: FunctionComponent = () => {
             <FormInputSaveField
               name="runningcard_hourlyrecording_construction"
               label="Konstruktion"
-              disabled={!isEditable}
+              disabled={
+                !isFieldEditable("runningcard_hourlyrecording_construction") ||
+                !isEditable
+              }
             />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>
             <FormInputSaveField
               name="runningcard_hourlyrecording_toolwork"
               label="Werkzeug- / Kalibrierungsbau"
-              disabled={!isEditable}
+              disabled={
+                !isFieldEditable("runningcard_hourlyrecording_toolwork") ||
+                !isEditable
+              }
             />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>
             <FormInputSaveField
               name="runningcard_hourlyrecording_entry"
               label="Einfahren"
-              disabled={!isEditable}
+              disabled={
+                !isFieldEditable("runningcard_hourlyrecording_entry") ||
+                !isEditable
+              }
             />
           </Grid>
           <Grid size={{ xs: 12, md: 3 }}>
@@ -69,21 +80,32 @@ const WorkHoursCard: FunctionComponent = () => {
             <FormInputSaveField
               name="runningcard_hourlyrecording_entrystitches"
               label="Einfahrstiche"
-              disabled={!isEditable}
+              disabled={
+                !isFieldEditable("runningcard_hourlyrecording_entrystitches") ||
+                !isEditable
+              }
             />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>
             <FormInputSaveField
               name="runningcard_hourlyrecording_entrydriver_user_id"
               label="Einfahrer"
-              disabled={!isEditable}
+              disabled={
+                !isFieldEditable(
+                  "runningcard_hourlyrecording_entrydriver_user_id"
+                ) || !isEditable
+              }
             />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>
             <FormInputSaveField
               name="runningcard_hourlyrecording_toolmaker_user_id"
               label="Werkzeugmacher"
-              disabled={!isEditable}
+              disabled={
+                !isFieldEditable(
+                  "runningcard_hourlyrecording_toolmaker_user_id"
+                ) || !isEditable
+              }
             />
           </Grid>
         </Grid>

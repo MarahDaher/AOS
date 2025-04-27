@@ -6,14 +6,15 @@ import { FormikProvider, useFormik } from "formik";
 import { useOfferContext } from "@contexts/OfferProvider";
 import { FunctionComponent } from "react";
 import NoteCard from "@components/NoteCard";
+import { useFieldEditable } from "@hooks/useFieldEditable";
 import { usePermissions } from "@hooks/usePermissions";
 
 const SamplingCard: FunctionComponent = () => {
-  const { offerDetails } = useOfferContext();
+  const { offerDetails, offerId } = useOfferContext();
   // Permissions
+  const { isFieldEditable } = useFieldEditable(offerId!);
   const { canEdit } = usePermissions();
   const isEditable = canEdit("process_sheet");
-
   const mapInitialValues = (offer: any) => ({
     runningcard_sampling_date: offer.runningcard_sampling_date ?? "",
     runningcard_sampling_quantity: offer.runningcard_sampling_quantity ?? "",
@@ -50,35 +51,46 @@ const SamplingCard: FunctionComponent = () => {
             <FormDatePicker
               name="runningcard_sampling_date"
               label="Termin Bemusterung"
-              disabled={!isEditable}
+              disabled={
+                !isFieldEditable("runningcard_sampling_date") || !isEditable
+              }
             />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>
             <FormInputSaveField
               name="runningcard_sampling_quantity"
               label="Menge"
-              disabled={!isEditable}
+              disabled={
+                !isFieldEditable("runningcard_sampling_quantity") || !isEditable
+              }
             />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>
             <FormInputSaveField
               name="runningcard_sampling_length"
               label="Länge"
-              disabled={!isEditable}
+              disabled={
+                !isFieldEditable("runningcard_sampling_length") || !isEditable
+              }
             />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>
             <FormInputSaveField
               name="runningcard_sampling_packing"
               label="Verpackung"
-              disabled={!isEditable}
+              disabled={
+                !isFieldEditable("runningcard_sampling_packing") || !isEditable
+              }
             />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>
             <FormInputSaveField
               name="runningcard_sampling_indication"
               label="Hinweis"
-              disabled={!isEditable}
+              disabled={
+                !isFieldEditable("runningcard_sampling_indication") ||
+                !isEditable
+              }
             />
           </Grid>
         </Grid>
@@ -87,9 +99,16 @@ const SamplingCard: FunctionComponent = () => {
       <NoteCard
         field="runningcard_qualitity_indication"
         label="Qualitätshinweis"
+        disabled={
+          !isFieldEditable("runningcard_qualitity_indication") || !isEditable
+        }
       />
 
-      <NoteCard field="runningcard_printing" label="Bedruckung" />
+      <NoteCard
+        field="runningcard_printing"
+        label="Bedruckung"
+        disabled={!isFieldEditable("runningcard_printing") || !isEditable}
+      />
     </FormikProvider>
   );
 };

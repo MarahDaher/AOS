@@ -11,21 +11,14 @@ import { useEditableFields } from "@hooks/useEditableFields";
 import { useOfferContext } from "@contexts/OfferProvider";
 import { OffersApi } from "@api/offers";
 import { Skeleton } from "@mui/material";
+import { useFieldEditable } from "@hooks/useFieldEditable";
 
 const OfferCard: FunctionComponent = () => {
   // Hooks
   const { offerDetails, offerId } = useOfferContext();
   // Permissions
-  const { data: editableFields = [], refetch: refetchEditableFields } =
-    useEditableFields(offerId!);
-
-  const isCreateMode = !offerId;
-
-  const isFieldEditable = (fieldName: string) => {
-    return isCreateMode
-      ? fieldName === "general_offer_number"
-      : editableFields.includes(fieldName);
-  };
+  const { refetch: refetchEditableFields } = useEditableFields(offerId!);
+  const { isFieldEditable } = useFieldEditable(offerId!);
 
   // Dropdowns
   const [statusOptions, setStatusOptions] = useState<
@@ -124,18 +117,18 @@ const OfferCard: FunctionComponent = () => {
           </Grid>
 
           <Grid size={{ xs: 4, md: 4 }}>
-  {statusOptions.length > 0 ? (
-    <FormSelectSaveField
-      name="general_status_id"
-      label="Status"
-      disabled={!isFieldEditable("general_status")}
-      options={statusOptions}
-      onSaved={refetchEditableFields}
-    />
-  ) : (
-    <Skeleton variant="rectangular" height={56} /> // or any spinner
-  )}
-</Grid>
+            {statusOptions.length > 0 ? (
+              <FormSelectSaveField
+                name="general_status_id"
+                label="Status"
+                disabled={!isFieldEditable("general_status_id")}
+                options={statusOptions}
+                onSaved={refetchEditableFields}
+              />
+            ) : (
+              <Skeleton variant="rectangular" height={56} /> // or any spinner
+            )}
+          </Grid>
 
           <Grid size={{ xs: 4, md: 4 }}>
             <FormInputSaveField

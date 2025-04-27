@@ -4,11 +4,13 @@ import { FunctionComponent } from "react";
 import Grid from "@mui/material/Grid2";
 import CardBox from "@components/CardBox";
 import FormInputSaveField from "@components/FormInputSaveField";
+import { useFieldEditable } from "@hooks/useFieldEditable";
 import { usePermissions } from "@hooks/usePermissions";
 
 const ProcessingCard: FunctionComponent = () => {
-  const { offerDetails } = useOfferContext();
+  const { offerDetails, offerId } = useOfferContext();
   // Permissions
+  const { isFieldEditable } = useFieldEditable(offerId!);
   const { canEdit } = usePermissions();
   const isEditable = canEdit("process_sheet");
 
@@ -37,14 +39,20 @@ const ProcessingCard: FunctionComponent = () => {
               <FormInputSaveField
                 name="runningcard_extrusion_speed_IST"
                 label="Geschwindigkeit Eingefahren (IST) [m/min]"
-                disabled={!isEditable}
+                disabled={
+                  !isFieldEditable("runningcard_extrusion_speed_IST") ||
+                  !isEditable
+                }
               />
             </Grid>
             <Grid size={{ xs: 12, md: 2.4 }}>
               <FormInputSaveField
                 name="runningcard_profile_weight_IST"
                 label="Metergewicht Eingefahren (IST) [g/m]"
-                disabled={!isEditable}
+                disabled={
+                  !isFieldEditable("runningcard_profile_weight_IST") ||
+                  !isEditable
+                }
               />
             </Grid>
           </Grid>
