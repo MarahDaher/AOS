@@ -30,4 +30,24 @@ class RawMaterial extends Model
         return $this->belongsToMany(Additive::class, 'additives_offers_raw_materials', 'raw_material_id', 'additives_id')
             ->withPivot('offer_id', 'share');
     }
+
+    public static function rawMaterialAllowedFields(): array
+    {
+        return [
+            // raw material fields
+            'raw_material_id',
+            'supplier',
+            'share',
+            'price',
+            'price_date',
+            'absolut_demand',
+            'type',
+            'general_raw_material_purchase_discount',
+            'general_raw_material_price_total_overwritten',
+
+            //Additives
+            'dosage_percent',
+            'additives_price_sum',
+        ];
+    }
 }

@@ -29,7 +29,7 @@ class OfferCalculated extends Model
      */
     public static function allowedFields(): array
     {
-        return [
+        $basicFields = [
             // General
             'general_offer_number',
             'general_status_id',
@@ -371,11 +371,11 @@ class OfferCalculated extends Model
             "_pricing_graduated_calculation_subtotal2_quantityC",
             "_pricing_graduated_calculation_subtotal2_quantityD",
             "_pricing_graduated_calculation_subtotal2_quantityE",
-
-
-
-
-
         ];
+
+        return array_merge(
+            $basicFields,
+            RawMaterial::rawMaterialAllowedFields()
+        );
     }
 }

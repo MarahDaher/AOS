@@ -41,7 +41,6 @@ class OfferService
     public function createOfferFromField(string $field, mixed $value, int $userId): Offer
     {
         $allowedFields = $this->allowedFields();
-
         if (!in_array($field, $allowedFields)) {
             throw new \InvalidArgumentException('Invalid field: ' . $field);
         }
