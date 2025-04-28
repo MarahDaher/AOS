@@ -5,9 +5,11 @@
 ## 📚 Overview
 
 -   [Project Setup](#-project-setup)
--   [Artisan Useful Commands](#⚡️-artisan-useful-commands)
+-   [Artisan Useful Commands](#⚡%ef%b8%8f-artisan-useful-commands)
 -   [Roles and Permissions](#-roles-and-permissions)
 -   [Offer Statuses Management](#-offer-statuses-management)
+-   [Word Export Configuration](#-word-export-configuration)
+-   [Offer Drawings Configuration](#-offer-drawings-configuration)
 -   [Offer Deletion Policy](#-offer-deletion-policy)
 -   [API Overview](#-api-overview)
 -   [Folder Structure](#-folder-structure)
@@ -93,6 +95,74 @@ php artisan sync:offer-statuses
 ```
 
 No manual database changes needed anymore! 🚀
+
+---
+
+## 📜 Word Export Configuration
+
+> 📝 Word export mappings and template settings are managed dynamically via `config/offer_word_export.php`.
+
+### How does it work?
+
+-   The file `config/offer_word_export.php` defines:
+    -   The **template path** for the Word file.
+    -   The list of **placeholders** and the corresponding **OfferCalculated** model fields.
+-   When generating the Word document:
+    -   Placeholders in the template (like `${general_offer_number}`) are automatically replaced by the values from the OfferCalculated model.
+    -   The current date (in `dd.mm.yyyy` format) is automatically inserted into `${TODAY()}`.
+-   No need to manually change code if the fields change!
+
+### How to update or add fields to the Word export?
+
+1. Open the `config/offer_word_export.php` file.
+2. Add, modify, or remove entries in the `placeholders` array:
+
+```php
+'placeholders' => [
+    'placeholder_in_docx' => 'model_field_name',
+]
+```
+
+3. (Optional) Update the `template_path` if the Word template file changes.
+
+Example:
+
+```php
+'template_path' => 'app/templates/Angebot Vorlage AOS.docx',
+
+'placeholders' => [
+    'general_offer_number' => 'general_offer_number',
+    'general_customer' => 'general_customer',
+    'general_color' => 'general_color',
+    // Add more here...
+],
+```
+
+👉 The system will **automatically** pick up the changes without modifying any PHP code!
+
+---
+
+## 🖌️ Offer Drawings Configuration
+
+> 📝 Offer drawing storage path is managed dynamically via `config/offer_drawings.php`.
+
+### How does it work?
+
+-   The `config/offer_drawings.php` file defines the base storage path for offer drawing files.
+-   The `base_path` value is set **directly in the config file** without reading from `.env`.
+
+Example:
+
+```php
+<?php
+
+return [
+    'base_path' => 'offer_drawings',
+];
+```
+
+-   This ensures a clean and environment-independent setup.
+-   Clients can update the storage path by editing the config file without touching `.env`.
 
 ---
 

@@ -1,5 +1,17 @@
 <?php
 
 return [
-    'base_path' => env('OFFER_DRAWINGS_BASE_PATH', 'offer_drawings'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Offer Drawings Base Path
+    |--------------------------------------------------------------------------
+    |
+    | This path defines where uploaded offer drawing files are stored.
+    | Update this value if you want to change the storage folder.
+    |
+    */
+
+    'base_path' => 'offer_drawings',
+
 ];

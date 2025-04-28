@@ -106,7 +106,7 @@ class OfferService
         $roleRules = $editableRules[$role] ?? [];
 
         // Handle production DEFAULT case
-        if ($role === 'production' && !isset($roleRules[$statusKey])) {
+        if ($role === RoleConstants::PRODUCTION_ROLE && !isset($roleRules[$statusKey])) {
             return $roleRules['DEFAULT'] === 'ALL' ? $allFields : $roleRules['DEFAULT'];
         }
 

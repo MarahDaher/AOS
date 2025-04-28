@@ -103,7 +103,6 @@ const DrawingForm: FunctionComponent<DrawingFormProps> = () => {
               accept="application/pdf"
               ref={fileInputRef}
               style={{ display: "none" }}
-              disabled={!drawingFile || uploading || !editable}
               onChange={handleFileChange}
             />
 
