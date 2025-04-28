@@ -9,7 +9,7 @@ class CreateOffersCalculatedTempView extends Migration
   {
     DB::statement(
       <<<SQL
-         CREATE OR REPLACE VIEW offers_calculated_temp AS 
+        CREATE OR REPLACE VIEW offers_calculated_temp AS 
           SELECT 
             o.*, 
 
@@ -118,9 +118,6 @@ class CreateOffersCalculatedTempView extends Migration
               * (100 + o.calculation_working_profile_cross_section_deviation_upper)/100
             ) AS `_calculation_working_profile_weight_upperborder`,
 
-        -- , Jahresumsatz = AVG(Marge1-Meterpreis, Marge2-Meterpreis) * Jahresbedarf (o.`pricing_annual_requirement`)    ^
-            -1 AS `_pricing_requirement_annual_sales`,
-
         -- , zus.Einstellmenge (for Kalk-Menge) / o.calculation_working_extrusion_speed /  60 
             ( ROUND(
               (o.`calculation_quantityA` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100) 
@@ -218,7 +215,7 @@ class CreateOffersCalculatedTempView extends Migration
 
         --  Rohstoffpreis gesamt [€] = "Rohstoffpreis / kg" * "Rohstoffmenge ges"
         --  general_raw_material_price_total_overwritten * _pricing_costs_calc_raw_material_quantity_total
-            ( ROUND(
+            ( 
               (
                 (
                   (o.`calculation_quantityA` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100)
@@ -250,29 +247,63 @@ class CreateOffersCalculatedTempView extends Migration
                   /100
                 )
               ) * o.`general_raw_material_price_total_overwritten`
-            , 2)) AS `_pricing_costs_calc_raw_material_price_total`,
+            ) AS `_pricing_costs_calc_raw_material_price_total`,
 
         --  Rohstoffeinsatz [€]    
         -- Rohstoffpreis/m = ProfilgewichtAverage * general_raw_material_price_total_overwritten / 1000
         -- _pricing_costs_yearly_raw_material_quantity = Rohstoffpreis/m * calculation_working_annual_requirement_estimated
-            ( ROUND(
+        -- => _pricing_costs_calc_raw_material_price_total / _pricing_graduated_calculation_quantityA * calculation_working_annual_requirement_estimated
+        --    ( 
+        --      (
+        --        ((
+        --          SELECT SUM(r.density * o_r.share/100)
+        --          FROM offers_raw_materials o_r 
+        --          JOIN raw_materials r ON (r.id=o_r.raw_material_id)
+        --          WHERE (o.id=o_r.offer_id)
+        --        )  * general_profile_crosssection )
+        --        *
+        --        o.`general_raw_material_price_total_overwritten`
+        --        / 1000
+        --      )
+        --      * o.`calculation_working_annual_requirement_estimated`
+        --    ) 
+            ( 
               (
-                ((
-                  SELECT SUM(r.density * o_r.share/100)
-                  FROM offers_raw_materials o_r 
-                  JOIN raw_materials r ON (r.id=o_r.raw_material_id)
-                  WHERE (o.id=o_r.offer_id)
-                )  * general_profile_crosssection )
-                *
-                o.`general_raw_material_price_total_overwritten`
-                / 1000
-              )
-              * o.`calculation_working_annual_requirement_estimated`
-            ,2 )) AS `_pricing_costs_yearly_raw_material_quantity`,
-
-        --  Fixkosten [€] ToDo: Erst Jahresumsatz berechnen Jahresumsatz-Rohstoffeinsatz-Zeitkosten
-        -- geschätzter Jahresumsatz - Rohstoffeinsatz(Jahr) - Zeitkosten(Jahr)
-            -1 AS `_pricing_costs_yearly_fixcosts`,
+                (
+                  (o.`calculation_quantityA` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100)
+                  / 1000
+                  * 
+                  (
+                    (
+                      SELECT SUM(r.density * o_r.share/100)
+                      FROM offers_raw_materials o_r 
+                      JOIN raw_materials r ON (r.id=o_r.raw_material_id)
+                      WHERE (o.id=o_r.offer_id)
+                    )  * general_profile_crosssection 
+                  )
+                )
+                +
+                (  
+                  (o.`calculation_quantityA` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100)
+                  / 1000
+                  * 
+                  (
+                    (
+                      SELECT SUM(r.density * o_r.share/100)
+                      FROM offers_raw_materials o_r 
+                      JOIN raw_materials r ON (r.id=o_r.raw_material_id)
+                      WHERE (o.id=o_r.offer_id)
+                    )  * general_profile_crosssection 
+                  ) 
+                  * calculation_working_setup_quantity_relative
+                  /100
+                )
+              ) * o.`general_raw_material_price_total_overwritten`
+            ) 
+            / (o.`calculation_quantityA` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100) 
+            * calculation_working_annual_requirement_estimated
+            AS `_pricing_costs_yearly_raw_material_quantity`, 
+        -- TODO
 
         --  Zusatzpreis / m [€] = `pricing_costs_calc_price_additional_lfm` * calculation_quantityA
             ROUND(
@@ -355,7 +386,8 @@ class CreateOffersCalculatedTempView extends Migration
 
             (o.`runningcard_hourlyrecording_construction` + o.`runningcard_hourlyrecording_toolwork` + o.`runningcard_hourlyrecording_entry`) AS `_runningcard_hourlyrecording_total`
 
-          FROM `offers` o
+
+          FROM `offers` o;
       SQL
     );
 
@@ -398,7 +430,6 @@ CREATE OR REPLACE VIEW offers_calculated_temp2 AS
     o_c.calculation_working_profile_cross_section_deviation_lower,
     o_c.calculation_working_profile_cross_section_deviation_upper,
     o_c.calculation_working_profit,
---    o_c.calculation_working_setup_quantity_additional,
     o_c.calculation_working_setup_quantity_relative,
     o_c.calculation_working_setup_quantity_total,
     o_c.calculation_working_tool_costs_amortization_years,
@@ -501,12 +532,7 @@ CREATE OR REPLACE VIEW offers_calculated_temp2 AS
     o_c._pricing_endprices_calc_print_costs,
     o_c._pricing_endprices_calc_transport_costs,
 
--- , Jahresumsatz = AVG(Marge1-Meterpreis, Marge2-Meterpreis) * Jahresbedarf (o.`pricing_annual_requirement`)
-    -1 AS `_pricing_requirement_annual_sales`,
 
---  Fixkosten [€] ToDo: Erst Jahresumsatz berechnen Jahresumsatz-Rohstoffeinsatz-Zeitkosten
--- _pricing_requirement_annual_sales - o_c.`_pricing_costs_yearly_raw_material_quantity` - o_c.`_pricing_costs_yearly_time_costs_quantity`
-    -1 AS `_pricing_costs_yearly_fixcosts`,
 
 -- Zwischensumme1: Zeitkosten + Rohstoffpreis (Kalkmenge)
     (o_c.`_pricing_costs_calc_time_costs_quantity` + o_c.`_pricing_costs_calc_raw_material_price_total`) AS _zwischensumme1,
@@ -1097,6 +1123,376 @@ CREATE OR REPLACE VIEW offers_calculated_temp2 AS
 
     FROM offers_calculated_temp o_c
 SQL
+    );
+
+    DB::statement(
+      <<<SQL
+      CREATE OR REPLACE VIEW offers_calculated_temp3 AS
+        SELECT 
+          oc.*,
+
+      --  Staffel / m
+          (
+            ((oc.`_pricing_costs_calc_time_costs_quantity` + oc.`_pricing_costs_calc_raw_material_price_total` 
+            + oc.`_calculation_additional_setup_costs_total` + oc.`_pricing_endprices_calc_packing_costs`
+            + oc.`_pricing_endprices_calc_transport_costs` + oc.`_pricing_endprices_calc_print_costs`)
+            / oc.`calculation_quantityA`)
+            + oc.`_calculation_working_allocation_costs_lfm`
+            + oc.`pricing_costs_calc_price_additional_lfm`
+          ) +
+          (
+            ((oc.`_pricing_costs_calc_time_costs_quantity` + oc.`_pricing_costs_calc_raw_material_price_total` 
+            + oc.`_calculation_additional_setup_costs_total` + oc.`_pricing_endprices_calc_packing_costs`
+            + oc.`_pricing_endprices_calc_transport_costs` + oc.`_pricing_endprices_calc_print_costs`)
+            / oc.`calculation_quantityA`)
+            + oc.`_calculation_working_allocation_costs_lfm`
+            + oc.`pricing_costs_calc_price_additional_lfm`
+          ) * (calculation_working_discount + calculation_working_profit + calculation_working_commission) / 100 
+          AS `_pricing_endprices_graduated_without_confection_lfm_quantityA`,
+
+      --  (ZwischenmeterpreisLFM_B + WerkzeugkostenumlageLFM + ZusatzkostenLFM) + 
+      --  (ZwischenmeterpreisLFM_B + WerkzeugkostenumlageLFM + ZusatzkostenLFM) * (Provision + Gewinn + Zahlungsziel) / 100
+          (
+            (_pricing_graduated_calculation_subtotal_lfm_quantityB + _calculation_working_allocation_costs_lfm + pricing_costs_calc_price_additional_lfm) + 
+            ((_pricing_graduated_calculation_subtotal_lfm_quantityB + _calculation_working_allocation_costs_lfm + pricing_costs_calc_price_additional_lfm) *
+            (calculation_working_commission + calculation_working_profit + calculation_working_discount) / 100)
+          ) AS `_pricing_endprices_graduated_without_confection_lfm_quantityB`,
+          (
+            (_pricing_graduated_calculation_subtotal_lfm_quantityC + _calculation_working_allocation_costs_lfm + pricing_costs_calc_price_additional_lfm) + 
+            ((_pricing_graduated_calculation_subtotal_lfm_quantityC + _calculation_working_allocation_costs_lfm + pricing_costs_calc_price_additional_lfm) *
+            (calculation_working_commission + calculation_working_profit + calculation_working_discount) / 100)
+          ) AS `_pricing_endprices_graduated_without_confection_lfm_quantityC`,
+          (
+            (_pricing_graduated_calculation_subtotal_lfm_quantityD + _calculation_working_allocation_costs_lfm + pricing_costs_calc_price_additional_lfm) + 
+            ((_pricing_graduated_calculation_subtotal_lfm_quantityD + _calculation_working_allocation_costs_lfm + pricing_costs_calc_price_additional_lfm) *
+            (calculation_working_commission + calculation_working_profit + calculation_working_discount) / 100)
+          ) AS `_pricing_endprices_graduated_without_confection_lfm_quantityD`,
+          (
+            (_pricing_graduated_calculation_subtotal_lfm_quantityE + _calculation_working_allocation_costs_lfm + pricing_costs_calc_price_additional_lfm) + 
+            ((_pricing_graduated_calculation_subtotal_lfm_quantityE + _calculation_working_allocation_costs_lfm + pricing_costs_calc_price_additional_lfm) *
+            (calculation_working_commission + calculation_working_profit + calculation_working_discount) / 100)
+          ) AS `_pricing_endprices_graduated_without_confection_lfm_quantityE`,
+
+
+      --  Staffel / stk =   _pricing_endprices_graduated_without_confection_lfm_quantityA / general_packaging / 1000
+          (
+            (
+              (
+                ((oc.`_pricing_costs_calc_time_costs_quantity` + oc.`_pricing_costs_calc_raw_material_price_total` 
+                + oc.`_calculation_additional_setup_costs_total` + oc.`_pricing_endprices_calc_packing_costs`
+                + oc.`_pricing_endprices_calc_transport_costs` + oc.`_pricing_endprices_calc_print_costs`)
+                / oc.`calculation_quantityA`)
+                + oc.`_calculation_working_allocation_costs_lfm`
+                + oc.`pricing_costs_calc_price_additional_lfm`
+              ) +
+              (
+                ((oc.`_pricing_costs_calc_time_costs_quantity` + oc.`_pricing_costs_calc_raw_material_price_total` 
+                + oc.`_calculation_additional_setup_costs_total` + oc.`_pricing_endprices_calc_packing_costs`
+                + oc.`_pricing_endprices_calc_transport_costs` + oc.`_pricing_endprices_calc_print_costs`)
+                / oc.`calculation_quantityA`)
+                + oc.`_calculation_working_allocation_costs_lfm`
+                + oc.`pricing_costs_calc_price_additional_lfm`
+              ) * (calculation_working_discount + calculation_working_profit + calculation_working_commission) / 100 
+            ) * oc.general_packaging / 1000      
+          ) AS `_pricing_endprices_graduated_without_confection_stk_quantityA`,
+          
+          (
+            (_pricing_graduated_calculation_subtotal_lfm_quantityB + _calculation_working_allocation_costs_lfm + pricing_costs_calc_price_additional_lfm) + 
+            ((_pricing_graduated_calculation_subtotal_lfm_quantityB + _calculation_working_allocation_costs_lfm + pricing_costs_calc_price_additional_lfm) *
+            (calculation_working_commission + calculation_working_profit + calculation_working_discount) / 100)
+          ) * oc.general_packaging / 1000 
+          AS `_pricing_endprices_graduated_without_confection_stk_quantityB`,
+          (
+            (_pricing_graduated_calculation_subtotal_lfm_quantityC + _calculation_working_allocation_costs_lfm + pricing_costs_calc_price_additional_lfm) + 
+            ((_pricing_graduated_calculation_subtotal_lfm_quantityC + _calculation_working_allocation_costs_lfm + pricing_costs_calc_price_additional_lfm) *
+            (calculation_working_commission + calculation_working_profit + calculation_working_discount) / 100)
+          ) * oc.general_packaging / 1000 
+          AS `_pricing_endprices_graduated_without_confection_stk_quantityC`,
+          (
+            (_pricing_graduated_calculation_subtotal_lfm_quantityD + _calculation_working_allocation_costs_lfm + pricing_costs_calc_price_additional_lfm) + 
+            ((_pricing_graduated_calculation_subtotal_lfm_quantityD + _calculation_working_allocation_costs_lfm + pricing_costs_calc_price_additional_lfm) *
+            (calculation_working_commission + calculation_working_profit + calculation_working_discount) / 100)
+          ) * oc.general_packaging / 1000 
+          AS `_pricing_endprices_graduated_without_confection_stk_quantityD`,
+          (
+            (_pricing_graduated_calculation_subtotal_lfm_quantityE + _calculation_working_allocation_costs_lfm + pricing_costs_calc_price_additional_lfm) + 
+            ((_pricing_graduated_calculation_subtotal_lfm_quantityE + _calculation_working_allocation_costs_lfm + pricing_costs_calc_price_additional_lfm) *
+            (calculation_working_commission + calculation_working_profit + calculation_working_discount) / 100)
+          ) * oc.general_packaging / 1000 
+          AS `_pricing_endprices_graduated_without_confection_stk_quantityE`,
+
+
+      --  Stück = Menge / Aufmachung * 1000
+          CEILING (
+            oc.calculation_quantityA / oc.general_packaging * 1000
+          )  AS `_pricing_endprices_graduated_pieces_quantityA`,
+          CEILING (
+            oc.calculation_quantityB / oc.general_packaging * 1000
+          )  AS `_pricing_endprices_graduated_pieces_quantityB`,
+          CEILING (
+            oc.calculation_quantityC / oc.general_packaging * 1000
+          )  AS `_pricing_endprices_graduated_pieces_quantityC`,
+          CEILING (
+            oc.calculation_quantityD / oc.general_packaging * 1000
+          )  AS `_pricing_endprices_graduated_pieces_quantityD`,
+          CEILING (
+            oc.calculation_quantityE / oc.general_packaging * 1000
+          )  AS `_pricing_endprices_graduated_pieces_quantityE`,
+
+
+      --  Staffel / m = Staffel / stk / general_packaging * 1000
+          (
+            (
+              (
+                (
+                  ((oc.`_pricing_costs_calc_time_costs_quantity` + oc.`_pricing_costs_calc_raw_material_price_total` 
+                  + oc.`_calculation_additional_setup_costs_total` + oc.`_pricing_endprices_calc_packing_costs`
+                  + oc.`_pricing_endprices_calc_transport_costs` + oc.`_pricing_endprices_calc_print_costs`)
+                  / oc.`calculation_quantityA`)
+                  + oc.`_calculation_working_allocation_costs_lfm`
+                  + oc.`pricing_costs_calc_price_additional_lfm`
+                ) +
+                (
+                  ((oc.`_pricing_costs_calc_time_costs_quantity` + oc.`_pricing_costs_calc_raw_material_price_total` 
+                  + oc.`_calculation_additional_setup_costs_total` + oc.`_pricing_endprices_calc_packing_costs`
+                  + oc.`_pricing_endprices_calc_transport_costs` + oc.`_pricing_endprices_calc_print_costs`)
+                  / oc.`calculation_quantityA`)
+                  + oc.`_calculation_working_allocation_costs_lfm`
+                  + oc.`pricing_costs_calc_price_additional_lfm`
+                ) * (calculation_working_discount + calculation_working_profit + calculation_working_commission) / 100 
+              ) * oc.general_packaging / 1000      
+            ) 
+            + _calculation_processing_piece_costs
+            + (_calculation_processing_lfm_costs * general_packaging / 1000)
+          ) / oc.general_packaging * 1000 
+          AS `_pricing_endprices_graduated_with_confection_lfm_quantityA`,
+          (
+            (
+              (
+                (_pricing_graduated_calculation_subtotal_lfm_quantityB + _calculation_working_allocation_costs_lfm + pricing_costs_calc_price_additional_lfm) + 
+                ((_pricing_graduated_calculation_subtotal_lfm_quantityB + _calculation_working_allocation_costs_lfm + pricing_costs_calc_price_additional_lfm) *
+                (calculation_working_commission + calculation_working_profit + calculation_working_discount) / 100)
+              ) * oc.general_packaging / 1000
+            )
+            + _calculation_processing_piece_costs
+            + (_calculation_processing_lfm_costs * general_packaging / 1000)
+          ) / oc.general_packaging * 1000 
+          AS `_pricing_endprices_graduated_with_confection_lfm_quantityB`,
+          (
+            (
+              (
+                (_pricing_graduated_calculation_subtotal_lfm_quantityC + _calculation_working_allocation_costs_lfm + pricing_costs_calc_price_additional_lfm) + 
+                ((_pricing_graduated_calculation_subtotal_lfm_quantityC + _calculation_working_allocation_costs_lfm + pricing_costs_calc_price_additional_lfm) *
+                (calculation_working_commission + calculation_working_profit + calculation_working_discount) / 100)
+              ) * oc.general_packaging / 1000
+            )
+            + _calculation_processing_piece_costs
+            + (_calculation_processing_lfm_costs * general_packaging / 1000)
+          ) / oc.general_packaging * 1000 
+          AS `_pricing_endprices_graduated_with_confection_lfm_quantityC`,
+          (
+            (
+              (
+                (_pricing_graduated_calculation_subtotal_lfm_quantityD + _calculation_working_allocation_costs_lfm + pricing_costs_calc_price_additional_lfm) + 
+                ((_pricing_graduated_calculation_subtotal_lfm_quantityD + _calculation_working_allocation_costs_lfm + pricing_costs_calc_price_additional_lfm) *
+                (calculation_working_commission + calculation_working_profit + calculation_working_discount) / 100)
+              ) * oc.general_packaging / 1000
+            )
+            + _calculation_processing_piece_costs
+            + (_calculation_processing_lfm_costs * general_packaging / 1000)
+          )  / oc.general_packaging * 1000 
+          AS `_pricing_endprices_graduated_with_confection_lfm_quantityD`,
+          (
+            (
+              (
+                (_pricing_graduated_calculation_subtotal_lfm_quantityE + _calculation_working_allocation_costs_lfm + pricing_costs_calc_price_additional_lfm) + 
+                ((_pricing_graduated_calculation_subtotal_lfm_quantityE + _calculation_working_allocation_costs_lfm + pricing_costs_calc_price_additional_lfm) *
+                (calculation_working_commission + calculation_working_profit + calculation_working_discount) / 100)
+              ) * oc.general_packaging / 1000
+            )
+            + _calculation_processing_piece_costs
+            + (_calculation_processing_lfm_costs * general_packaging / 1000)
+          ) / oc.general_packaging * 1000 
+          AS `_pricing_endprices_graduated_with_confection_lfm_quantityE`,
+
+
+      --  Staffel / stk = _pricing_endprices_graduated_without_confection_stk_quantityA
+      --  + _calculation_processing_piece_costs
+      --  + (_calculation_processing_lfm_costs * general_packaging / 1000)
+
+          (
+            (
+              (
+                (
+                  ((oc.`_pricing_costs_calc_time_costs_quantity` + oc.`_pricing_costs_calc_raw_material_price_total` 
+                  + oc.`_calculation_additional_setup_costs_total` + oc.`_pricing_endprices_calc_packing_costs`
+                  + oc.`_pricing_endprices_calc_transport_costs` + oc.`_pricing_endprices_calc_print_costs`)
+                  / oc.`calculation_quantityA`)
+                  + oc.`_calculation_working_allocation_costs_lfm`
+                  + oc.`pricing_costs_calc_price_additional_lfm`
+                ) +
+                (
+                  ((oc.`_pricing_costs_calc_time_costs_quantity` + oc.`_pricing_costs_calc_raw_material_price_total` 
+                  + oc.`_calculation_additional_setup_costs_total` + oc.`_pricing_endprices_calc_packing_costs`
+                  + oc.`_pricing_endprices_calc_transport_costs` + oc.`_pricing_endprices_calc_print_costs`)
+                  / oc.`calculation_quantityA`)
+                  + oc.`_calculation_working_allocation_costs_lfm`
+                  + oc.`pricing_costs_calc_price_additional_lfm`
+                ) * (calculation_working_discount + calculation_working_profit + calculation_working_commission) / 100 
+              ) * oc.general_packaging / 1000      
+            ) 
+            + _calculation_processing_piece_costs
+            + (_calculation_processing_lfm_costs * general_packaging / 1000)
+          ) AS `_pricing_endprices_graduated_with_confection_stk_quantityA`,
+          (
+            (
+              (
+                (_pricing_graduated_calculation_subtotal_lfm_quantityB + _calculation_working_allocation_costs_lfm + pricing_costs_calc_price_additional_lfm) + 
+                ((_pricing_graduated_calculation_subtotal_lfm_quantityB + _calculation_working_allocation_costs_lfm + pricing_costs_calc_price_additional_lfm) *
+                (calculation_working_commission + calculation_working_profit + calculation_working_discount) / 100)
+              ) * oc.general_packaging / 1000
+            )
+            + _calculation_processing_piece_costs
+            + (_calculation_processing_lfm_costs * general_packaging / 1000)
+          ) AS `_pricing_endprices_graduated_with_confection_stk_quantityB`,
+          (
+            (
+              (
+                (_pricing_graduated_calculation_subtotal_lfm_quantityC + _calculation_working_allocation_costs_lfm + pricing_costs_calc_price_additional_lfm) + 
+                ((_pricing_graduated_calculation_subtotal_lfm_quantityC + _calculation_working_allocation_costs_lfm + pricing_costs_calc_price_additional_lfm) *
+                (calculation_working_commission + calculation_working_profit + calculation_working_discount) / 100)
+              ) * oc.general_packaging / 1000
+            )
+            + _calculation_processing_piece_costs
+            + (_calculation_processing_lfm_costs * general_packaging / 1000)
+          ) AS `_pricing_endprices_graduated_with_confection_stk_quantityC`,
+          (
+            (
+              (
+                (_pricing_graduated_calculation_subtotal_lfm_quantityD + _calculation_working_allocation_costs_lfm + pricing_costs_calc_price_additional_lfm) + 
+                ((_pricing_graduated_calculation_subtotal_lfm_quantityD + _calculation_working_allocation_costs_lfm + pricing_costs_calc_price_additional_lfm) *
+                (calculation_working_commission + calculation_working_profit + calculation_working_discount) / 100)
+              ) * oc.general_packaging / 1000
+            )
+            + _calculation_processing_piece_costs
+            + (_calculation_processing_lfm_costs * general_packaging / 1000)
+          ) AS `_pricing_endprices_graduated_with_confection_stk_quantityD`,
+          (
+            (
+              (
+                (_pricing_graduated_calculation_subtotal_lfm_quantityE + _calculation_working_allocation_costs_lfm + pricing_costs_calc_price_additional_lfm) + 
+                ((_pricing_graduated_calculation_subtotal_lfm_quantityE + _calculation_working_allocation_costs_lfm + pricing_costs_calc_price_additional_lfm) *
+                (calculation_working_commission + calculation_working_profit + calculation_working_discount) / 100)
+              ) * oc.general_packaging / 1000
+            )
+            + _calculation_processing_piece_costs
+            + (_calculation_processing_lfm_costs * general_packaging / 1000)
+          ) AS `_pricing_endprices_graduated_with_confection_stk_quantityE`,
+
+
+
+      -- Maschinenauslastung->Stunden -- machine utilization->hours
+
+      -- calculation_working_annual_requirement_estimated * pricing_graduated_calculation_additional_setup_quantity 
+      --    / calculation_working_extrusion_speed / 60
+          (
+            (oc.calculation_working_annual_requirement_estimated * (100+oc.pricing_graduated_calculation_additional_setup_quantity)/100) 
+            / oc.calculation_working_extrusion_speed / 60
+          ) AS `_pricing_machine_utilization_hours_quantity_yearly`,
+
+      -- Menge(zzgl) / Extrusionsgeschwindigkeit / 60
+          (
+            oc._pricing_graduated_calculation_quantityA / oc.calculation_working_extrusion_speed / 60
+          ) AS `_pricing_machine_utilization_hours_quantityA`,
+          (
+            oc._pricing_graduated_calculation_quantityB / oc.calculation_working_extrusion_speed / 60
+          ) AS `_pricing_machine_utilization_hours_quantityB`,
+          (
+            oc._pricing_graduated_calculation_quantityC / oc.calculation_working_extrusion_speed / 60
+          ) AS `_pricing_machine_utilization_hours_quantityC`,
+          (
+            oc._pricing_graduated_calculation_quantityD / oc.calculation_working_extrusion_speed / 60
+          ) AS `_pricing_machine_utilization_hours_quantityD`,
+          (
+            oc._pricing_graduated_calculation_quantityE / oc.calculation_working_extrusion_speed / 60
+          ) AS `_pricing_machine_utilization_hours_quantityE`,
+
+
+      -- Maschinenauslastung->Tage -- machine utilization->days
+          (
+            (oc.calculation_working_annual_requirement_estimated * (100+oc.pricing_graduated_calculation_additional_setup_quantity)/100) 
+            / oc.calculation_working_extrusion_speed / 60
+          )  / 24 AS `_pricing_machine_utilization_days_quantity_yearly`,
+          (
+            oc._pricing_graduated_calculation_quantityA / oc.calculation_working_extrusion_speed / 60
+          ) / 24 AS `_pricing_machine_utilization_days_quantityA`,
+          (
+            oc._pricing_graduated_calculation_quantityB / oc.calculation_working_extrusion_speed / 60
+          ) / 24 AS `_pricing_machine_utilization_days_quantityB`,
+          (
+            oc._pricing_graduated_calculation_quantityC / oc.calculation_working_extrusion_speed / 60
+          ) / 24  AS `_pricing_machine_utilization_days_quantityC`,
+          (
+            oc._pricing_graduated_calculation_quantityD / oc.calculation_working_extrusion_speed / 60
+          ) / 24  AS `_pricing_machine_utilization_days_quantityD`,
+          (
+            oc._pricing_graduated_calculation_quantityE / oc.calculation_working_extrusion_speed / 60
+          ) / 24  AS `_pricing_machine_utilization_days_quantityE`,
+
+
+      -- Maschinenauslastung->Wochen -- machine utilization->weeks
+          (
+            (oc.calculation_working_annual_requirement_estimated * (100+oc.pricing_graduated_calculation_additional_setup_quantity)/100) 
+            / oc.calculation_working_extrusion_speed / 60
+          )  / 24 / 5 AS `_pricing_machine_utilization_weeks_quantity_yearly`,
+          (
+            oc._pricing_graduated_calculation_quantityA / oc.calculation_working_extrusion_speed / 60
+          ) / 24 / 5 AS `_pricing_machine_utilization_weeks_quantityA`,
+          (
+            oc._pricing_graduated_calculation_quantityB / oc.calculation_working_extrusion_speed / 60
+          ) / 24 / 5 AS `_pricing_machine_utilization_weeks_quantityB`,
+          (
+            oc._pricing_graduated_calculation_quantityC / oc.calculation_working_extrusion_speed / 60
+          ) / 24 / 5 AS `_pricing_machine_utilization_weeks_quantityC`,
+          (
+            oc._pricing_graduated_calculation_quantityD / oc.calculation_working_extrusion_speed / 60
+          ) / 24 / 5 AS `_pricing_machine_utilization_weeks_quantityD`,
+          (
+            oc._pricing_graduated_calculation_quantityE / oc.calculation_working_extrusion_speed / 60
+          ) / 24 / 5 AS `_pricing_machine_utilization_weeks_quantityE`,
+
+
+      -- Maschinenauslastung->Monate -- machine utilization->months
+          (
+            (oc.calculation_working_annual_requirement_estimated * (100+oc.pricing_graduated_calculation_additional_setup_quantity)/100) 
+            / oc.calculation_working_extrusion_speed / 60
+          )  / 24 / 5 / 4 AS `_pricing_machine_utilization_months_quantity_yearly`,
+          (
+            oc._pricing_graduated_calculation_quantityA / oc.calculation_working_extrusion_speed / 60
+          ) / 24 / 5 / 4 AS `_pricing_machine_utilization_months_quantityA`,
+          (
+            oc._pricing_graduated_calculation_quantityB / oc.calculation_working_extrusion_speed / 60
+          ) / 24 / 5 / 4 AS `_pricing_machine_utilization_months_quantityB`,
+          (
+            oc._pricing_graduated_calculation_quantityC / oc.calculation_working_extrusion_speed / 60
+          ) / 24 / 5 / 4 AS `_pricing_machine_utilization_months_quantityC`,
+          (
+            oc._pricing_graduated_calculation_quantityD / oc.calculation_working_extrusion_speed / 60
+          ) / 24 / 5 / 4 AS `_pricing_machine_utilization_months_quantityD`,
+          (
+            oc._pricing_graduated_calculation_quantityE / oc.calculation_working_extrusion_speed / 60
+          ) / 24 / 5 / 4 AS `_pricing_machine_utilization_months_quantityE`,
+
+
+      -- Maschinenauslastung->Maschinenauslastung im Jahr prozentual -- machine utilization per year relative
+          (
+            (oc.calculation_working_annual_requirement_estimated * (100+oc.pricing_graduated_calculation_additional_setup_quantity)/100) 
+            / oc.calculation_working_extrusion_speed / 60
+          ) / oc.pricing_machine_utilization_annual_machine_capacity * 100  
+          AS `_pricing_machine_utilization_yearly_relative`
+
+        FROM offers_calculated_temp2 oc;
+  SQL
     );
   }
 
