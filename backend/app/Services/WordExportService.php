@@ -2,23 +2,26 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Log;
 use PhpOffice\PhpWord\TemplateProcessor;
 
 class WordExportService
 {
 
-    public function exportOfferWithTemplate(array $data, string $outputFilename)
+    public function exportOfferWithTemplate(array $placeholders, string $outputFilename)
     {
         $templatePath = storage_path(config('offer_word_export.template_path'));
         $template = new TemplateProcessor($templatePath);
 
-        $placeholders = config('offer_word_export.placeholders');
+        // Optional: get template variables (but no logging anymore)
+        $templateVariables = $template->getVariables();
 
-        foreach ($placeholders as $templatePlaceholder => $dataField) {
-            $template->setValue($templatePlaceholder, $data[$dataField] ?? '-');
+        foreach ($placeholders as $templatePlaceholder => $value) {
+            if (in_array($templatePlaceholder, $templateVariables)) {
+                $template->setValue($templatePlaceholder, $value ?? '-');
+            }
         }
 
-        // Add the TODAY() field separately
         $template->setValue('TODAY()', now()->format('d.m.Y'));
 
         $outputPath = storage_path("app/public/{$outputFilename}.docx");

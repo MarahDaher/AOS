@@ -100,45 +100,70 @@ No manual database changes needed anymore! 🚀
 
 ## 📜 Word Export Configuration
 
-> 📝 Word export mappings and template settings are managed dynamically via `config/offer_word_export.php`.
+> 📝 Word export now pulls data **directly from the `offers_calculated_wordexport` database view**, making the system more dynamic and easier to extend.
 
-### How does it work?
+### ✅ How does it work now?
 
--   The file `config/offer_word_export.php` defines:
-    -   The **template path** for the Word file.
-    -   The list of **placeholders** and the corresponding **OfferCalculated** model fields.
--   When generating the Word document:
-    -   Placeholders in the template (like `${general_offer_number}`) are automatically replaced by the values from the OfferCalculated model.
-    -   The current date (in `dd.mm.yyyy` format) is automatically inserted into `${TODAY()}`.
--   No need to manually change code if the fields change!
+-   Word placeholders like `${general_offer_number}`, `${general_color}`, `${_ingredients_concatenated}` are directly matched with fields from the **`offers_calculated_wordexport` view**.
+-   The data is loaded using a dedicated model: `App\Models\OfferCalculatedWordExport`.
+-   This view is automatically updated via a database migration (`CreateOffersCalculatedWordExportView`).
+-   The current date is still inserted into `${TODAY()}`.
 
-### How to update or add fields to the Word export?
+### ✅ How to update the fields used in export?
 
-1. Open the `config/offer_word_export.php` file.
-2. Add, modify, or remove entries in the `placeholders` array:
+1. Open the SQL view logic in:
 
-```php
-'placeholders' => [
-    'placeholder_in_docx' => 'model_field_name',
-]
+    ```
+    database/migrations/xxxx_xx_xx_create_offers_calculated_wordexport_view.php
+    ```
+
+2. Update the `SELECT` fields or computed columns as needed. For example:
+
+```sql
+SELECT
+    oc.general_offer_number,
+    oc.general_color,
+    ...
+    (
+      SELECT GROUP_CONCAT(...) FROM ...
+    ) AS _ingredients_concatenated
+FROM offers_calculated oc
 ```
 
-3. (Optional) Update the `template_path` if the Word template file changes.
+3. Run the migration again or re-run the view creation manually using:
 
-Example:
+```bash
+php artisan migrate:refresh
+
+```
+
+4. Update the Word `.docx` template placeholders to match the exact field names (e.g., `${general_offer_number}`).
+
+---
+
+### ⚠️ Placeholder Naming Rules
+
+-   All placeholders in the `.docx` template **must exactly match** the view field names.
+-   Placeholders are **case-sensitive** (e.g., `${general_color}` ≠ `${GENERAL_COLOR}`).
+-   Ensure the placeholders are not split or formatted across lines in Word.
+
+---
+
+### ✅ Template Path
+
+The Word template file path is still defined via:
 
 ```php
 'template_path' => 'app/templates/Angebot Vorlage AOS.docx',
-
-'placeholders' => [
-    'general_offer_number' => 'general_offer_number',
-    'general_customer' => 'general_customer',
-    'general_color' => 'general_color',
-    // Add more here...
-],
 ```
 
-👉 The system will **automatically** pick up the changes without modifying any PHP code!
+in:
+
+```
+config/offer_word_export.php
+```
+
+No changes are needed here unless you want to use a different template file.
 
 ---
 
@@ -188,7 +213,7 @@ return [
 
 ---
 
-## 🧰 Folder Structure
+## 🪰 Folder Structure
 
 | Folder      | Purpose                                   |
 | ----------- | ----------------------------------------- |

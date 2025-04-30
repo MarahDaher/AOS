@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\BaseController;
 use App\Models\Offer;
 use App\Models\OfferCalculated;
+use App\Models\OfferCalculatedWordExport;
 use App\Services\WordExportService;
 
 class OfferExportController extends BaseController
@@ -18,18 +19,19 @@ class OfferExportController extends BaseController
 
     public function export($id)
     {
-        $offer = OfferCalculated::findOrFail($id);
+        $offer = OfferCalculatedWordExport::findOrFail($id);
 
-        $placeholders = config('offer_word_export.placeholders');
+        // Convert model to associative array
+        $data = $offer->toArray();
 
-        $data = [];
-
-        foreach ($placeholders as $templatePlaceholder => $modelField) {
-            $data[$modelField] = $offer->{$modelField} ?? '';
+        // Optionally format keys to match placeholder names
+        $placeholders = [];
+        foreach ($data as $key => $value) {
+            $placeholders[$key] = $value ?? '-';
         }
 
         $filename = 'Offer_' . ($offer->general_offer_number ?? 'DEFAULT');
 
-        return $this->wordExportService->exportOfferWithTemplate($data, $filename);
+        return $this->wordExportService->exportOfferWithTemplate($placeholders, $filename);
     }
 }
