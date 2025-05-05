@@ -31,7 +31,7 @@ const ToolingCard: FunctionComponent = () => {
           <Grid size={{ xs: 12, md: 2.4 }}>
             <FormInputSaveField
               name="runningcard_tool_costs"
-              label="Kosten"
+              label="Kosten [€]"
               disabled={
                 !isFieldEditable("runningcard_tool_costs") || !isEditable
               }

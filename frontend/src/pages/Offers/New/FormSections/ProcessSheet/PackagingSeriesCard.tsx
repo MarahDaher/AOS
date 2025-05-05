@@ -56,7 +56,7 @@ const PackagingSeriesCard: FunctionComponent = () => {
           <Grid size={{ xs: 12, md: 2.4 }}>
             <FormInputSaveField
               name="runningcard_packing_length"
-              label="Länge"
+              label="Länge [m]"
               disabled={
                 !isFieldEditable("runningcard_packing_length") || !isEditable
               }

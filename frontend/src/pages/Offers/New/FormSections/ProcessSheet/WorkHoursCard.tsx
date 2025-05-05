@@ -42,7 +42,7 @@ const WorkHoursCard: FunctionComponent = () => {
           <Grid size={{ xs: 12, md: 2.4 }}>
             <FormInputSaveField
               name="runningcard_hourlyrecording_construction"
-              label="Konstruktion"
+              label="Konstruktion [min]"
               disabled={
                 !isFieldEditable("runningcard_hourlyrecording_construction") ||
                 !isEditable
@@ -52,7 +52,7 @@ const WorkHoursCard: FunctionComponent = () => {
           <Grid size={{ xs: 12, md: 2.4 }}>
             <FormInputSaveField
               name="runningcard_hourlyrecording_toolwork"
-              label="Werkzeug- / Kalibrierungsbau"
+              label="Werkzeug-/Kalibrierungsbau [min]"
               disabled={
                 !isFieldEditable("runningcard_hourlyrecording_toolwork") ||
                 !isEditable
@@ -62,7 +62,7 @@ const WorkHoursCard: FunctionComponent = () => {
           <Grid size={{ xs: 12, md: 2.4 }}>
             <FormInputSaveField
               name="runningcard_hourlyrecording_entry"
-              label="Einfahren"
+              label="Einfahren [min]"
               disabled={
                 !isFieldEditable("runningcard_hourlyrecording_entry") ||
                 !isEditable
