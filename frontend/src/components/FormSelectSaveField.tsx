@@ -11,16 +11,28 @@ import {
 } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useSaveFieldMutation } from "@hooks/useSaveFieldMutation";
+import ListSubheader from "@mui/material/ListSubheader";
+
+interface BaseOption {
+  label: string;
+  value: any;
+}
+
+interface GroupedOption {
+  group: string;
+  options: BaseOption[];
+}
+
+type OptionType = BaseOption | GroupedOption;
 
 interface FormSelectFieldProps {
   name: string;
   label: string;
-  options: { label: string; value: any }[];
+  options: OptionType[];
   required?: boolean;
   disabled?: boolean;
   onSaved?: () => void;
 }
-
 const FormSelectSaveField: FunctionComponent<FormSelectFieldProps> = ({
   name,
   label,
@@ -60,22 +72,44 @@ const FormSelectSaveField: FunctionComponent<FormSelectFieldProps> = ({
       <InputLabel required={required}>{label}</InputLabel>
       <Select
         {...field}
-        value={field.value}
+        value={
+          options
+            .flatMap((opt) => ("group" in opt ? opt.options : [opt]))
+            .some((opt) => opt.value === field.value)
+            ? field.value
+            : ""
+        }
         onChange={handleChange}
         disabled={disabled}
         endAdornment={
-          justSaved ? (
+          justSaved && (
             <InputAdornment position="end">
               <CheckCircleIcon sx={{ color: "green" }} />
             </InputAdornment>
-          ) : undefined
+          )
         }
       >
-        {options.map((opt) => (
-          <MenuItem key={opt.value} value={opt.value}>
-            {opt.label}
-          </MenuItem>
-        ))}
+        {options.flatMap((opt) =>
+          "group" in opt
+            ? [
+                <ListSubheader key={`group-${opt.group}`}>
+                  {opt.group}
+                </ListSubheader>,
+                ...opt.options.map((subOpt) => (
+                  <MenuItem key={subOpt.value} value={subOpt.value}>
+                    {subOpt.label}
+                  </MenuItem>
+                )),
+              ]
+            : [
+                <MenuItem
+                  key={(opt as BaseOption).value}
+                  value={(opt as BaseOption).value}
+                >
+                  {(opt as BaseOption).label}
+                </MenuItem>,
+              ]
+        )}
       </Select>
       {meta.touched && meta.error && (
         <FormHelperText>{meta.error}</FormHelperText>

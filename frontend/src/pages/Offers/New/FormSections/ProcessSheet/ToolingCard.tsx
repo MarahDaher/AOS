@@ -17,7 +17,7 @@ const ToolingCard: FunctionComponent = () => {
     initialValues: {
       runningcard_tool_costs: offerDetails?.runningcard_tool_costs ?? "",
       runningcard_tool_cost_type:
-        offerDetails?.runningcard_tool_cost_type ?? "anteilig",
+        offerDetails?.runningcard_tool_cost_type ?? "Anteilig",
       runningcard_tool_hint: offerDetails?.runningcard_tool_hint ?? "",
     },
     enableReinitialize: true,

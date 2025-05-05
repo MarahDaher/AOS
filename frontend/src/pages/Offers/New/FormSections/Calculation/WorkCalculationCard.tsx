@@ -11,6 +11,7 @@ import {
 } from "../../Index";
 import ProfileWeightTripleDisplay from "./ProfileWeightTripleDisplay";
 import { usePermissions } from "@hooks/usePermissions";
+import ToolCostsCustomerView from "./ToolCostsCustomerView";
 
 type FieldConfig = {
   name: string;
@@ -55,11 +56,12 @@ const rows: Array<FieldConfig | null>[] = [
       label: "Werkzeugkosten gesamt [€]",
       numeric: true,
     },
-    {
-      name: "calculation_working_tool_costs_customer",
-      label: "Werkzeugkosten Kunde [€]",
-      numeric: true,
-    },
+    null,
+    // {
+    //   name: "calculation_working_tool_costs_customer",
+    //   label: "Werkzeugkosten Kunde [€]",
+    //   numeric: true,
+    // },
     {
       name: "calculation_working_allocation_costs_additional",
       label: "Umlagekosten zzgl. [€]",
@@ -158,6 +160,8 @@ const WorkCalculationCard: FC = () => {
                     disabled={field.disabled || !isEditable}
                     numeric={field.numeric}
                   />
+                ) : rowIndex === 1 && colIndex === 1 ? (
+                  <ToolCostsCustomerView />
                 ) : rowIndex === 2 && colIndex === 4 ? (
                   <ProfileWeightTripleDisplay />
                 ) : null}

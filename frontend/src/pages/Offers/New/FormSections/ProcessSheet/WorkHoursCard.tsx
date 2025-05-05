@@ -1,14 +1,26 @@
 import CardBox from "@components/CardBox";
 import FormInputSaveField from "@components/FormInputSaveField";
+import FormSelectSaveField from "@components/FormSelectSaveField";
 import Grid from "@mui/material/Grid2";
 import { FormikProvider, useFormik } from "formik";
-import { useOfferContext } from "@contexts/OfferProvider";
-import { FunctionComponent } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
+import { Roles } from "@enums/Roles.enum";
 import { useFieldEditable } from "@hooks/useFieldEditable";
+import { useOfferContext } from "@contexts/OfferProvider";
 import { usePermissions } from "@hooks/usePermissions";
+import { UsersApi } from "@api/users";
+
+type OptionGroup = {
+  group: string;
+  options: {
+    label: string;
+    value: number;
+  }[];
+};
 
 const WorkHoursCard: FunctionComponent = () => {
   const { offerDetails, offerId } = useOfferContext();
+
   // Permissions
   // Permissions
   const { isFieldEditable } = useFieldEditable(offerId!);
@@ -34,6 +46,52 @@ const WorkHoursCard: FunctionComponent = () => {
     enableReinitialize: true,
     onSubmit: () => {},
   });
+
+  // State
+  const [userOptions, setUserOptions] = useState<OptionGroup[]>([]);
+
+  // Fetch users
+  useEffect(() => {
+    async function loadUsers() {
+      try {
+        const response = await UsersApi.getAllUsers();
+
+        if (response && Array.isArray(response)) {
+          const admins = response.filter((u) => u.role?.name === Roles.ADMIN);
+          const productions = response.filter(
+            (u) => u.role?.name === Roles.PRODUCTION
+          );
+
+          const formatUser = (u: any) => ({
+            label: `${u.name} (${u.email})`,
+            value: u.id,
+          });
+
+          const groupedOptions: OptionGroup[] = [];
+
+          if (admins.length > 0) {
+            groupedOptions.push({
+              group: "Administratorin",
+              options: admins.map(formatUser),
+            });
+          }
+
+          if (productions.length > 0) {
+            groupedOptions.push({
+              group: "Produktion",
+              options: productions.map(formatUser),
+            });
+          }
+
+          setUserOptions(groupedOptions);
+        }
+      } catch (err) {
+        console.error("Failed to load users", err);
+      }
+    }
+
+    loadUsers();
+  }, []);
 
   return (
     <FormikProvider value={formik}>
@@ -87,9 +145,10 @@ const WorkHoursCard: FunctionComponent = () => {
             />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>
-            <FormInputSaveField
+            <FormSelectSaveField
               name="runningcard_hourlyrecording_entrydriver_user_id"
               label="Einfahrer"
+              options={userOptions}
               disabled={
                 !isFieldEditable(
                   "runningcard_hourlyrecording_entrydriver_user_id"
@@ -98,9 +157,10 @@ const WorkHoursCard: FunctionComponent = () => {
             />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>
-            <FormInputSaveField
+            <FormSelectSaveField
               name="runningcard_hourlyrecording_toolmaker_user_id"
               label="Werkzeugmacher"
+              options={userOptions}
               disabled={
                 !isFieldEditable(
                   "runningcard_hourlyrecording_toolmaker_user_id"

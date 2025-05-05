@@ -10,178 +10,218 @@ class CreateOffersCalculatedTempView extends Migration
     DB::statement(
       <<<SQL
         CREATE OR REPLACE VIEW offers_calculated_temp AS 
-          SELECT 
-            o.*, 
+        SELECT 
+          o.*, 
 
-            (
-              o.`calculation_processing_lfm_runtime` * o.`calculation_processing_lfm_runtime_factor` + 
-              o.`calculation_processing_lfm_packing_time` * o.`calculation_processing_lfm_packing_time_factor` 
-            ) AS `_calculation_processing_lfm_expense`,
-            (
-              (o.`calculation_processing_lfm_runtime` * o.`calculation_processing_lfm_runtime_factor` + 
-              o.`calculation_processing_lfm_packing_time` * o.`calculation_processing_lfm_packing_time_factor`) *
-              o.`calculation_processing_lfm_hourly_rate` / 3600 
-            ) AS `_calculation_processing_lfm_costs`,
+          CASE
+            WHEN o.`calculation_working_tool_costs_total` = o.`calculation_working_tool_costs_customer` THEN 'Vollkosten'
+            ELSE 'anteilig'
+          END AS `runningcard_tool_cost_type`,
 
-
-            (
-              o.`calculation_processing_piece_runtime` * o.`calculation_processing_piece_runtime_factor` + 
-              o.`calculation_processing_piece_packing_time` * o.`calculation_processing_piece_packing_time_factor` 
-            ) AS `_calculation_processing_piece_expense`,
-            (
-              (o.`calculation_processing_piece_runtime` * o.`calculation_processing_piece_runtime_factor` + 
-              o.`calculation_processing_piece_packing_time` * o.`calculation_processing_piece_packing_time_factor`) *
-              o.`calculation_processing_piece_hourly_rate` / 3600 
-            ) AS `_calculation_processing_piece_costs`,
+          (
+            o.`calculation_processing_lfm_runtime` * o.`calculation_processing_lfm_runtime_factor` + 
+            o.`calculation_processing_lfm_packing_time` * o.`calculation_processing_lfm_packing_time_factor` 
+          ) AS `_calculation_processing_lfm_expense`,
+          (
+            (o.`calculation_processing_lfm_runtime` * o.`calculation_processing_lfm_runtime_factor` + 
+            o.`calculation_processing_lfm_packing_time` * o.`calculation_processing_lfm_packing_time_factor`) *
+            o.`calculation_processing_lfm_hourly_rate` / 3600 
+          ) AS `_calculation_processing_lfm_costs`,
 
 
-            (
-              o.`calculation_additional_setup_time` * o.`calculation_additional_hourly_rate`
-            ) AS `_calculation_additional_setup_costs_total`,
-            (
-              o.`calculation_additional_setup_time` * o.`calculation_additional_hourly_rate` / 
-              o.`calculation_quantityA`
-            ) AS `_calculation_additional_setup_costs_lfm`,
-            (
-              o.`calculation_additional_transport_costs_total` / o.`calculation_quantityA`
-            ) AS `_calculation_additional_transport_costs_lfm`,
-            (
-              ((o.`calculation_additional_box_count` * o.`calculation_additional_box_price_per_piece`) + 
-              o.`calculation_additional_box_price_flat_additional`) / o.`calculation_quantityA`
-            ) AS `_calculation_additional_box_costs_lfm`,
-            (
-              (o.`calculation_additional_single_print` * o.`calculation_additional_single_print_price`)
-            ) AS `_calculation_additional_single_print_lfm`,
+          (
+            o.`calculation_processing_piece_runtime` * o.`calculation_processing_piece_runtime_factor` + 
+            o.`calculation_processing_piece_packing_time` * o.`calculation_processing_piece_packing_time_factor` 
+          ) AS `_calculation_processing_piece_expense`,
+          (
+            (o.`calculation_processing_piece_runtime` * o.`calculation_processing_piece_runtime_factor` + 
+            o.`calculation_processing_piece_packing_time` * o.`calculation_processing_piece_packing_time_factor`) *
+            o.`calculation_processing_piece_hourly_rate` / 3600 
+          ) AS `_calculation_processing_piece_costs`,
 
 
-            (
-              o.`calculation_working_setup_quantity_relative` * o.`calculation_quantityA` / 100 
-            ) AS `_calculation_working_setup_quantity_lfm`,
-            (
-              (o.`calculation_working_setup_quantity_relative` * o.`calculation_quantityA` / 100) / 
-              o.`calculation_working_extrusion_speed` 
-            ) AS `_calculation_working_setup_time`,
-            (
-              o.`calculation_working_tool_costs_customer` / o.`calculation_working_tool_costs_total` * 100 
-            ) AS `_calculation_working_tool_costs_customer_relative`,
-            (
-              
-                (o.`calculation_working_allocation_costs_additional` +
-                o.`calculation_working_tool_costs_total` -
-                o.`calculation_working_tool_costs_customer`) /
-                (o.`calculation_working_annual_requirement_estimated` * 
-                o.`calculation_working_tool_costs_amortization_years`)
-                
-            ) AS `_calculation_working_allocation_costs_lfm`,
+          (
+            o.`calculation_additional_setup_time` * o.`calculation_additional_hourly_rate`
+          ) AS `_calculation_additional_setup_costs_total`,
+          (
+            o.`calculation_additional_setup_time` * o.`calculation_additional_hourly_rate` / 
+            o.`calculation_quantityA`
+          ) AS `_calculation_additional_setup_costs_lfm`,
+          (
+            o.`calculation_additional_transport_costs_total` / o.`calculation_quantityA`
+          ) AS `_calculation_additional_transport_costs_lfm`,
+          (
+            ((o.`calculation_additional_box_count` * o.`calculation_additional_box_price_per_piece`) + 
+            o.`calculation_additional_box_price_flat_additional`) / o.`calculation_quantityA`
+          ) AS `_calculation_additional_box_costs_lfm`,
+          (
+            (o.`calculation_additional_single_print` * o.`calculation_additional_single_print_price`)
+          ) AS `_calculation_additional_single_print_lfm`,
 
-        -- raw_material average density over the raw_materials pultiplied by their share
-        -- it has to be sumed up, because of the multiplication with the share. So its not directly the average.
-            (
-              SELECT SUM(r.density * o_r.share/100)
-              FROM offers_raw_materials o_r 
-              JOIN raw_materials r ON (r.id=o_r.raw_material_id)
-              WHERE (o.id=o_r.offer_id)
-            ) AS `_calculation_working_density_total`, 
+
+          (
+            o.`calculation_working_setup_quantity_relative` * o.`calculation_quantityA` / 100 
+          ) AS `_calculation_working_setup_quantity_lfm`,
+          (
+            (o.`calculation_working_setup_quantity_relative` * o.`calculation_quantityA` / 100) / 
+            o.`calculation_working_extrusion_speed` 
+          ) AS `_calculation_working_setup_time`,
+          (
+            o.`calculation_working_tool_costs_customer` / o.`calculation_working_tool_costs_total` * 100 
+          ) AS `_calculation_working_tool_costs_customer_relative`,
+          (
             
-        -- _calculation_working_density_total * o.general_profile_crosssection * 
-        -- (100 - o.calculation_working_profile_cross_section_deviation_lower)/100
-            (
-              (
-              SELECT SUM(r.density * o_r.share/100)
-              FROM offers_raw_materials o_r 
-              JOIN raw_materials r ON (r.id=o_r.raw_material_id)
-              WHERE (o.id=o_r.offer_id)
-            ) 
-              * o.general_profile_crosssection 
-              * (100 - o.calculation_working_profile_cross_section_deviation_lower)/100
-            ) AS `_calculation_working_profile_weight_lowerborder`,
-
-        -- _calculation_working_density_total * general_profile_crosssection      1,9625 + 0,9
-            ((
-              SELECT SUM(r.density * o_r.share/100)
-              FROM offers_raw_materials o_r 
-              JOIN raw_materials r ON (r.id=o_r.raw_material_id)
-              WHERE (o.id=o_r.offer_id)
-            )  * general_profile_crosssection ) AS `_calculation_working_profile_weight_average`,
-
-
-        -- _calculation_working_density_total * o.general_profile_crosssection * 
-        -- (100 + o.calculation_working_profile_cross_section_deviation_upper)/100
-            (
-              (
-              SELECT SUM(r.density * o_r.share/100)
-              FROM offers_raw_materials o_r 
-              JOIN raw_materials r ON (r.id=o_r.raw_material_id)
-              WHERE (o.id=o_r.offer_id)
-            ) 
-              * o.general_profile_crosssection 
-              * (100 + o.calculation_working_profile_cross_section_deviation_upper)/100
-            ) AS `_calculation_working_profile_weight_upperborder`,
-
-        -- , zus.Einstellmenge (for Kalk-Menge) / o.calculation_working_extrusion_speed /  60 
-            ( ROUND(
-              (o.`calculation_quantityA` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100) 
-              / o. `calculation_working_extrusion_speed` / 60 
-            , 2)) AS `_pricing_costs_calc_production_time`,
-
-        -- , `_pricing_costs_calc_production_time` * o.calculation_working_hourly_rate
-            ( 
-              ROUND(
-              (o.`calculation_quantityA` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100) 
-              / o. `calculation_working_extrusion_speed` / 60 
+              (o.`calculation_working_allocation_costs_additional` +
+              o.`calculation_working_tool_costs_total` -
+              o.`calculation_working_tool_costs_customer`) /
+              (o.`calculation_working_annual_requirement_estimated` * 
+              o.`calculation_working_tool_costs_amortization_years`)
               
-              * o.calculation_working_hourly_rate
-            , 2)) AS `_pricing_costs_calc_time_costs_quantity`,
+          ) AS `_calculation_working_allocation_costs_lfm`,
 
-        -- Zeitkosten gesamt / MengeA(zzgl.Einstellmenge)*Jahresbedarf
-        -- _pricing_costs_calc_time_costs_quantity / _pricing_graduated_calculation_quantityA * calculation_working_annual_requirement_estimated
-            ( ROUND(
-              (
-                (o.`calculation_quantityA` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100) 
-                / o.`calculation_working_extrusion_speed` / 60         
-                * o.calculation_working_hourly_rate
-              )   
-            / (o.`calculation_quantityA` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100)
-            * (o.`calculation_working_annual_requirement_estimated`)
-
-            , 2)) AS `_pricing_costs_yearly_time_costs_quantity`,
-
-        -- `_calculation_working_profile_weight_average` / 1000 * MengeA(zzgl.Einstellmenge)
-            ( ROUND(
-                (
-                  (
-                    SELECT SUM(r.density * o_r.share/100)
-                    FROM offers_raw_materials o_r 
-                    JOIN raw_materials r ON (r.id=o_r.raw_material_id)
-                    WHERE (o.id=o_r.offer_id)
-                  )  * o.general_profile_crosssection 
-                ) 
-                / (1000 / (o.`calculation_quantityA` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100))
-            , 2)) AS `_pricing_costs_calc_raw_material_quantity`,
-
-        -- Einstellmenge [kg] = Rohstoffmenge [kg] * Einstellmenge [%]
-        --       = _pricing_costs_calc_raw_material_quantity * calculation_working_setup_quantity_relative
+      -- raw_material average density over the raw_materials pultiplied by their share
+      -- it has to be sumed up, because of the multiplication with the share. So its not directly the average.
+          (
+            SELECT SUM(r.density * o_r.share/100)
+            FROM offers_raw_materials o_r 
+            JOIN raw_materials r ON (r.id=o_r.raw_material_id)
+            WHERE (o.id=o_r.offer_id)
+          ) AS `_calculation_working_density_total`, 
+          
+      -- _calculation_working_density_total * o.general_profile_crosssection * 
+      -- (100 - o.calculation_working_profile_cross_section_deviation_lower)/100
+          (
             (
-              ROUND(
-              (o.`calculation_quantityA` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100)
-                / 1000
-                * 
+            SELECT SUM(r.density * o_r.share/100)
+            FROM offers_raw_materials o_r 
+            JOIN raw_materials r ON (r.id=o_r.raw_material_id)
+            WHERE (o.id=o_r.offer_id)
+          ) 
+            * o.general_profile_crosssection 
+            * (100 - o.calculation_working_profile_cross_section_deviation_lower)/100
+          ) AS `_calculation_working_profile_weight_lowerborder`,
+
+      -- _calculation_working_density_total * general_profile_crosssection      1,9625 + 0,9
+          ((
+            SELECT SUM(r.density * o_r.share/100)
+            FROM offers_raw_materials o_r 
+            JOIN raw_materials r ON (r.id=o_r.raw_material_id)
+            WHERE (o.id=o_r.offer_id)
+          )  * general_profile_crosssection ) AS `_calculation_working_profile_weight_average`,
+
+
+      -- _calculation_working_density_total * o.general_profile_crosssection * 
+      -- (100 + o.calculation_working_profile_cross_section_deviation_upper)/100
+          (
+            (
+            SELECT SUM(r.density * o_r.share/100)
+            FROM offers_raw_materials o_r 
+            JOIN raw_materials r ON (r.id=o_r.raw_material_id)
+            WHERE (o.id=o_r.offer_id)
+          ) 
+            * o.general_profile_crosssection 
+            * (100 + o.calculation_working_profile_cross_section_deviation_upper)/100
+          ) AS `_calculation_working_profile_weight_upperborder`,
+
+      -- , zus.Einstellmenge (for Kalk-Menge) / o.calculation_working_extrusion_speed /  60 
+          ( ROUND(
+            (o.`calculation_quantityA` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100) 
+            / o. `calculation_working_extrusion_speed` / 60 
+          , 2)) AS `_pricing_costs_calc_production_time`,
+
+      -- , `_pricing_costs_calc_production_time` * o.calculation_working_hourly_rate
+          ( 
+            ROUND(
+            (o.`calculation_quantityA` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100) 
+            / o. `calculation_working_extrusion_speed` / 60 
+            
+            * o.calculation_working_hourly_rate
+          , 2)) AS `_pricing_costs_calc_time_costs_quantity`,
+
+      -- Zeitkosten gesamt / MengeA(zzgl.Einstellmenge)*Jahresbedarf
+      -- _pricing_costs_calc_time_costs_quantity / _pricing_graduated_calculation_quantityA * calculation_working_annual_requirement_estimated
+          ( ROUND(
+            (
+              (o.`calculation_quantityA` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100) 
+              / o.`calculation_working_extrusion_speed` / 60         
+              * o.calculation_working_hourly_rate
+            )   
+          / (o.`calculation_quantityA` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100)
+          * (o.`calculation_working_annual_requirement_estimated`)
+
+          , 2)) AS `_pricing_costs_yearly_time_costs_quantity`,
+
+      -- `_calculation_working_profile_weight_average` / 1000 * MengeA(zzgl.Einstellmenge)
+          ( ROUND(
+              (
                 (
-                  (
-                    SELECT SUM(r.density * o_r.share/100)
-                    FROM offers_raw_materials o_r 
-                    JOIN raw_materials r ON (r.id=o_r.raw_material_id)
-                    WHERE (o.id=o_r.offer_id)
-                  )  * general_profile_crosssection 
-                ) 
+                  SELECT SUM(r.density * o_r.share/100)
+                  FROM offers_raw_materials o_r 
+                  JOIN raw_materials r ON (r.id=o_r.raw_material_id)
+                  WHERE (o.id=o_r.offer_id)
+                )  * o.general_profile_crosssection 
+              ) 
+              / (1000 / (o.`calculation_quantityA` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100))
+          , 2)) AS `_pricing_costs_calc_raw_material_quantity`,
+
+      -- Einstellmenge [kg] = Rohstoffmenge [kg] * Einstellmenge [%]
+      --       = _pricing_costs_calc_raw_material_quantity * calculation_working_setup_quantity_relative
+          (
+            ROUND(
+            (o.`calculation_quantityA` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100)
+              / 1000
+              * 
+              (
+                (
+                  SELECT SUM(r.density * o_r.share/100)
+                  FROM offers_raw_materials o_r 
+                  JOIN raw_materials r ON (r.id=o_r.raw_material_id)
+                  WHERE (o.id=o_r.offer_id)
+                )  * general_profile_crosssection 
+              ) 
+            * calculation_working_setup_quantity_relative
+            /100
+          , 2)) AS `_pricing_costs_calc_raw_material_setup_quantity`,
+
+      -- 	Einstellmenge [kg] + Rohstoffmenge [kg]
+      --  _pricing_costs_calc_raw_material_quantity + _pricing_costs_calc_raw_material_setup_quantity
+          (
+            ROUND(
+            (
+              (o.`calculation_quantityA` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100)
+              / 1000
+              * 
+              (
+                (
+                  SELECT SUM(r.density * o_r.share/100)
+                  FROM offers_raw_materials o_r 
+                  JOIN raw_materials r ON (r.id=o_r.raw_material_id)
+                  WHERE (o.id=o_r.offer_id)
+                )  * general_profile_crosssection 
+              )
+            )
+            +
+            (  
+              (o.`calculation_quantityA` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100)
+              / 1000
+              * 
+              (
+                (
+                  SELECT SUM(r.density * o_r.share/100)
+                  FROM offers_raw_materials o_r 
+                  JOIN raw_materials r ON (r.id=o_r.raw_material_id)
+                  WHERE (o.id=o_r.offer_id)
+                )  * general_profile_crosssection 
+              ) 
               * calculation_working_setup_quantity_relative
               /100
-            , 2)) AS `_pricing_costs_calc_raw_material_setup_quantity`,
+            )
+          , 2)) AS `_pricing_costs_calc_raw_material_quantity_total`,
 
-        -- 	Einstellmenge [kg] + Rohstoffmenge [kg]
-        --  _pricing_costs_calc_raw_material_quantity + _pricing_costs_calc_raw_material_setup_quantity
+      --  Rohstoffpreis gesamt [€] = "Rohstoffpreis / kg" * "Rohstoffmenge ges"
+      --  general_raw_material_price_total_overwritten * _pricing_costs_calc_raw_material_quantity_total
+          ( 
             (
-              ROUND(
               (
                 (o.`calculation_quantityA` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100)
                 / 1000
@@ -211,183 +251,148 @@ class CreateOffersCalculatedTempView extends Migration
                 * calculation_working_setup_quantity_relative
                 /100
               )
-            , 2)) AS `_pricing_costs_calc_raw_material_quantity_total`,
+            ) * o.`general_raw_material_price_total_overwritten`
+          ) AS `_pricing_costs_calc_raw_material_price_total`,
 
-        --  Rohstoffpreis gesamt [€] = "Rohstoffpreis / kg" * "Rohstoffmenge ges"
-        --  general_raw_material_price_total_overwritten * _pricing_costs_calc_raw_material_quantity_total
-            ( 
+      --  Rohstoffeinsatz [€]    
+      -- Rohstoffpreis/m = ProfilgewichtAverage * general_raw_material_price_total_overwritten / 1000
+      -- _pricing_costs_yearly_raw_material_quantity = Rohstoffpreis/m * calculation_working_annual_requirement_estimated
+      -- => _pricing_costs_calc_raw_material_price_total / _pricing_graduated_calculation_quantityA * calculation_working_annual_requirement_estimated
+      --    ( 
+      --      (
+      --        ((
+      --          SELECT SUM(r.density * o_r.share/100)
+      --          FROM offers_raw_materials o_r 
+      --          JOIN raw_materials r ON (r.id=o_r.raw_material_id)
+      --          WHERE (o.id=o_r.offer_id)
+      --        )  * general_profile_crosssection )
+      --        *
+      --        o.`general_raw_material_price_total_overwritten`
+      --        / 1000
+      --      )
+      --      * o.`calculation_working_annual_requirement_estimated`
+      --    ) 
+          ( 
+            (
               (
+                (o.`calculation_quantityA` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100)
+                / 1000
+                * 
                 (
-                  (o.`calculation_quantityA` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100)
-                  / 1000
-                  * 
                   (
-                    (
-                      SELECT SUM(r.density * o_r.share/100)
-                      FROM offers_raw_materials o_r 
-                      JOIN raw_materials r ON (r.id=o_r.raw_material_id)
-                      WHERE (o.id=o_r.offer_id)
-                    )  * general_profile_crosssection 
-                  )
+                    SELECT SUM(r.density * o_r.share/100)
+                    FROM offers_raw_materials o_r 
+                    JOIN raw_materials r ON (r.id=o_r.raw_material_id)
+                    WHERE (o.id=o_r.offer_id)
+                  )  * general_profile_crosssection 
                 )
-                +
-                (  
-                  (o.`calculation_quantityA` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100)
-                  / 1000
-                  * 
-                  (
-                    (
-                      SELECT SUM(r.density * o_r.share/100)
-                      FROM offers_raw_materials o_r 
-                      JOIN raw_materials r ON (r.id=o_r.raw_material_id)
-                      WHERE (o.id=o_r.offer_id)
-                    )  * general_profile_crosssection 
-                  ) 
-                  * calculation_working_setup_quantity_relative
-                  /100
-                )
-              ) * o.`general_raw_material_price_total_overwritten`
-            ) AS `_pricing_costs_calc_raw_material_price_total`,
-
-        --  Rohstoffeinsatz [€]    
-        -- Rohstoffpreis/m = ProfilgewichtAverage * general_raw_material_price_total_overwritten / 1000
-        -- _pricing_costs_yearly_raw_material_quantity = Rohstoffpreis/m * calculation_working_annual_requirement_estimated
-        -- => _pricing_costs_calc_raw_material_price_total / _pricing_graduated_calculation_quantityA * calculation_working_annual_requirement_estimated
-        --    ( 
-        --      (
-        --        ((
-        --          SELECT SUM(r.density * o_r.share/100)
-        --          FROM offers_raw_materials o_r 
-        --          JOIN raw_materials r ON (r.id=o_r.raw_material_id)
-        --          WHERE (o.id=o_r.offer_id)
-        --        )  * general_profile_crosssection )
-        --        *
-        --        o.`general_raw_material_price_total_overwritten`
-        --        / 1000
-        --      )
-        --      * o.`calculation_working_annual_requirement_estimated`
-        --    ) 
-            ( 
-              (
+              )
+              +
+              (  
+                (o.`calculation_quantityA` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100)
+                / 1000
+                * 
                 (
-                  (o.`calculation_quantityA` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100)
-                  / 1000
-                  * 
                   (
-                    (
-                      SELECT SUM(r.density * o_r.share/100)
-                      FROM offers_raw_materials o_r 
-                      JOIN raw_materials r ON (r.id=o_r.raw_material_id)
-                      WHERE (o.id=o_r.offer_id)
-                    )  * general_profile_crosssection 
-                  )
-                )
-                +
-                (  
-                  (o.`calculation_quantityA` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100)
-                  / 1000
-                  * 
-                  (
-                    (
-                      SELECT SUM(r.density * o_r.share/100)
-                      FROM offers_raw_materials o_r 
-                      JOIN raw_materials r ON (r.id=o_r.raw_material_id)
-                      WHERE (o.id=o_r.offer_id)
-                    )  * general_profile_crosssection 
-                  ) 
-                  * calculation_working_setup_quantity_relative
-                  /100
-                )
-              ) * o.`general_raw_material_price_total_overwritten`
-            ) 
-            / (o.`calculation_quantityA` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100) 
-            * calculation_working_annual_requirement_estimated
-            AS `_pricing_costs_yearly_raw_material_quantity`, 
-        -- TODO
-
-        --  Zusatzpreis / m [€] = `pricing_costs_calc_price_additional_lfm` * calculation_quantityA
-            ROUND(
-              o.`pricing_costs_calc_price_additional_lfm` * o.`calculation_quantityA`
-            ,2 ) AS `_pricing_endprices_calc_price_additional_lfm_total`,
-
-        --  Verpackung = _calculation_additional_box_costs_lfm * calculation_quantityA
-            ( ROUND(
-              (
-                ((o.`calculation_additional_box_count` * o.`calculation_additional_box_price_per_piece`) + 
-                o.`calculation_additional_box_price_flat_additional`) / o.`calculation_quantityA`
+                    SELECT SUM(r.density * o_r.share/100)
+                    FROM offers_raw_materials o_r 
+                    JOIN raw_materials r ON (r.id=o_r.raw_material_id)
+                    WHERE (o.id=o_r.offer_id)
+                  )  * general_profile_crosssection 
+                ) 
+                * calculation_working_setup_quantity_relative
+                /100
               )
-              * o.`calculation_quantityA`
-            ,2 )) AS `_pricing_endprices_calc_packing_costs`,
+            ) * o.`general_raw_material_price_total_overwritten`
+          ) 
+          / (o.`calculation_quantityA` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100) 
+          * calculation_working_annual_requirement_estimated
+          AS `_pricing_costs_yearly_raw_material_quantity`, 
+      -- TODO
 
-        --  Transport = _calculation_additional_transport_costs_lfm * calculation_quantityA
-            ( ROUND (
-              (o.`calculation_additional_transport_costs_total` / o.`calculation_quantityA`)
-              * o.`calculation_quantityA`
-            ,2 )) AS `_pricing_endprices_calc_transport_costs`,
+      --  Zusatzpreis / m [€] = `pricing_costs_calc_price_additional_lfm` * calculation_quantityA
+          ROUND(
+            o.`pricing_costs_calc_price_additional_lfm` * o.`calculation_quantityA`
+          ,2 ) AS `_pricing_endprices_calc_price_additional_lfm_total`,
 
-        --  Druck = _calculation_additional_single_print_lfm * calculation_quantityA
-            ( ROUND(
-              (o.`calculation_additional_single_print` * o.`calculation_additional_single_print_price`)
-              * o.`calculation_quantityA`
-            ,2 )) AS `_pricing_endprices_calc_print_costs`,
+      --  Verpackung = _calculation_additional_box_costs_lfm * calculation_quantityA
+          ( ROUND(
+            (
+              ((o.`calculation_additional_box_count` * o.`calculation_additional_box_price_per_piece`) + 
+              o.`calculation_additional_box_price_flat_additional`) / o.`calculation_quantityA`
+            )
+            * o.`calculation_quantityA`
+          ,2 )) AS `_pricing_endprices_calc_packing_costs`,
 
-        --  Konfektion / m = _calculation_processing_lfm_costs * calculation_quantityA
-            ( ROUND(
-              (
-                (o.`calculation_processing_lfm_runtime` * o.`calculation_processing_lfm_runtime_factor` + 
-                o.`calculation_processing_lfm_packing_time` * o.`calculation_processing_lfm_packing_time_factor`) *
-                o.`calculation_processing_lfm_hourly_rate` / 3600
-              )
-              * o.`calculation_quantityA`
-            ,2 )) AS `_pricing_endprices_calc_confection_lfm_costs`,
+      --  Transport = _calculation_additional_transport_costs_lfm * calculation_quantityA
+          ( ROUND (
+            (o.`calculation_additional_transport_costs_total` / o.`calculation_quantityA`)
+            * o.`calculation_quantityA`
+          ,2 )) AS `_pricing_endprices_calc_transport_costs`,
 
-        --  Konfektion / stk = _calculation_processing_piece_costs * calculation_quantityA * Aufmachung / 1000
-            ( ROUND(
-              (
-                (o.`calculation_processing_piece_runtime` * o.`calculation_processing_piece_runtime_factor` + 
-                o.`calculation_processing_piece_packing_time` * o.`calculation_processing_piece_packing_time_factor`) *
-                o.`calculation_processing_piece_hourly_rate` / 3600
-              )
-              * o.`calculation_quantityA` * o.`general_packaging` / 1000
-            ,2 )) AS `_pricing_endprices_calc_confection_stk_costs`,
+      --  Druck = _calculation_additional_single_print_lfm * calculation_quantityA
+          ( ROUND(
+            (o.`calculation_additional_single_print` * o.`calculation_additional_single_print_price`)
+            * o.`calculation_quantityA`
+          ,2 )) AS `_pricing_endprices_calc_print_costs`,
 
+      --  Konfektion / m = _calculation_processing_lfm_costs * calculation_quantityA
+          ( ROUND(
+            (
+              (o.`calculation_processing_lfm_runtime` * o.`calculation_processing_lfm_runtime_factor` + 
+              o.`calculation_processing_lfm_packing_time` * o.`calculation_processing_lfm_packing_time_factor`) *
+              o.`calculation_processing_lfm_hourly_rate` / 3600
+            )
+            * o.`calculation_quantityA`
+          ,2 )) AS `_pricing_endprices_calc_confection_lfm_costs`,
 
-        --  Staffelpreise Mengen -- graduated prices quantities plus additonal setup quantity
-            (o.`calculation_quantityA` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100) 
-              AS `_pricing_graduated_calculation_quantityA`, 
-
-            (o.`calculation_quantityB` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100) 
-              AS `_pricing_graduated_calculation_quantityB`, 
-
-            (o.`calculation_quantityC` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100) 
-              AS `_pricing_graduated_calculation_quantityC`, 
-
-            (o.`calculation_quantityD` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100) 
-              AS `_pricing_graduated_calculation_quantityD`, 
-
-            (o.`calculation_quantityE` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100) 
-              AS `_pricing_graduated_calculation_quantityE`,
-
-        --  Staffelpreise Stundensatz -- graduated prices hourly rates
-            o.`calculation_working_hourly_rate` 
-              AS `_pricing_graduated_calculation_hourly_rate_quantityA`,
-
-            (o.`calculation_working_hourly_rate` * (100 + COALESCE(o.pricing_grad_qtyB_add_hourlyrate,0))/100)
-              AS `_pricing_graduated_calculation_hourly_rate_quantityB`,
-
-            (o.`calculation_working_hourly_rate` * (100 + COALESCE(o.pricing_grad_qtyC_add_hourlyrate,0))/100)
-              AS `_pricing_graduated_calculation_hourly_rate_quantityC`,
-
-            (o.`calculation_working_hourly_rate` * (100 + COALESCE(o.pricing_grad_qtyD_add_hourlyrate,0))/100)
-              AS `_pricing_graduated_calculation_hourly_rate_quantityD`,
-
-            (o.`calculation_working_hourly_rate` * (100 + COALESCE(o.pricing_grad_qtyE_add_hourlyrate,0))/100)
-              AS `_pricing_graduated_calculation_hourly_rate_quantityE`,
-
-            (o.`runningcard_hourlyrecording_construction` + o.`runningcard_hourlyrecording_toolwork` + o.`runningcard_hourlyrecording_entry`) AS `_runningcard_hourlyrecording_total`
+      --  Konfektion / stk = _calculation_processing_piece_costs * calculation_quantityA * Aufmachung / 1000
+          ( ROUND(
+            (
+              (o.`calculation_processing_piece_runtime` * o.`calculation_processing_piece_runtime_factor` + 
+              o.`calculation_processing_piece_packing_time` * o.`calculation_processing_piece_packing_time_factor`) *
+              o.`calculation_processing_piece_hourly_rate` / 3600
+            )
+            * o.`calculation_quantityA` * o.`general_packaging` / 1000
+          ,2 )) AS `_pricing_endprices_calc_confection_stk_costs`,
 
 
-          FROM `offers` o;
+      --  Staffelpreise Mengen -- graduated prices quantities plus additonal setup quantity
+          (o.`calculation_quantityA` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100) 
+            AS `_pricing_graduated_calculation_quantityA`, 
+
+          (o.`calculation_quantityB` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100) 
+            AS `_pricing_graduated_calculation_quantityB`, 
+
+          (o.`calculation_quantityC` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100) 
+            AS `_pricing_graduated_calculation_quantityC`, 
+
+          (o.`calculation_quantityD` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100) 
+            AS `_pricing_graduated_calculation_quantityD`, 
+
+          (o.`calculation_quantityE` * (100 + o.pricing_graduated_calculation_additional_setup_quantity)/100) 
+            AS `_pricing_graduated_calculation_quantityE`,
+
+      --  Staffelpreise Stundensatz -- graduated prices hourly rates
+          o.`calculation_working_hourly_rate` 
+            AS `_pricing_graduated_calculation_hourly_rate_quantityA`,
+
+          (o.`calculation_working_hourly_rate` * (100 + COALESCE(o.pricing_grad_qtyB_add_hourlyrate,0))/100)
+            AS `_pricing_graduated_calculation_hourly_rate_quantityB`,
+
+          (o.`calculation_working_hourly_rate` * (100 + COALESCE(o.pricing_grad_qtyC_add_hourlyrate,0))/100)
+            AS `_pricing_graduated_calculation_hourly_rate_quantityC`,
+
+          (o.`calculation_working_hourly_rate` * (100 + COALESCE(o.pricing_grad_qtyD_add_hourlyrate,0))/100)
+            AS `_pricing_graduated_calculation_hourly_rate_quantityD`,
+
+          (o.`calculation_working_hourly_rate` * (100 + COALESCE(o.pricing_grad_qtyE_add_hourlyrate,0))/100)
+            AS `_pricing_graduated_calculation_hourly_rate_quantityE`,
+
+          (o.`runningcard_hourlyrecording_construction` + o.`runningcard_hourlyrecording_toolwork` + o.`runningcard_hourlyrecording_entry`) AS `_runningcard_hourlyrecording_total`
+
+
+        FROM `offers` o;
       SQL
     );
 

@@ -122,7 +122,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('runningcard_hourlyrecording_toolmaker_user_id')->nullable();
 
             $table->unsignedInteger('runningcard_tool_costs')->nullable();
-            $table->string('runningcard_tool_cost_type', 31)->nullable();
+            // $table->string('runningcard_tool_cost_type', 31)->nullable();
             $table->text('runningcard_tool_hint')->nullable();
 
             // timestamps if needed (created_at, updated_at)
