@@ -106,11 +106,11 @@ const rows: Array<FieldConfig | null>[] = [
     //   label: "Einstellmenge Zusatz [%]",
     // },
     { name: "calculation_working_hourly_rate", label: "Stundensatz [€]" },
-    {
-      name: "calculation_working_additional_costs",
-      label: "Zusatzkosten / m [€]",
-      numeric: true,
-    },
+    // {
+    //   name: "calculation_working_additional_costs",
+    //   label: "Zusatzkosten / m [€]",
+    //   numeric: true,
+    // },
     null,
   ],
   [
