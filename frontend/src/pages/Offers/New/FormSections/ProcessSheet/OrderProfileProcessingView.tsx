@@ -6,6 +6,7 @@ import WorkHoursCard from "./WorkHoursCard";
 import ToolingCard from "./ToolingCard";
 import ProcessingCard from "./ProcessingCard";
 import RawMaterialTable from "./RawMaterialTable";
+import { formatNumber } from "@utils/formatNumbers";
 
 type Props = {
   data: any;
@@ -16,7 +17,7 @@ export default function OrderProfileProcessingView({ data }: Props) {
 
   return (
     <>
-      <Grid container spacing={10} px={0.5}>
+      <Grid container spacing={5} px={0.5}>
         <Grid size={{ xs: 12, md: 4 }}>
           <InfoCard
             title="Auftrag"
@@ -45,12 +46,16 @@ export default function OrderProfileProcessingView({ data }: Props) {
             title="Verarbeitungsvorgaben"
             rows={[
               {
-                label: "Geschwindigkeit Kalkulation",
-                value: processing.speed_calc,
+                label: "Geschwindigkeit SOLL",
+                value: `${formatNumber(processing.speed_calc)} m/min`,
               },
               {
-                label: "Metergewicht Kalkulation",
-                value: processing.weight_actual,
+                label: "Metergewicht SOLL",
+                value: `${formatNumber(
+                  Math.round(
+                    (processing.weight_actual + Number.EPSILON) * 100
+                  ) / 100
+                )} g/m`,
               },
             ]}
           />
