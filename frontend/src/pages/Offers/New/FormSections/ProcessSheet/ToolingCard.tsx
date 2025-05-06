@@ -6,6 +6,7 @@ import { useOfferContext } from "@contexts/OfferProvider";
 import { FunctionComponent } from "react";
 import { useFieldEditable } from "@hooks/useFieldEditable";
 import { usePermissions } from "@hooks/usePermissions";
+import FormIntField from "@components/FormInputs/FormIntField";
 
 const ToolingCard: FunctionComponent = () => {
   const { offerDetails, offerId } = useOfferContext();
@@ -29,7 +30,7 @@ const ToolingCard: FunctionComponent = () => {
       <CardBox label="Werkzeug">
         <Grid container spacing={2}>
           <Grid size={{ xs: 12, md: 2.4 }}>
-            <FormInputSaveField
+            <FormIntField
               name="runningcard_tool_costs"
               label="Kosten [€]"
               disabled={

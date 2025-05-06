@@ -1,10 +1,11 @@
 import CardBox from "@components/CardBox";
-import FormInputSaveField from "@components/FormInputSaveField";
+import FormIntField from "@components/FormInputs/FormIntField";
+import FormTextField from "@components/FormInputs/FormTextField";
 import Grid from "@mui/material/Grid2";
 import { FormikProvider, useFormik } from "formik";
-import { useOfferContext } from "@contexts/OfferProvider";
 import { FunctionComponent } from "react";
 import { useFieldEditable } from "@hooks/useFieldEditable";
+import { useOfferContext } from "@contexts/OfferProvider";
 import { usePermissions } from "@hooks/usePermissions";
 
 const PackagingSeriesCard: FunctionComponent = () => {
@@ -36,7 +37,7 @@ const PackagingSeriesCard: FunctionComponent = () => {
       <CardBox label="Verpackung Serie">
         <Grid container spacing={2}>
           <Grid size={{ xs: 12, md: 2.4 }}>
-            <FormInputSaveField
+            <FormTextField
               name="runningcard_packing_type"
               label="Verpackungsart"
               disabled={
@@ -45,7 +46,7 @@ const PackagingSeriesCard: FunctionComponent = () => {
             />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>
-            <FormInputSaveField
+            <FormTextField
               name="runningcard_packing_variant"
               label="Verpackungsvariante"
               disabled={
@@ -54,7 +55,7 @@ const PackagingSeriesCard: FunctionComponent = () => {
             />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>
-            <FormInputSaveField
+            <FormIntField
               name="runningcard_packing_length"
               label="Länge [m]"
               disabled={
@@ -63,7 +64,7 @@ const PackagingSeriesCard: FunctionComponent = () => {
             />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>
-            <FormInputSaveField
+            <FormIntField
               name="runningcard_packing_packing_unit"
               label="Packeinheit"
               disabled={
@@ -73,7 +74,7 @@ const PackagingSeriesCard: FunctionComponent = () => {
             />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>
-            <FormInputSaveField
+            <FormIntField
               name="runningcard_packing_quantity"
               label="Menge / Palette-Box-Karton"
               disabled={
@@ -83,7 +84,7 @@ const PackagingSeriesCard: FunctionComponent = () => {
           </Grid>
 
           <Grid size={{ xs: 12 }}>
-            <FormInputSaveField
+            <FormTextField
               name="runningcard_packing_description"
               label="Anmerkung"
               disabled={

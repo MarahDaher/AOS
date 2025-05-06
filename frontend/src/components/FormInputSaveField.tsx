@@ -15,6 +15,7 @@ interface FormInputFieldProps extends Omit<TextFieldProps, "name"> {
   name: string;
   required?: boolean;
   numeric?: boolean;
+  integerOnly?: boolean;
   onSaved?: () => void;
   hiddenLabel?: boolean;
   variant?: "standard" | "outlined" | "filled";
@@ -27,6 +28,7 @@ const FormInputSaveField: FunctionComponent<FormInputFieldProps> = ({
   required = false,
   disabled = false,
   numeric = false,
+  integerOnly = false,
   hiddenLabel = false,
   variant = "filled",
   alignText,
@@ -41,19 +43,30 @@ const FormInputSaveField: FunctionComponent<FormInputFieldProps> = ({
   const mutation = useSaveFieldMutation(navigate);
   const debounceTimer = useRef<NodeJS.Timeout | null>(null);
 
+  // 🔄 Format value when loading (but not while typing)
   useEffect(() => {
     if (numeric && typeof field.value === "number") {
-      setInputValue(formatNumberToGerman(field.value));
+      if (integerOnly) {
+        setInputValue(field.value.toString());
+      } else {
+        setInputValue(formatNumberToGerman(field.value));
+      }
     } else if (!numeric) {
       setInputValue(field.value || "");
     }
-  }, [field.value, numeric]);
+  }, [field.value, numeric, integerOnly]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let val = e.target.value;
 
-    if (numeric) {
-      val = val.replace(/[^0-9,.\-]/g, "");
+    if (numeric && integerOnly) {
+      val = val.replace(/[^0-9]/g, "");
+    } else if (numeric) {
+      val = val.replace(/[^0-9,]/g, "");
+      const parts = val.split(",");
+      if (parts.length > 2) {
+        val = parts[0] + "," + parts[1]; // keep only one comma
+      }
     }
 
     setInputValue(val);
@@ -64,7 +77,7 @@ const FormInputSaveField: FunctionComponent<FormInputFieldProps> = ({
 
     debounceTimer.current = setTimeout(() => {
       saveField(val);
-    }, 500); // Save after 500ms delay
+    }, 500);
   };
 
   const saveField = (value: string) => {
@@ -73,7 +86,7 @@ const FormInputSaveField: FunctionComponent<FormInputFieldProps> = ({
     if (numeric) {
       const parsed = parseGermanNumber(value);
       if (parsed === null) {
-        setFieldValue(name, value);
+        setFieldValue(name, value); // fallback
         return;
       }
       valueToSave = parsed;
@@ -84,7 +97,7 @@ const FormInputSaveField: FunctionComponent<FormInputFieldProps> = ({
       : field.value;
 
     if (valueToSave === normalizedCurrentValue) {
-      return; // No change
+      return; // no change
     }
 
     setFieldValue(name, valueToSave);
@@ -100,8 +113,13 @@ const FormInputSaveField: FunctionComponent<FormInputFieldProps> = ({
       }
     );
 
+    // Apply formatting after save
     if (numeric && typeof valueToSave === "number") {
-      setInputValue(formatNumberToGerman(valueToSave));
+      if (integerOnly) {
+        setInputValue(valueToSave.toString());
+      } else {
+        setInputValue(formatNumberToGerman(valueToSave));
+      }
     }
   };
 
@@ -112,7 +130,7 @@ const FormInputSaveField: FunctionComponent<FormInputFieldProps> = ({
         value={inputValue}
         onChange={handleChange}
         fullWidth
-        type={type}
+        type="text" // always text to control custom formatting
         required={required}
         hiddenLabel={hiddenLabel}
         disabled={disabled}

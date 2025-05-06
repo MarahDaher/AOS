@@ -1,10 +1,9 @@
-// FormSections/Calculation/QuantityStepsCard.tsx
 import CardBox from "@components/CardBox";
-import FormInputSaveField from "@components/FormInputSaveField";
+import FormIntField from "@components/FormInputs/FormIntField";
 import Grid from "@mui/material/Grid2";
 import { CARD_HEIGHT } from "@utils/constantValue";
-import { FormikProvider, useFormik } from "formik";
 import { FC } from "react";
+import { FormikProvider, useFormik } from "formik";
 import {
   mapOfferToQuantityStepsInitialValues,
   QuantityStepsCardInitialValues,
@@ -34,42 +33,37 @@ const QuantityStepsCard: FC = () => {
       <CardBox label="Staffelmengen" height={CARD_HEIGHT}>
         <Grid container spacing={2}>
           <Grid size={{ xs: 12 }}>
-            <FormInputSaveField
+            <FormIntField
               name="calculation_quantityA"
               label="Menge A (Kalkulation) [m]"
-              type="number"
               disabled={!isEditable}
             />
           </Grid>
           <Grid size={{ xs: 12 }}>
-            <FormInputSaveField
+            <FormIntField
               name="calculation_quantityB"
               label="Menge B [m]"
-              type="number"
               disabled={!isEditable}
             />
           </Grid>
           <Grid size={{ xs: 12 }}>
-            <FormInputSaveField
+            <FormIntField
               name="calculation_quantityC"
               label="Menge C [m]"
-              type="number"
               disabled={!isEditable}
             />
           </Grid>
           <Grid size={{ xs: 12 }}>
-            <FormInputSaveField
+            <FormIntField
               name="calculation_quantityD"
               label="Menge D [m]"
-              type="number"
               disabled={!isEditable}
             />
           </Grid>
           <Grid size={{ xs: 12 }}>
-            <FormInputSaveField
+            <FormIntField
               name="calculation_quantityE"
               label="Menge E [m]"
-              type="number"
               disabled={!isEditable}
             />
           </Grid>

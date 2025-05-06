@@ -1,11 +1,11 @@
 import CardBox from "@components/CardBox";
+import FormIntField from "@components/FormInputs/FormIntField";
 import Grid from "@mui/material/Grid2";
 import MachineUtilizationTable from "./MachineUtilizationTable";
-import { FormikProvider, useFormik } from "formik";
-import FormInputSaveField from "@components/FormInputSaveField";
 import { Box } from "@mui/material";
-import { useOfferContext } from "@contexts/OfferProvider";
+import { FormikProvider, useFormik } from "formik";
 import { mapMachineUtilizationData } from ".";
+import { useOfferContext } from "@contexts/OfferProvider";
 import { usePermissions } from "@hooks/usePermissions";
 
 const MachineUtilizationCard = () => {
@@ -37,7 +37,7 @@ const MachineUtilizationCard = () => {
           <Grid size={{ xs: 12, md: 2 }}>
             <FormikProvider value={formik}>
               <Box display="flex" justifyContent="end">
-                <FormInputSaveField
+                <FormIntField
                   name="pricing_machine_utilization_annual_machine_capacity"
                   label="Maschinenkapazität [Std / Jahr]"
                   disabled={!isEditable}

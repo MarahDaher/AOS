@@ -12,7 +12,7 @@ return new class extends Migration {
 
             // $table->enum('general_status', ['Vorkalkulation', 'Angebot', 'Auftrag', 'Produziert', 'Versandt', 'Gelöscht'])->nullable();
             $table->string('general_offer_number', 63)->nullable();
-            $table->integer('general_profile_description')->nullable();
+            $table->string('general_profile_description', 63)->nullable();
             $table->dateTime('general_creation_date');
             $table->foreignId('general_status_id')->constrained('offer_status')->restrictOnDelete()->restrictOnUpdate();
             $table->foreignId('general_created_by_user_id')->constrained('users')->restrictOnDelete()->restrictOnUpdate();

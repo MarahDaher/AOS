@@ -1,12 +1,12 @@
-import { FC } from "react";
-import Grid from "@mui/material/Grid2";
 import CardBox from "@components/CardBox";
-import FormInputSaveField from "@components/FormInputSaveField";
+import FormFloatField from "@components/FormInputs/FormFloatField";
+import Grid from "@mui/material/Grid2";
 import { CARD_HEIGHT } from "@utils/constantValue";
 import { Divider } from "@mui/material";
-import { useOfferContext } from "@contexts/OfferProvider";
+import { FC } from "react";
 import { FormikProvider, useFormik } from "formik";
 import { mapInitialValues, ProcessingPerMeterInitialValues } from "../../Index";
+import { useOfferContext } from "@contexts/OfferProvider";
 import { usePermissions } from "@hooks/usePermissions";
 
 const ProcessingPerMeterCard: FC = () => {
@@ -30,44 +30,39 @@ const ProcessingPerMeterCard: FC = () => {
       <CardBox label="Konfektion (pro Laufmeter)" height={CARD_HEIGHT}>
         <Grid container spacing={1}>
           <Grid size={{ xs: 8 }}>
-            <FormInputSaveField
+            <FormFloatField
               name="calculation_processing_lfm_hourly_rate"
               label="Stundensatz [€] / h"
-              numeric
               disabled={!isEditable}
             />
           </Grid>
 
           <Grid size={{ xs: 8 }}>
-            <FormInputSaveField
+            <FormFloatField
               name="calculation_processing_lfm_runtime"
               label="Laufzeit / m [sek]"
-              numeric
               disabled={!isEditable}
             />
           </Grid>
           <Grid size={{ xs: 4 }}>
-            <FormInputSaveField
+            <FormFloatField
               name="calculation_processing_lfm_runtime_factor"
               label="Faktor"
-              numeric
               disabled={!isEditable}
             />
           </Grid>
 
           <Grid size={{ xs: 8 }}>
-            <FormInputSaveField
+            <FormFloatField
               name="calculation_processing_lfm_packing_time"
               label="Verpackungszeit / m [sek]"
-              numeric
               disabled={!isEditable}
             />
           </Grid>
           <Grid size={{ xs: 4 }}>
-            <FormInputSaveField
+            <FormFloatField
               name="calculation_processing_lfm_packing_time_factor"
               label="Faktor"
-              numeric
               disabled={!isEditable}
             />
           </Grid>
@@ -77,20 +72,18 @@ const ProcessingPerMeterCard: FC = () => {
           </Grid>
 
           <Grid size={{ xs: 8 }}>
-            <FormInputSaveField
+            <FormFloatField
               name="_calculation_processing_lfm_expense"
               label="Aufwand / m [sek]"
               disabled
-              numeric
             />
           </Grid>
 
           <Grid size={{ xs: 8 }}>
-            <FormInputSaveField
+            <FormFloatField
               name="_calculation_processing_lfm_costs"
               label="Kosten / m [€]"
               disabled
-              numeric
             />
           </Grid>
         </Grid>

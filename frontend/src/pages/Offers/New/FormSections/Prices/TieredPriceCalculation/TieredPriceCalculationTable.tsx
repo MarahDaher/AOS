@@ -1,4 +1,4 @@
-import FormInputSaveField from "@components/FormInputSaveField";
+import FormIntField from "@components/FormInputs/FormIntField";
 import {
   Table,
   TableHead,
@@ -77,13 +77,12 @@ export default function TieredPriceCalculationTable({
 
               <TableCell>
                 {row.staffel !== "A" && isEditable ? (
-                  <FormInputSaveField
+                  <FormIntField
                     variant={"standard"}
                     name={`pricing_grad_qty${row.staffel}_add_hourlyrate`}
                     fullWidth
                     hiddenLabel={true}
                     alignText="right"
-                    numeric
                   />
                 ) : row.AufschlagStundensatz != null ? (
                   `${formatNumber(row.AufschlagStundensatz)} %`
@@ -101,13 +100,12 @@ export default function TieredPriceCalculationTable({
 
               <TableCell>
                 {row.staffel !== "A" && isEditable ? (
-                  <FormInputSaveField
+                  <FormIntField
                     name={`pricing_grad_qty${row.staffel}_add_setupcosts`}
                     variant={"standard"}
                     fullWidth
                     hiddenLabel={true}
                     alignText="right"
-                    numeric
                   />
                 ) : row.Rüstkosten != null ? (
                   `${formatCurrency(row.Rüstkosten)}`
@@ -118,13 +116,12 @@ export default function TieredPriceCalculationTable({
 
               <TableCell>
                 {row.staffel !== "A" && isEditable ? (
-                  <FormInputSaveField
+                  <FormIntField
                     name={`pricing_grad_qty${row.staffel}_add_transport`}
                     fullWidth
                     variant={"standard"}
                     hiddenLabel={true}
                     alignText="right"
-                    numeric
                   />
                 ) : row.Transport != null ? (
                   `${formatCurrency(row.Transport)}`

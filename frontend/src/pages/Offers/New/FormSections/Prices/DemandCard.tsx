@@ -5,6 +5,7 @@ import FormInputSaveField from "@components/FormInputSaveField";
 import { useOfferContext } from "@contexts/OfferProvider";
 import { FormikProvider, useFormik } from "formik";
 import { usePermissions } from "@hooks/usePermissions";
+import FormFloatField from "@components/FormInputs/FormFloatField";
 
 const DemandCard: FC = () => {
   const { offerDetails } = useOfferContext();
@@ -32,10 +33,9 @@ const DemandCard: FC = () => {
       <CardBox label="Bedarf">
         <Grid container spacing={5}>
           <Grid size={{ xs: 12, md: 2 }}>
-            <FormInputSaveField
+            <FormFloatField
               name="calculation_working_annual_requirement_estimated"
               label="Jahresbedarf, geschätzt [m]"
-              numeric
               disabled={!isEditable}
             />
           </Grid>

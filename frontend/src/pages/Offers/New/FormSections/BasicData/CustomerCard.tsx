@@ -1,13 +1,14 @@
 import CardBox from "@components/CardBox";
 import FormDatePicker from "@components/FormDatePicker";
-import FormInputSaveField from "@components/FormInputSaveField";
+import FormIntField from "@components/FormInputs/FormIntField";
+import FormTextField from "@components/FormInputs/FormTextField";
 import Grid from "@mui/material/Grid2";
 import { CARD_HEIGHT } from "@utils/constantValue";
 import { CustomerCardInitialValues } from "../../Index";
 import { FormikProvider, useFormik } from "formik";
 import { FunctionComponent } from "react";
-import { useOfferContext } from "@contexts/OfferProvider";
 import { useEditableFields } from "@hooks/useEditableFields";
+import { useOfferContext } from "@contexts/OfferProvider";
 
 const CustomerCard: FunctionComponent = () => {
   // Hooks
@@ -42,7 +43,7 @@ const CustomerCard: FunctionComponent = () => {
       <CardBox label="Kunde" height={CARD_HEIGHT}>
         <Grid container spacing={2}>
           <Grid size={{ xs: 6, md: 6 }}>
-            <FormInputSaveField
+            <FormTextField
               name="general_customer"
               label="Kunde"
               disabled={!isFieldEditable("general_customer")}
@@ -57,21 +58,21 @@ const CustomerCard: FunctionComponent = () => {
             />
           </Grid>
           <Grid size={{ xs: 6, md: 6 }}>
-            <FormInputSaveField
+            <FormTextField
               name="general_customer_contact_person"
               label="Ansprechpartner"
               disabled={!isFieldEditable("general_customer_contact_person")}
             />
           </Grid>
           <Grid size={{ xs: 6, md: 6 }}>
-            <FormInputSaveField
+            <FormIntField
               name="general_request_number"
               label="Anfragenummer"
               disabled={!isFieldEditable("general_request_number")}
             />
           </Grid>
           <Grid size={{ xs: 6, md: 6 }}>
-            <FormInputSaveField
+            <FormTextField
               name="general_customer_article_number"
               label="Artikelnummer Kunde"
               disabled={!isFieldEditable("general_customer_article_number")}

@@ -1,10 +1,10 @@
 import CardBox from "@components/CardBox";
+import FormIntField from "@components/FormInputs/FormIntField";
 import Grid from "@mui/material/Grid2";
 import TieredPriceCalculationTable from "./TieredPriceCalculationTable";
 import { FormikProvider, useFormik } from "formik";
-import FormInputSaveField from "@components/FormInputSaveField";
-import { useOfferContext } from "@contexts/OfferProvider";
 import { mapStaffelPricedataFromOffer } from ".";
+import { useOfferContext } from "@contexts/OfferProvider";
 import { usePermissions } from "@hooks/usePermissions";
 
 export interface TieredPriceFormValues {
@@ -77,7 +77,7 @@ const TieredPriceCalculationCard = () => {
         <CardBox label="Staffelpreisberechnung">
           <Grid container spacing={5} display="flex" justifyContent="end">
             <Grid size={{ xs: 12, md: 2 }}>
-              <FormInputSaveField
+              <FormIntField
                 name="pricing_graduated_calculation_additional_setup_quantity"
                 label="zus. Einstellmenge [%]"
                 disabled={!isEditable}

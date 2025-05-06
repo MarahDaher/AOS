@@ -1,17 +1,19 @@
 import CardBox from "@components/CardBox";
-import FormInputSaveField from "@components/FormInputSaveField";
+import FormFloatField from "@components/FormInputs/FormFloatField";
+import FormIntField from "@components/FormInputs/FormIntField";
 import FormSelectSaveField from "@components/FormSelectSaveField";
+import FormTextField from "@components/FormInputs/FormTextField";
 import Grid from "@mui/material/Grid2";
 import { CARD_HEIGHT } from "@utils/constantValue";
 import { DeliveryTypeLabels } from "@enums/GeneralEnums";
 import { FormikProvider, useFormik } from "formik";
 import { FunctionComponent, useEffect, useState } from "react";
 import { OfferCardInitialValues } from "../../Index";
-import { useEditableFields } from "@hooks/useEditableFields";
-import { useOfferContext } from "@contexts/OfferProvider";
 import { OffersApi } from "@api/offers";
 import { Skeleton } from "@mui/material";
+import { useEditableFields } from "@hooks/useEditableFields";
 import { useFieldEditable } from "@hooks/useFieldEditable";
+import { useOfferContext } from "@contexts/OfferProvider";
 
 const OfferCard: FunctionComponent = () => {
   // Hooks
@@ -86,21 +88,21 @@ const OfferCard: FunctionComponent = () => {
       <CardBox label="Angebot" height={CARD_HEIGHT}>
         <Grid container spacing={2}>
           <Grid size={{ xs: 4, md: 4 }}>
-            <FormInputSaveField
+            <FormTextField
               name="general_offer_number"
               label="Angebotsnummer"
               disabled={!isFieldEditable("general_offer_number")}
             />
           </Grid>
           <Grid size={{ xs: 4, md: 4 }}>
-            <FormInputSaveField
+            <FormTextField
               name="general_order_number"
               label="Auftragsnummer"
               disabled={!isFieldEditable("general_order_number")}
             />
           </Grid>
           <Grid size={{ xs: 4, md: 4 }}>
-            <FormInputSaveField
+            <FormTextField
               name="general_profile_description"
               label="Profilbezeichnung"
               disabled={!isFieldEditable("general_profile_description")}
@@ -109,7 +111,7 @@ const OfferCard: FunctionComponent = () => {
 
           {/* Row 2 */}
           <Grid size={{ xs: 4, md: 4 }}>
-            <FormInputSaveField
+            <FormTextField
               name="general_article_number"
               label="Artikelnummer"
               disabled={!isFieldEditable("general_article_number")}
@@ -131,7 +133,7 @@ const OfferCard: FunctionComponent = () => {
           </Grid>
 
           <Grid size={{ xs: 4, md: 4 }}>
-            <FormInputSaveField
+            <FormFloatField
               name="general_profile_crosssection"
               label="Profilquerschnitt [mm²]"
               numeric
@@ -141,7 +143,7 @@ const OfferCard: FunctionComponent = () => {
 
           {/* Row 3 */}
           <Grid size={{ xs: 4, md: 4 }}>
-            <FormInputSaveField
+            <FormTextField
               name="general_tool_number"
               label="Werkzeugnummer"
               disabled={!isFieldEditable("general_tool_number")}
@@ -151,7 +153,7 @@ const OfferCard: FunctionComponent = () => {
           <Grid size={{ xs: 4, md: 4 }}></Grid>
 
           <Grid size={{ xs: 4, md: 4 }}>
-            <FormInputSaveField
+            <FormIntField
               name="general_packaging"
               label="Aufmachung [mm]"
               numeric
@@ -171,7 +173,7 @@ const OfferCard: FunctionComponent = () => {
           <Grid size={{ xs: 4, md: 4 }}></Grid>
 
           <Grid size={{ xs: 4, md: 4 }}>
-            <FormInputSaveField
+            <FormTextField
               name="general_color"
               label="Farbe"
               disabled={!isFieldEditable("general_color")}

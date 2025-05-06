@@ -1,12 +1,13 @@
 import CardBox from "@components/CardBox";
 import FormDatePicker from "@components/FormDatePicker";
-import FormInputSaveField from "@components/FormInputSaveField";
+import FormIntField from "@components/FormInputs/FormIntField";
+import FormTextField from "@components/FormInputs/FormTextField";
 import Grid from "@mui/material/Grid2";
-import { FormikProvider, useFormik } from "formik";
-import { useOfferContext } from "@contexts/OfferProvider";
-import { FunctionComponent } from "react";
 import NoteCard from "@components/NoteCard";
+import { FormikProvider, useFormik } from "formik";
+import { FunctionComponent } from "react";
 import { useFieldEditable } from "@hooks/useFieldEditable";
+import { useOfferContext } from "@contexts/OfferProvider";
 import { usePermissions } from "@hooks/usePermissions";
 
 const SamplingCard: FunctionComponent = () => {
@@ -57,7 +58,7 @@ const SamplingCard: FunctionComponent = () => {
             />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>
-            <FormInputSaveField
+            <FormIntField
               name="runningcard_sampling_quantity"
               label="Menge"
               disabled={
@@ -66,7 +67,7 @@ const SamplingCard: FunctionComponent = () => {
             />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>
-            <FormInputSaveField
+            <FormIntField
               name="runningcard_sampling_length"
               label="Länge [m]"
               disabled={
@@ -75,7 +76,7 @@ const SamplingCard: FunctionComponent = () => {
             />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>
-            <FormInputSaveField
+            <FormIntField
               name="runningcard_sampling_packing"
               label="Verpackung"
               disabled={
@@ -84,7 +85,7 @@ const SamplingCard: FunctionComponent = () => {
             />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>
-            <FormInputSaveField
+            <FormTextField
               name="runningcard_sampling_indication"
               label="Hinweis"
               disabled={

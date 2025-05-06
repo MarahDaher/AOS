@@ -1,10 +1,10 @@
-import { useOfferContext } from "@contexts/OfferProvider";
+import CardBox from "@components/CardBox";
+import FormIntField from "@components/FormInputs/FormIntField";
+import Grid from "@mui/material/Grid2";
 import { FormikProvider, useFormik } from "formik";
 import { FunctionComponent } from "react";
-import Grid from "@mui/material/Grid2";
-import CardBox from "@components/CardBox";
-import FormInputSaveField from "@components/FormInputSaveField";
 import { useFieldEditable } from "@hooks/useFieldEditable";
+import { useOfferContext } from "@contexts/OfferProvider";
 import { usePermissions } from "@hooks/usePermissions";
 
 const ProcessingCard: FunctionComponent = () => {
@@ -36,7 +36,7 @@ const ProcessingCard: FunctionComponent = () => {
         <CardBox label="Verarbeitung">
           <Grid container spacing={2}>
             <Grid size={{ xs: 12, md: 2.4 }}>
-              <FormInputSaveField
+              <FormIntField
                 name="runningcard_extrusion_speed_IST"
                 label="Geschwindigkeit Eingefahren (IST) [m/min]"
                 disabled={
@@ -46,7 +46,7 @@ const ProcessingCard: FunctionComponent = () => {
               />
             </Grid>
             <Grid size={{ xs: 12, md: 2.4 }}>
-              <FormInputSaveField
+              <FormIntField
                 name="runningcard_profile_weight_IST"
                 label="Metergewicht Eingefahren (IST) [g/m]"
                 disabled={

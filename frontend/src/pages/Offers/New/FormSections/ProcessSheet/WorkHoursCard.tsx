@@ -9,6 +9,7 @@ import { useFieldEditable } from "@hooks/useFieldEditable";
 import { useOfferContext } from "@contexts/OfferProvider";
 import { usePermissions } from "@hooks/usePermissions";
 import { UsersApi } from "@api/users";
+import FormIntField from "@components/FormInputs/FormIntField";
 
 type OptionGroup = {
   group: string;
@@ -98,7 +99,7 @@ const WorkHoursCard: FunctionComponent = () => {
       <CardBox label="Stundenerfassung">
         <Grid container spacing={2}>
           <Grid size={{ xs: 12, md: 2.4 }}>
-            <FormInputSaveField
+            <FormIntField
               name="runningcard_hourlyrecording_construction"
               label="Konstruktion [min]"
               disabled={
@@ -108,7 +109,7 @@ const WorkHoursCard: FunctionComponent = () => {
             />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>
-            <FormInputSaveField
+            <FormIntField
               name="runningcard_hourlyrecording_toolwork"
               label="Werkzeug-/Kalibrierungsbau [min]"
               disabled={
@@ -118,7 +119,7 @@ const WorkHoursCard: FunctionComponent = () => {
             />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>
-            <FormInputSaveField
+            <FormIntField
               name="runningcard_hourlyrecording_entry"
               label="Einfahren [min]"
               disabled={
@@ -135,7 +136,7 @@ const WorkHoursCard: FunctionComponent = () => {
             />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>
-            <FormInputSaveField
+            <FormIntField
               name="runningcard_hourlyrecording_entrystitches"
               label="Einfahrstiche"
               disabled={

@@ -53,18 +53,9 @@ export const parseGermanNumber = (input: string): number | null => {
   return isNaN(parsed) ? null : parsed;
 };
 
-export const formatNumberToGerman = (
-  value: number | string | null | undefined
-): string => {
-  if (value === null || value === undefined || value === "") return "";
-
-  const num =
-    typeof value === "string" ? parseFloat(value.replace(",", ".")) : value;
-
-  if (typeof num !== "number" || isNaN(num)) return "";
-
-  return num.toLocaleString("de-DE", {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 3,
-  });
-};
+export function formatNumberToGerman(value: number): string {
+  return new Intl.NumberFormat("de-DE", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(value);
+}

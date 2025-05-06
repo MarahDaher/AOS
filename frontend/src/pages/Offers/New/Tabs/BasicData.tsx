@@ -1,6 +1,6 @@
 import CardBox from "@components/CardBox";
 import CustomerCard from "../FormSections/BasicData/CustomerCard";
-import FormInputSaveField from "@components/FormInputSaveField";
+import FormTextField from "@components/FormInputs/FormTextField";
 import Grid from "@mui/material/Grid2";
 import HistoryCard from "../FormSections/BasicData/HistoryCard";
 import OfferCard from "../FormSections/BasicData/OfferCard";
@@ -55,7 +55,7 @@ const BasicDataTab: FunctionComponent<BasicDataTabProps> = () => {
             <Grid size={{ xs: 12, md: 12 }}>
               <FormikProvider value={formik}>
                 <CardBox label="">
-                  <FormInputSaveField
+                  <FormTextField
                     name="general_comments"
                     label="Bemerkungen"
                     multiline
