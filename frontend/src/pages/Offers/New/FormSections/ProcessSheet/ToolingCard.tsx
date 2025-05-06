@@ -16,7 +16,8 @@ const ToolingCard: FunctionComponent = () => {
   const isEditable = canEdit("process_sheet");
   const formik = useFormik({
     initialValues: {
-      runningcard_tool_costs: offerDetails?.runningcard_tool_costs ?? "",
+      calculation_working_tool_costs_customer:
+        offerDetails?.calculation_working_tool_costs_customer ?? "",
       runningcard_tool_cost_type:
         offerDetails?.runningcard_tool_cost_type ?? "Anteilig",
       runningcard_tool_hint: offerDetails?.runningcard_tool_hint ?? "",
@@ -31,11 +32,9 @@ const ToolingCard: FunctionComponent = () => {
         <Grid container spacing={2}>
           <Grid size={{ xs: 12, md: 2.4 }}>
             <FormIntField
-              name="runningcard_tool_costs"
+              name="calculation_working_tool_costs_customer"
               label="Kosten [€]"
-              disabled={
-                !isFieldEditable("runningcard_tool_costs") || !isEditable
-              }
+              disabled
             />
           </Grid>
           <Grid size={{ xs: 12, md: 2.4 }}>

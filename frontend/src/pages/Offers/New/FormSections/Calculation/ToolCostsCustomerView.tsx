@@ -1,43 +1,45 @@
-import { FC } from "react";
-import { TextField } from "@mui/material";
-import { formatNumberToGerman } from "@utils/formatNumbers";
+import { Box, Typography } from "@mui/material";
+import FormFloatField from "@components/FormInputs/FormFloatField";
+import { usePermissions } from "@hooks/usePermissions";
 import { useOfferContext } from "@contexts/OfferProvider";
 
-const ToolCostsCustomerView: FC = () => {
+const ToolCostsCustomerView = () => {
   const { offerDetails } = useOfferContext();
+  const { canEdit } = usePermissions();
+  const isEditable = canEdit("calculation");
 
-  const customerCost = offerDetails.calculation_working_tool_costs_customer;
-  const customerRelative =
-    offerDetails._calculation_working_tool_costs_customer_relative;
-
-  const format = (val: any) => {
-    const num = Number(val);
-    return isNaN(num) ? "-" : formatNumberToGerman(num);
-  };
-
-  const displayValue = `${format(customerCost)} (${Number(
-    customerRelative || 0
-  ).toFixed(2)} %)`;
+  const customerCosts =
+    offerDetails.calculation_working_tool_costs_customer ?? 0;
+  const totalCosts = offerDetails.calculation_working_tool_costs_total ?? 1;
+  const percent =
+    totalCosts && customerCosts
+      ? `(${((customerCosts / totalCosts) * 100).toFixed(2)} %)`
+      : "(0.00 %)";
 
   return (
-    <TextField
-      label="Werkzeugkosten Kunde [€]"
-      value={displayValue}
-      variant="filled"
-      fullWidth
-      disabled
-      slotProps={{
-        input: {
-          readOnly: true,
-        },
-      }}
-      sx={{
-        border: "none",
-        "& .MuiInputBase-root": {
-          backgroundColor: "#0000000f",
-        },
-      }}
-    />
+    <Box sx={{ position: "relative", width: "100%" }}>
+      <FormFloatField
+        name="calculation_working_tool_costs_customer"
+        label="Werkzeugkosten Kunde [€]"
+        disabled={!isEditable}
+        sx={{
+          pr: "60px",
+        }}
+      />
+      <Typography
+        variant="body2"
+        sx={{
+          position: "absolute",
+          right: 12,
+          top: "50%",
+          transform: "translateY(-50%)",
+          color: "gray",
+          pointerEvents: "none",
+        }}
+      >
+        {percent}
+      </Typography>
+    </Box>
   );
 };
 

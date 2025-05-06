@@ -74,12 +74,12 @@ const rows: Array<FieldConfig | null>[] = [
     },
     {
       name: "calculation_additional_box_price_flat_additional",
-      label: "Karton Pauschale [€]",
+      label: "Verpackung Pauschale [€]",
       type: "float",
     },
     {
       name: "_calculation_additional_box_costs_lfm",
-      label: "Karton Preis / m [€]",
+      label: "Verpackung Preis / m [€]",
       disabled: true,
       type: "float",
     },
