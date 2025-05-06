@@ -1,12 +1,12 @@
 import CardBox from "@components/CardBox";
+import FormFloatField from "@components/FormInputs/FormFloatField";
 import FormInputSaveField from "@components/FormInputSaveField";
 import Grid from "@mui/material/Grid2";
 import { FormikProvider, useFormik } from "formik";
-import { useOfferContext } from "@contexts/OfferProvider";
 import { FunctionComponent } from "react";
 import { useFieldEditable } from "@hooks/useFieldEditable";
+import { useOfferContext } from "@contexts/OfferProvider";
 import { usePermissions } from "@hooks/usePermissions";
-import FormIntField from "@components/FormInputs/FormIntField";
 
 const ToolingCard: FunctionComponent = () => {
   const { offerDetails, offerId } = useOfferContext();
@@ -31,7 +31,7 @@ const ToolingCard: FunctionComponent = () => {
       <CardBox label="Werkzeug">
         <Grid container spacing={2}>
           <Grid size={{ xs: 12, md: 2.4 }}>
-            <FormIntField
+            <FormFloatField
               name="calculation_working_tool_costs_customer"
               label="Kosten [€]"
               disabled
