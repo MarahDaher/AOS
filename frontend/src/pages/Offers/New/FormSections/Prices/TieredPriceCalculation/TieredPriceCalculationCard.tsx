@@ -7,6 +7,12 @@ import { mapStaffelPricedataFromOffer } from ".";
 import { useOfferContext } from "@contexts/OfferProvider";
 import { usePermissions } from "@hooks/usePermissions";
 
+const initValue = (target?: string | null, source?: number | null) => {
+  return target !== undefined && target !== null && target !== ""
+    ? target
+    : source?.toString() ?? "";
+};
+
 export interface TieredPriceFormValues {
   pricing_graduated_calculation_additional_setup_quantity: string;
   pricing_grad_qtyB_add_hourlyrate: string;
@@ -40,6 +46,7 @@ const TieredPriceCalculationCard = () => {
       pricing_graduated_calculation_additional_setup_quantity:
         offerDetails?.pricing_graduated_calculation_additional_setup_quantity ??
         "",
+
       pricing_grad_qtyB_add_hourlyrate:
         offerDetails?.pricing_grad_qtyB_add_hourlyrate ?? "",
       pricing_grad_qtyC_add_hourlyrate:
@@ -49,23 +56,41 @@ const TieredPriceCalculationCard = () => {
       pricing_grad_qtyE_add_hourlyrate:
         offerDetails?.pricing_grad_qtyE_add_hourlyrate ?? "",
 
-      pricing_grad_qtyB_add_setupcosts:
-        offerDetails?.pricing_grad_qtyB_add_setupcosts ?? "",
-      pricing_grad_qtyC_add_setupcosts:
-        offerDetails?.pricing_grad_qtyC_add_setupcosts ?? "",
-      pricing_grad_qtyD_add_setupcosts:
-        offerDetails?.pricing_grad_qtyD_add_setupcosts ?? "",
-      pricing_grad_qtyE_add_setupcosts:
-        offerDetails?.pricing_grad_qtyE_add_setupcosts ?? "",
+      // Setup cost fields: initialize with _calculation_additional_setup_costs_total
+      pricing_grad_qtyB_add_setupcosts: initValue(
+        offerDetails?.pricing_grad_qtyB_add_setupcosts,
+        offerDetails?._calculation_additional_setup_costs_total
+      ),
+      pricing_grad_qtyC_add_setupcosts: initValue(
+        offerDetails?.pricing_grad_qtyC_add_setupcosts,
+        offerDetails?._calculation_additional_setup_costs_total
+      ),
+      pricing_grad_qtyD_add_setupcosts: initValue(
+        offerDetails?.pricing_grad_qtyD_add_setupcosts,
+        offerDetails?._calculation_additional_setup_costs_total
+      ),
+      pricing_grad_qtyE_add_setupcosts: initValue(
+        offerDetails?.pricing_grad_qtyE_add_setupcosts,
+        offerDetails?._calculation_additional_setup_costs_total
+      ),
 
-      pricing_grad_qtyB_add_transport:
-        offerDetails?.pricing_grad_qtyB_add_transport ?? "",
-      pricing_grad_qtyC_add_transport:
-        offerDetails?.pricing_grad_qtyC_add_transport ?? "",
-      pricing_grad_qtyD_add_transport:
-        offerDetails?.pricing_grad_qtyD_add_transport ?? "",
-      pricing_grad_qtyE_add_transport:
-        offerDetails?.pricing_grad_qtyE_add_transport ?? "",
+      // Transport cost fields: initialize with calculation_additional_transport_costs_total
+      pricing_grad_qtyB_add_transport: initValue(
+        offerDetails?.pricing_grad_qtyB_add_transport,
+        offerDetails?.calculation_additional_transport_costs_total
+      ),
+      pricing_grad_qtyC_add_transport: initValue(
+        offerDetails?.pricing_grad_qtyC_add_transport,
+        offerDetails?.calculation_additional_transport_costs_total
+      ),
+      pricing_grad_qtyD_add_transport: initValue(
+        offerDetails?.pricing_grad_qtyD_add_transport,
+        offerDetails?.calculation_additional_transport_costs_total
+      ),
+      pricing_grad_qtyE_add_transport: initValue(
+        offerDetails?.pricing_grad_qtyE_add_transport,
+        offerDetails?.calculation_additional_transport_costs_total
+      ),
     },
     enableReinitialize: true,
     onSubmit: () => {},
