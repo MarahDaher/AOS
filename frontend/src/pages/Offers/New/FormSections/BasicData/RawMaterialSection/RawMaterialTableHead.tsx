@@ -4,7 +4,7 @@ const RawMaterialTableHead = () => (
   <TableHead>
     <TableRow>
       {/* id */}
-      <TableCell>Rohstoff</TableCell>
+      <TableCell width={200}>Rohstoff</TableCell>
       {/* type */}
       <TableCell>Typ</TableCell>
       {/* supplier */}

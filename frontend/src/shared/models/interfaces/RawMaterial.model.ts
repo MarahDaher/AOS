@@ -49,4 +49,5 @@ export interface RawMaterialRow {
 export interface BaseMaterial {
   id: number;
   name: string;
+  type: string;
 }

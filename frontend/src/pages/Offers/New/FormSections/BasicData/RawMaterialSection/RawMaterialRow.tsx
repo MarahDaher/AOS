@@ -1,6 +1,6 @@
 import {
+  Autocomplete,
   IconButton,
-  MenuItem,
   Stack,
   TableCell,
   TableRow,
@@ -51,7 +51,6 @@ interface RawMaterialRowProps {
 const RawMaterialRow = ({
   row,
   baseMaterials,
-  rawMaterialRows,
   onChangeMaterial,
   onUpdateField,
   setRawMaterialRows,
@@ -114,39 +113,35 @@ const RawMaterialRow = ({
     }
   };
 
-  const selectedMaterialIds = rawMaterialRows
-    .filter(
-      (r) =>
-        r.raw_material_id !== 0 && r.raw_material_id !== row.raw_material_id
-    )
-    .map((r) => r.raw_material_id);
-
   return (
     <TableRow>
       <TableCell>
-        <TextField
-          select
-          fullWidth
-          variant="standard"
-          value={row.raw_material_id || ""}
-          onChange={(e) => {
-            const selectedId = Number(e.target.value);
-            if (!row.raw_material_id) {
-              handleAddMaterial(selectedId);
-            } else {
-              onChangeMaterial(row, selectedId);
+        <Autocomplete
+          options={baseMaterials}
+          clearIcon={null}
+          getOptionLabel={(option) =>
+            `${option.name}${option.type ? ` (${option.type})` : ""}`
+          }
+          value={
+            baseMaterials.find((m) => m.id === row.raw_material_id) || null
+          }
+          onChange={(_, newValue) => {
+            if (!row.raw_material_id && newValue) {
+              handleAddMaterial(newValue.id);
+            } else if (newValue) {
+              onChangeMaterial(row, newValue.id);
             }
           }}
-          disabled={!isFieldEditable("raw_material_id")}
-        >
-          {baseMaterials
-            .filter((material) => !selectedMaterialIds.includes(material.id))
-            .map((m) => (
-              <MenuItem key={m.id} value={m.id}>
-                {m.name}
-              </MenuItem>
-            ))}
-        </TextField>
+          isOptionEqualToValue={(option, value) => option.id === value.id}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              variant="standard"
+              label="Rohstoff"
+              disabled={!isFieldEditable("raw_material_id")}
+            />
+          )}
+        />
       </TableCell>
 
       <TableCell>
