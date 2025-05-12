@@ -54,9 +54,11 @@ export default function RawMaterialTable() {
         >
           <TableHead>
             <TableRow>
-              <TableCell>Bezeichnung</TableCell>
+              <TableCell>Rohstoff</TableCell>
               <TableCell>Typ</TableCell>
               <TableCell>Lieferant</TableCell>
+              <TableCell>Rohstoffbedarf [mm²]</TableCell>
+              <TableCell>Anteil</TableCell>
               <TableCell>Additives</TableCell>
             </TableRow>
           </TableHead>
@@ -66,6 +68,8 @@ export default function RawMaterialTable() {
                 <TableCell>{mat.name}</TableCell>
                 <TableCell>{mat.type}</TableCell>
                 <TableCell>{mat.supplier}</TableCell>
+                <TableCell>{mat.absolut_demand}</TableCell>
+                <TableCell>{mat.share}</TableCell>
                 <TableCell>
                   {mat._additives_concatenated
                     ? mat._additives_concatenated
