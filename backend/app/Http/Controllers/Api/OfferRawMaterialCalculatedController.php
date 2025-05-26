@@ -68,6 +68,8 @@ class OfferRawMaterialCalculatedController extends BaseController
             ->where('raw_material_id', $rawMaterialId)
             ->delete();
 
+        $this->service->recalculateShares($offerId);
+
         return ApiResponse::success(null);
     }
 }

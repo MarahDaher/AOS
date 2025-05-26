@@ -108,4 +108,38 @@ class OfferRawMaterialRepository
 
         return new OfferRawMaterialCalculatedResource($updated);
     }
+
+    public function recalculateShares(int $offerId): void
+    {
+        $allMaterials = OfferRawMaterial::where('offer_id', $offerId)->get();
+        $totalDemand = $allMaterials->sum('absolut_demand');
+
+        if ($totalDemand > 0) {
+            $shares = [];
+            foreach ($allMaterials as $material) {
+                $unrounded = ($material->absolut_demand / $totalDemand) * 100;
+                $shares[] = [
+                    'material' => $material,
+                    'unrounded' => $unrounded,
+                    'rounded' => round($unrounded, 2),
+                ];
+            }
+
+            $roundedSum = array_sum(array_column($shares, 'rounded'));
+            $diff = round(100 - $roundedSum, 2);
+
+            usort($shares, fn($a, $b) => $b['unrounded'] <=> $a['unrounded']);
+            if (count($shares) > 0) {
+                $shares[0]['rounded'] += $diff;
+            }
+
+            foreach ($shares as $s) {
+                OfferRawMaterial::where('offer_id', $offerId)
+                    ->where('raw_material_id', $s['material']->raw_material_id)
+                    ->update([
+                        'share' => $s['rounded'],
+                    ]);
+            }
+        }
+    }
 }

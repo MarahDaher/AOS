@@ -108,6 +108,7 @@ const RawMaterialRow = ({
         )
       );
       setConfirmOpen(false);
+      await fetchOfferRawMaterials();
     } catch (error) {
       showError(error);
       setConfirmOpen(false);
