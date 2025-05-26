@@ -144,6 +144,7 @@ class OfferCalculated extends Model
             '_pricing_costs_yearly_raw_material_quantity',
             '_pricing_costs_yearly_fixcosts',
             'pricing_costs_calc_price_additional_lfm',
+            'pricing_costs_calc_price_additional_lfm_desc',
             'pricing_graduated_calculation_additional_setup_quantity',
             '_pricing_endprices_calc_price_additional_lfm_total',
 

@@ -121,8 +121,14 @@ const RawMaterialPrices = () => {
               </TableRow>
               {/* ⬇️ Overwritten Total (Summe überschrieben) */}
               <TableRow>
-                <TableCell colSpan={10} align="right">
-                  <Typography fontWeight="bold">
+                <TableCell
+                  colSpan={10}
+                  align="right"
+                  sx={{
+                    alignContent: "start",
+                  }}
+                >
+                  <Typography fontWeight="bold" pt={1}>
                     Summe (überschrieben)
                   </Typography>
                 </TableCell>
@@ -131,7 +137,9 @@ const RawMaterialPrices = () => {
                     <FormInputFallbackField
                       name="general_raw_material_price_total_overwritten"
                       label=""
-                      fallbackValue={totalPriceShare.toFixed(2)}
+                      fallbackValue={parseFloat(
+                        totalPriceShare?.toString() || "0"
+                      )}
                       hiddenLabel={true}
                       disabled={
                         !isFieldEditable(

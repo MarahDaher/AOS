@@ -77,6 +77,7 @@ return new class extends Migration {
             $table->integer('pricing_annual_requirement')->default(0);
             $table->integer('pricing_graduated_calculation_additional_setup_quantity')->default(0);
             $table->float('pricing_costs_calc_price_additional_lfm')->nullable();
+            $table->string('pricing_costs_calc_price_additional_lfm_desc', 31)->nullable();
 
             $table->integer('pricing_grad_qtyB_add_hourlyrate')->nullable();
             $table->integer('pricing_grad_qtyC_add_hourlyrate')->nullable();

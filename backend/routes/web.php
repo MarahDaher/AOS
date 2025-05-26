@@ -35,17 +35,17 @@ Route::get('/clear', function () {
     //     $outputText .= "❌ Failed to create storage link. Error: " . $e->getMessage() . "\n";
     // }
 
-    Artisan::call('migrate:refresh');
+    // Artisan::call('migrate:refresh');
 
 
-    // // ✅ Safer migrate without fresh
-    // Artisan::call('migrate:fresh', ['--force' => true]);
-    // $migrateOutput = Artisan::output();
-    // $outputText .= "✅ Migrations complete.\n$migrateOutput\n";
+    // ✅ Safer migrate without fresh
+    Artisan::call('migrate:fresh', ['--force' => true]);
+    $migrateOutput = Artisan::output();
+    $outputText .= "✅ Migrations complete.\n$migrateOutput\n";
 
-    // Artisan::call('db:seed', ['--force' => true]);
-    // $seedOutput = Artisan::output();
-    // $outputText .= "✅ Database seeded successfully.\n$seedOutput\n";
+    Artisan::call('db:seed', ['--force' => true]);
+    $seedOutput = Artisan::output();
+    $outputText .= "✅ Database seeded successfully.\n$seedOutput\n";
 
     return nl2br($outputText);
 });

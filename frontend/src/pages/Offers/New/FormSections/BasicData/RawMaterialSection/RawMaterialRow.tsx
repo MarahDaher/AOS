@@ -1,3 +1,4 @@
+import ConfirmationDialog from "@components/ConfirmationDialog";
 import {
   Autocomplete,
   IconButton,
@@ -7,20 +8,19 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { Delete, PlaylistAdd } from "@mui/icons-material";
 import {
-  RawMaterialRow as RawMaterialRowType,
   BaseMaterial,
   OfferRawMaterialCalculatedModel,
+  RawMaterialRow as RawMaterialRowType,
 } from "@interfaces/RawMaterial.model";
-import { useOfferContext } from "@contexts/OfferProvider";
-import { useApiErrorHandler } from "@hooks/useApiErrorHandler";
+import { Delete, PlaylistAdd } from "@mui/icons-material";
+import { formatNumberToGerman, parseGermanNumber } from "@utils/formatNumbers";
 import { OfferRawMaterialCalculatedApi } from "@api/offer-raw-material";
-import { useEffect, useState } from "react";
-import ConfirmationDialog from "@components/ConfirmationDialog";
+import { useApiErrorHandler } from "@hooks/useApiErrorHandler";
 import { useApiSuccessHandler } from "@hooks/useApiSuccessHandler";
 import { useEditableFields } from "@hooks/useEditableFields";
-import { formatNumberToGerman, parseGermanNumber } from "@utils/formatNumbers";
+import { useEffect, useState } from "react";
+import { useOfferContext } from "@contexts/OfferProvider";
 
 interface RawMaterialRowProps {
   row: RawMaterialRowType;
@@ -51,6 +51,7 @@ interface RawMaterialRowProps {
 const RawMaterialRow = ({
   row,
   baseMaterials,
+  rawMaterialRows,
   onChangeMaterial,
   onUpdateField,
   setRawMaterialRows,
@@ -113,11 +114,16 @@ const RawMaterialRow = ({
     }
   };
 
+  const usedMaterialIds = rawMaterialRows.map((r) => r.raw_material_id);
+  const availableMaterials = baseMaterials.filter(
+    (material) => !usedMaterialIds.includes(material.id)
+  );
+
   return (
     <TableRow>
       <TableCell>
         <Autocomplete
-          options={baseMaterials}
+          options={availableMaterials}
           clearIcon={null}
           getOptionLabel={(option) =>
             `${option.name}${option.type ? ` (${option.type})` : ""}`
@@ -179,7 +185,7 @@ const RawMaterialRow = ({
             }
 
             if (parsed === row.absolut_demand) {
-              return; // 🛡️ No change, do not call updateDemand
+              return;
             }
 
             await updateDemand({

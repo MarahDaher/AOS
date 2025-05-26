@@ -24,14 +24,15 @@ return new class extends Migration
             r.price as price_from_raw_material,
 
             (
-            SELECT GROUP_CONCAT(a.name SEPARATOR ', ') 
+            SELECT GROUP_CONCAT(CONCAT(a.name, ' (', aor.share, '%)') SEPARATOR ', ') 
             FROM additives a JOIN additives_offers_raw_materials aor ON (a.id=aor.additives_id) 
             WHERE aor.offer_id=o_r.offer_id AND r.id=aor.raw_material_id
             ) AS `_additives_concatenated`,
 
             -- additives price total per share
             (
-  SELECT ROUND(SUM(aor.price * aor.share / 100), 2)            FROM additives_offers_raw_materials aor  
+            SELECT ROUND(SUM(aor.price * aor.share / 100), 2)
+            FROM additives_offers_raw_materials aor  
             WHERE aor.offer_id=o_r.offer_id AND r.id=aor.raw_material_id
             ) AS `_additives_price_sum`,
 

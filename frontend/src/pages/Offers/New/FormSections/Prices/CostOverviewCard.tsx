@@ -7,13 +7,14 @@ import { FC } from "react";
 import { FormikProvider, useFormik } from "formik";
 import { useOfferContext } from "@contexts/OfferProvider";
 import { usePermissions } from "@hooks/usePermissions";
+import FormTextField from "@components/FormInputs/FormTextField";
 
 type FieldConfig = {
   name: string;
   label: string;
   disabled?: boolean;
   numeric?: boolean;
-  type?: "int" | "float";
+  type?: "int" | "float" | "string";
 };
 
 // Left side fields (Kalkulationsmenge)
@@ -68,7 +69,12 @@ const kalkulationsmengeRows: Array<FieldConfig | null>[] = [
       disabled: false,
       type: "float",
     },
-    null,
+    {
+      name: "pricing_costs_calc_price_additional_lfm_desc",
+      label: "Zusatzpreis Beschreibung",
+      disabled: false,
+      type: "string",
+    },
     null,
   ],
 ];
@@ -172,11 +178,19 @@ const CostOverviewCard: FC = () => {
                       .map((field, colIndex) => (
                         <Grid size={12} key={colIndex}>
                           <Box mb={2}>
-                            <FormFloatField
-                              name={field!.name}
-                              label={field!.label}
-                              disabled={field!.disabled || !isEditable}
-                            />
+                            {field.type === "string" ? (
+                              <FormTextField
+                                name={field.name}
+                                label={field.label}
+                                disabled={field.disabled || !isEditable}
+                              />
+                            ) : (
+                              <FormFloatField
+                                name={field.name}
+                                label={field.label}
+                                disabled={field.disabled || !isEditable}
+                              />
+                            )}
                           </Box>
                         </Grid>
                       ))}
@@ -199,11 +213,19 @@ const CostOverviewCard: FC = () => {
                     row.map((field, colIndex) => (
                       <Grid key={colIndex} size={{ xs: 12, md: 3 }}>
                         {field ? (
-                          <FormFloatField
-                            name={field.name}
-                            label={field.label}
-                            disabled={field.disabled || !isEditable}
-                          />
+                          field.type === "string" ? (
+                            <FormTextField
+                              name={field.name}
+                              label={field.label}
+                              disabled={field.disabled || !isEditable}
+                            />
+                          ) : (
+                            <FormFloatField
+                              name={field.name}
+                              label={field.label}
+                              disabled={field.disabled || !isEditable}
+                            />
+                          )
                         ) : null}
                       </Grid>
                     ))

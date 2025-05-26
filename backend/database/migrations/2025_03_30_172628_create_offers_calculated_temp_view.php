@@ -10,7 +10,7 @@ class CreateOffersCalculatedTempView extends Migration
     DB::statement(
       <<<SQL
         CREATE OR REPLACE VIEW offers_calculated_temp AS 
-        SELECT 
+              SELECT 
           o.*, 
 
           CASE
@@ -464,6 +464,7 @@ CREATE OR REPLACE VIEW offers_calculated_temp2 AS
     o_c.id,
     o_c.pricing_annual_requirement,
     o_c.pricing_costs_calc_price_additional_lfm,
+    o_c.pricing_costs_calc_price_additional_lfm_desc,
     o_c.pricing_grad_qtyB_add_hourlyrate,
     o_c.pricing_grad_qtyB_add_setupcosts,
     o_c.pricing_grad_qtyB_add_transport,
@@ -500,8 +501,8 @@ CREATE OR REPLACE VIEW offers_calculated_temp2 AS
     o_c.runningcard_sampling_packing,
     o_c.runningcard_sampling_quantity,
     o_c.runningcard_tool_cost_type,
-    o_c.runningcard_tool_costs,
     o_c.runningcard_tool_hint,
+    o_c._runningcard_hourlyrecording_total,
     o_c.updated_at,
         
     -- calculated field from offers_calculated::    

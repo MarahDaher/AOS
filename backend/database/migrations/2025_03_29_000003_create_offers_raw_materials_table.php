@@ -11,14 +11,14 @@ return new class extends Migration {
             $table->unsignedBigInteger('offer_id');
             $table->unsignedBigInteger('raw_material_id');
             $table->float('absolut_demand')->default(0);
-            $table->float('share')->default(0); // calculated
+            $table->float('share')->default(0);
             $table->string('supplier', 63)->nullable();
             $table->float('price')->nullable();
             $table->date('price_date')->nullable();
 
             $table->primary(['offer_id', 'raw_material_id']);
-            $table->foreign('offer_id')->references('id')->on('offers')->restrictOnDelete()->restrictOnUpdate();
-            $table->foreign('raw_material_id')->references('id')->on('raw_materials')->restrictOnDelete()->restrictOnUpdate();
+            $table->foreign('offer_id')->references('id')->on('offers')->onUpdate('restrict')->onDelete('restrict');
+            $table->foreign('raw_material_id')->references('id')->on('raw_materials')->onUpdate('restrict')->onDelete('restrict');
         });
     }
 
