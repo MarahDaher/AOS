@@ -105,6 +105,12 @@ class Offer extends Model
 
         'pricing_machine_utilization_annual_machine_capacity',
 
+        'pricing_piece_length_prices_length1',
+        'pricing_piece_length_prices_length2',
+        'pricing_piece_length_prices_length3',
+        'pricing_piece_length_prices_length4',
+        'pricing_piece_length_prices_length5',
+
         'runningcard_sampling_date',
         'runningcard_sampling_quantity',
         'runningcard_sampling_length',
@@ -125,6 +131,12 @@ class Offer extends Model
         'runningcard_hourlyrecording_entrystitches',
         'runningcard_hourlyrecording_entrydriver_user_id',
         'runningcard_hourlyrecording_toolmaker_user_id',
+
+        'pricing_piece_length_prices_length1',
+        'pricing_piece_length_prices_length2',
+        'pricing_piece_length_prices_length3',
+        'pricing_piece_length_prices_length4',
+        'pricing_piece_length_prices_length5',
 
         'runningcard_extrusion_speed_IST',
         'runningcard_profile_weight_IST',

@@ -11,6 +11,8 @@ use App\Models\OfferStatus;
 use App\Services\OfferService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class OfferController extends BaseController
 {
@@ -127,5 +129,21 @@ class OfferController extends BaseController
         $fields = $this->service->editableFieldsByRoleAndStatus($user, $offer);
 
         return ApiResponse::success($fields, 'Editable fields retrieved successfully');
+    }
+
+    public function getTemplates()
+    {
+        $templatePath = storage_path('app/templates');
+        if (!File::exists($templatePath)) {
+            return ApiResponse::success([], 'No templates folder found');
+        }
+
+        $files = File::files($templatePath);
+        $docxFiles = collect($files)
+            ->filter(fn($file) => $file->getExtension() === 'docx')
+            ->map(fn($file) => $file->getFilename())
+            ->values();
+
+        return ApiResponse::success($docxFiles, 'Templates fetched');
     }
 }

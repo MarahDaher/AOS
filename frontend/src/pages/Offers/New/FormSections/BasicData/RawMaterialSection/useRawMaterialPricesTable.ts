@@ -1,6 +1,6 @@
 import debounce from "lodash.debounce";
 import { AdditiveApi } from "@api/additives";
-import { BaseMaterial, RawMaterialRow } from "@interfaces/RawMaterial.model";
+import { RawMaterialRow } from "@interfaces/RawMaterial.model";
 import { OfferRawMaterialCalculatedApi } from "@api/offer-raw-material";
 import { RawMaterialApi } from "@api/raw-materials";
 import { RawMaterialPricesTableInitialValues } from "@pages/Offers/New/Index";
@@ -26,7 +26,7 @@ export const useRawMaterialPricesTable = () => {
   const isFieldEditable = (fieldName: string) =>
     editableFields.includes(fieldName);
 
-  const [baseMaterials, setRawMaterials] = useState<BaseMaterial[]>([]);
+  const [baseMaterials, setRawMaterials] = useState<any[]>([]);
   const [rawMaterialRows, setRawMaterialRows] = useState<RawMaterialRow[]>([]);
   const [selectedMaterial, setSelectedMaterial] = useState<any | null>(null);
   const [openModal, setOpenModal] = useState(false);
@@ -80,11 +80,17 @@ export const useRawMaterialPricesTable = () => {
   const handleAddMaterial = async (newMaterialId: number) => {
     if (!offerDetails?.id) return;
 
+    // Find the base material to prefill fields
+    const baseMaterial = baseMaterials.find((m) => m.id === newMaterialId);
+
     try {
       const createdMaterial =
         await OfferRawMaterialCalculatedApi.createRawMaterial({
           offer_id: offerDetails.id,
           raw_material_id: newMaterialId,
+          supplier: baseMaterial?.supplier || "",
+          price_date: baseMaterial?.price_date || "",
+          // add other fields if needed
         });
 
       setRawMaterialRows((prev) =>
@@ -93,8 +99,8 @@ export const useRawMaterialPricesTable = () => {
             ? {
                 ...createdMaterial,
                 share: r.share,
-                supplier: r.supplier,
-                price_date: r.price_date,
+                supplier: r.supplier || baseMaterial?.supplier || "",
+                price_date: r.price_date || baseMaterial?.price_date || "",
                 price: r.price,
                 type: r.type,
               }
@@ -103,8 +109,6 @@ export const useRawMaterialPricesTable = () => {
       );
 
       showSuccess("Rohstoff erfolgreich hinzugefügt.");
-
-      // (Optional) لو بدك تتأكد انه كل شي تمام بعد شوي
       fetchOfferRawMaterials();
     } catch (error) {
       showError(error);

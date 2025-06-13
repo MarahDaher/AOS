@@ -2,8 +2,13 @@ import AddIcon from "@mui/icons-material/Add";
 import CardBox from "../../components/CardBox";
 import IconAction from "@components/IconAction";
 import RoundedIconButton from "@components/RoundedIconButton";
-import { Box, CircularProgress } from "@mui/material";
-import { ContentCopy, Delete, Edit, ShoppingBasket } from "@mui/icons-material";
+import { Box } from "@mui/material";
+import {
+  ContentCopy,
+  Delete,
+  Edit,
+  InsertDriveFileRounded,
+} from "@mui/icons-material";
 import { FunctionComponent, useEffect, useState } from "react";
 import { MTable } from "@components/MTable";
 import { OfferColumns } from "./Columns";
@@ -15,6 +20,7 @@ import { useOfferContext } from "@contexts/OfferProvider";
 import { usePermissions } from "@hooks/usePermissions";
 import { useApiSuccessHandler } from "@hooks/useApiSuccessHandler";
 import ConfirmationDialog from "@components/ConfirmationDialog";
+import TemplateDialog from "./TemplateDialog";
 
 type OffersPageProps = object;
 
@@ -34,6 +40,32 @@ const OffersPage: FunctionComponent<OffersPageProps> = () => {
   const [exportingOfferId, setExportingOfferId] = useState<number | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedOffer, setSelectedOffer] = useState<OffersModel | null>(null);
+  const [templateDialogOpen, setTemplateDialogOpen] = useState(false);
+  const [templates, setTemplates] = useState<string[]>([]);
+  const [exportOfferId, setExportOfferId] = useState<number | null>(null);
+
+  const openTemplateDialog = async (offerId: number) => {
+    setExportOfferId(offerId);
+    setTemplateDialogOpen(true);
+    const files = await OffersApi.getTemplates();
+    setTemplates(files);
+  };
+
+  const handleTemplateSelect = async (filename: string) => {
+    setTemplateDialogOpen(false);
+    if (exportOfferId) {
+      setExportingOfferId(exportOfferId);
+      try {
+        await OffersApi.export(exportOfferId, filename);
+        // Optionally show success or handle file download
+      } catch (error) {
+        showError(error);
+      } finally {
+        setExportingOfferId(null);
+        setExportOfferId(null);
+      }
+    }
+  };
 
   const handleAdd = () => {
     resetOffer();
@@ -62,19 +94,19 @@ const OffersPage: FunctionComponent<OffersPageProps> = () => {
     }
   };
 
-  const handleExport = async (offerId: number) => {
-    try {
-      setExportingOfferId(offerId);
-      await OffersApi.export(offerId);
+  // const handleExport = async (offerId: number) => {
+  //   try {
+  //     setExportingOfferId(offerId);
+  //     await OffersApi.export(offerId);
 
-      // ⏳ Wait a little so user can see spinner
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    } catch (error) {
-      showError(error);
-    } finally {
-      setExportingOfferId(null);
-    }
-  };
+  //     // ⏳ Wait a little so user can see spinner
+  //     await new Promise((resolve) => setTimeout(resolve, 1000));
+  //   } catch (error) {
+  //     showError(error);
+  //   } finally {
+  //     setExportingOfferId(null);
+  //   }
+  // };
 
   const handleDelete = (offer: OffersModel) => {
     setSelectedOffer(offer);
@@ -114,15 +146,11 @@ const OffersPage: FunctionComponent<OffersPageProps> = () => {
               <>
                 {canExport("offer") && (
                   <IconAction
-                    tooltip="Als Word exportieren"
-                    onClick={() => handleExport(row.id)}
+                    tooltip="Mit Vorlage exportieren"
+                    onClick={() => openTemplateDialog(row.id)}
                     disabled={exportingOfferId === row.id}
                   >
-                    {exportingOfferId === row.id ? (
-                      <CircularProgress size={20} />
-                    ) : (
-                      <ShoppingBasket fontSize="small" />
-                    )}
+                    <InsertDriveFileRounded fontSize="small" />
                   </IconAction>
                 )}
                 {canDuplicate("offer") && (
@@ -170,6 +198,13 @@ const OffersPage: FunctionComponent<OffersPageProps> = () => {
             onConfirm={confirmDelete}
             title="Angebot löschen"
             message="Möchten Sie dieses Angebot wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden."
+          />
+
+          <TemplateDialog
+            open={templateDialogOpen}
+            templates={templates}
+            onClose={() => setTemplateDialogOpen(false)}
+            onSelect={handleTemplateSelect}
           />
         </CardBox>
       </Box>

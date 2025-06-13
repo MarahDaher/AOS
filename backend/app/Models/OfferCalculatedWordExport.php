@@ -16,4 +16,9 @@ class OfferCalculatedWordExport extends Model
     {
         return 'id'; // assuming the view includes an `id` field from `offers_calculated`
     }
+
+    public function rawMaterials()
+    {
+        return $this->hasMany(OfferRawMaterialCalculated::class, 'offer_id', 'id');
+    }
 }

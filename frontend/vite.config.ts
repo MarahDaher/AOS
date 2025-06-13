@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { defineConfig, splitVendorChunkPlugin } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 
@@ -6,7 +6,7 @@ import path from "path";
 export default defineConfig({
   base: "/aos/",
 
-  plugins: [react()],
+  plugins: [react(), splitVendorChunkPlugin()],
   resolve: {
     alias: {
       "@interfaces": path.resolve(__dirname, "src/shared/models/interfaces"),
@@ -20,6 +20,35 @@ export default defineConfig({
       "@hooks": path.resolve(__dirname, "src/shared/hooks"),
       "@styles": path.resolve(__dirname, "src/styles"),
       "@assets": path.resolve(__dirname, "src/assets"),
+    },
+  },
+  build: {
+    chunkSizeWarningLimit: 1000,
+
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          react: ["react", "react-dom"],
+          mui: [
+            "@mui/material",
+            "@mui/icons-material",
+            "@mui/x-data-grid",
+            "@mui/x-date-pickers",
+            "@emotion/react",
+            "@emotion/styled",
+            "@fontsource/roboto",
+          ],
+          tanstack: ["@tanstack/react-query"],
+          lodash: ["lodash", "lodash.debounce"],
+          utils: [
+            "axios",
+            "yup",
+            "notistack",
+            "react-cookie",
+            "react-router-dom",
+          ],
+        },
+      },
     },
   },
 });

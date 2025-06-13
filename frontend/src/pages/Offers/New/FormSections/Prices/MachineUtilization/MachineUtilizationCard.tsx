@@ -30,10 +30,10 @@ const MachineUtilizationCard = () => {
     <>
       <CardBox label="Maschinenauslastung">
         <Grid container spacing={5}>
-          <Grid size={{ xs: 12, md: 8 }}>
+          <Grid size={{ xs: 12, md: 10 }}>
             <MachineUtilizationTable data={mappedData} />
           </Grid>
-          <Grid size={{ xs: 12, md: 2 }}></Grid>
+          {/* <Grid size={{ xs: 12, md: 2 }}></Grid> */}
           <Grid size={{ xs: 12, md: 2 }}>
             <FormikProvider value={formik}>
               <Box display="flex" justifyContent="end">

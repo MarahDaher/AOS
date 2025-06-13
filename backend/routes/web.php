@@ -39,13 +39,13 @@ Route::get('/clear', function () {
 
 
     // ✅ Safer migrate without fresh
-    Artisan::call('migrate:fresh', ['--force' => true]);
+    Artisan::call('migrate', ['--force' => true]);
     $migrateOutput = Artisan::output();
     $outputText .= "✅ Migrations complete.\n$migrateOutput\n";
 
-    Artisan::call('db:seed', ['--force' => true]);
-    $seedOutput = Artisan::output();
-    $outputText .= "✅ Database seeded successfully.\n$seedOutput\n";
+    // Artisan::call('db:seed', ['--force' => true]);
+    // $seedOutput = Artisan::output();
+    // $outputText .= "✅ Database seeded successfully.\n$seedOutput\n";
 
     return nl2br($outputText);
 });

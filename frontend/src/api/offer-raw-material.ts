@@ -11,6 +11,8 @@ export class OfferRawMaterialCalculatedApi {
   static async createRawMaterial(data: {
     offer_id: number;
     raw_material_id: number;
+    supplier?: string;
+    price_date?: string;
   }) {
     return await handleRequest<any>({
       method: "POST",

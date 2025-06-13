@@ -60,7 +60,11 @@ Route::middleware(['auth:api'])->group(function () {
         Route::post('{id}/drawing', [OfferDrawingController::class, 'store'])->middleware('check.permission:' . PermissionConstants::CREATE_DRAWING);
         //Export Offer
         Route::get('{id}/export', [OfferExportController::class, 'export'])->middleware('check.permission:' . PermissionConstants::EXPORT_OFFER);
+        Route::get('{id}/export-data', [OfferExportController::class, 'getWordExportData'])->middleware('check.permission:' . PermissionConstants::EXPORT_OFFER);
     });
+
+    Route::get('templates', [OfferController::class, 'getTemplates']);
+
 
     Route::post('offer-raw-materials', [OfferRawMaterialCalculatedController::class, 'store'])->middleware('check.permission:' . PermissionConstants::CREATE_OFFER_RAW_MATERIAL);;
     Route::get('offer-status', [OfferStatusController::class, 'index']);

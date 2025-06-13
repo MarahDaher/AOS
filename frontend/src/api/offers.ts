@@ -65,8 +65,11 @@ export class OffersApi {
   }
 
   // Export
-  static async export(offerId: number) {
-    const url = `${import.meta.env.VITE_API_URL}/offers/${offerId}/export`;
+  static async export(offerId: number, template?: string) {
+    let url = `${import.meta.env.VITE_API_URL}/offers/${offerId}/export`;
+    if (template) {
+      url += `?template=${encodeURIComponent(template)}`;
+    }
 
     const link = document.createElement("a");
     link.href = url;
@@ -96,6 +99,14 @@ export class OffersApi {
     return await handleRequest<any>({
       method: "DELETE",
       endpoint: `offers/${offerId}`,
+    });
+  }
+
+  // Templates
+  static async getTemplates() {
+    return await handleRequest<any[]>({
+      method: "GET",
+      endpoint: "templates",
     });
   }
 }

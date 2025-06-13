@@ -37,33 +37,35 @@ class CreateOffersCalculatedView extends Migration
     oc._pricing_endprices_graduated_without_confection_lfm_quantityE AS `_pricing_piece_length_prices_graduated_lfm_quantityE`,
    
 -- Stück-Längen-Preise Länge 625mm -- piece-length-prices length 625mm  
-    oc._pricing_endprices_graduated_without_confection_lfm_quantityA * 625 / 1000 AS `_pricing_piece_length_prices_length625_quantityA`,
-    oc._pricing_endprices_graduated_without_confection_lfm_quantityB * 625 / 1000 AS `_pricing_piece_length_prices_length625_quantityB`,
-    oc._pricing_endprices_graduated_without_confection_lfm_quantityC * 625 / 1000 AS `_pricing_piece_length_prices_length625_quantityC`,
-    oc._pricing_endprices_graduated_without_confection_lfm_quantityD * 625 / 1000 AS `_pricing_piece_length_prices_length625_quantityD`,
-    oc._pricing_endprices_graduated_without_confection_lfm_quantityE * 625 / 1000 AS `_pricing_piece_length_prices_length625_quantityE`,
-   
--- Stück-Längen-Preise Länge 1000mm -- piece-length-prices length 1000mm    
-    oc._pricing_endprices_graduated_without_confection_lfm_quantityA * 1000 / 1000 AS `_pricing_piece_length_prices_length1000_quantityA`,
-    oc._pricing_endprices_graduated_without_confection_lfm_quantityB * 1000 / 1000 AS `_pricing_piece_length_prices_length1000_quantityB`,
-    oc._pricing_endprices_graduated_without_confection_lfm_quantityC * 1000 / 1000 AS `_pricing_piece_length_prices_length1000_quantityC`,
-    oc._pricing_endprices_graduated_without_confection_lfm_quantityD * 1000 / 1000 AS `_pricing_piece_length_prices_length1000_quantityD`,
-    oc._pricing_endprices_graduated_without_confection_lfm_quantityE * 1000 / 1000 AS `_pricing_piece_length_prices_length1000_quantityE`,
-   
--- Stück-Längen-Preise Länge 1250mm -- piece-length-prices length 1250mm    
-    oc._pricing_endprices_graduated_without_confection_lfm_quantityA * 1250 / 1000 AS `_pricing_piece_length_prices_length1250_quantityA`,
-    oc._pricing_endprices_graduated_without_confection_lfm_quantityB * 1250 / 1000 AS `_pricing_piece_length_prices_length1250_quantityB`,
-    oc._pricing_endprices_graduated_without_confection_lfm_quantityC * 1250 / 1000 AS `_pricing_piece_length_prices_length1250_quantityC`,
-    oc._pricing_endprices_graduated_without_confection_lfm_quantityD * 1250 / 1000 AS `_pricing_piece_length_prices_length1250_quantityD`,
-    oc._pricing_endprices_graduated_without_confection_lfm_quantityE * 1250 / 1000 AS `_pricing_piece_length_prices_length1250_quantityE`,
-   
--- Stück-Längen-Preise Länge 1333mm -- piece-length-prices length 1333mm    
-    oc._pricing_endprices_graduated_without_confection_lfm_quantityA * 1333 / 1000 AS `_pricing_piece_length_prices_length1333_quantityA`,
-    oc._pricing_endprices_graduated_without_confection_lfm_quantityB * 1333 / 1000 AS `_pricing_piece_length_prices_length1333_quantityB`,
-    oc._pricing_endprices_graduated_without_confection_lfm_quantityC * 1333 / 1000 AS `_pricing_piece_length_prices_length1333_quantityC`,
-    oc._pricing_endprices_graduated_without_confection_lfm_quantityD * 1333 / 1000 AS `_pricing_piece_length_prices_length1333_quantityD`,
-    oc._pricing_endprices_graduated_without_confection_lfm_quantityE * 1333 / 1000 AS `_pricing_piece_length_prices_length1333_quantityE`
+oc._pricing_endprices_graduated_without_confection_lfm_quantityA * oc.pricing_piece_length_prices_length1 / 1000 AS `_pricing_piece_length_prices_length1_quantityA`,
+            oc._pricing_endprices_graduated_without_confection_lfm_quantityB * oc.pricing_piece_length_prices_length1 / 1000 AS `_pricing_piece_length_prices_length1_quantityB`,
+            oc._pricing_endprices_graduated_without_confection_lfm_quantityC * oc.pricing_piece_length_prices_length1 / 1000 AS `_pricing_piece_length_prices_length1_quantityC`,
+            oc._pricing_endprices_graduated_without_confection_lfm_quantityD * oc.pricing_piece_length_prices_length1 / 1000 AS `_pricing_piece_length_prices_length1_quantityD`,
+            oc._pricing_endprices_graduated_without_confection_lfm_quantityE * oc.pricing_piece_length_prices_length1 / 1000 AS `_pricing_piece_length_prices_length1_quantityE`,
 
+            oc._pricing_endprices_graduated_without_confection_lfm_quantityA * oc.pricing_piece_length_prices_length2 / 1000 AS `_pricing_piece_length_prices_length2_quantityA`,
+            oc._pricing_endprices_graduated_without_confection_lfm_quantityB * oc.pricing_piece_length_prices_length2 / 1000 AS `_pricing_piece_length_prices_length2_quantityB`,
+            oc._pricing_endprices_graduated_without_confection_lfm_quantityC * oc.pricing_piece_length_prices_length2 / 1000 AS `_pricing_piece_length_prices_length2_quantityC`,
+            oc._pricing_endprices_graduated_without_confection_lfm_quantityD * oc.pricing_piece_length_prices_length2 / 1000 AS `_pricing_piece_length_prices_length2_quantityD`,
+            oc._pricing_endprices_graduated_without_confection_lfm_quantityE * oc.pricing_piece_length_prices_length2 / 1000 AS `_pricing_piece_length_prices_length2_quantityE`,
+
+            oc._pricing_endprices_graduated_without_confection_lfm_quantityA * oc.pricing_piece_length_prices_length3 / 1000 AS `_pricing_piece_length_prices_length3_quantityA`,
+            oc._pricing_endprices_graduated_without_confection_lfm_quantityB * oc.pricing_piece_length_prices_length3 / 1000 AS `_pricing_piece_length_prices_length3_quantityB`,
+            oc._pricing_endprices_graduated_without_confection_lfm_quantityC * oc.pricing_piece_length_prices_length3 / 1000 AS `_pricing_piece_length_prices_length3_quantityC`,
+            oc._pricing_endprices_graduated_without_confection_lfm_quantityD * oc.pricing_piece_length_prices_length3 / 1000 AS `_pricing_piece_length_prices_length3_quantityD`,
+            oc._pricing_endprices_graduated_without_confection_lfm_quantityE * oc.pricing_piece_length_prices_length3 / 1000 AS `_pricing_piece_length_prices_length3_quantityE`,
+
+            oc._pricing_endprices_graduated_without_confection_lfm_quantityA * oc.pricing_piece_length_prices_length4 / 1000 AS `_pricing_piece_length_prices_length4_quantityA`,
+            oc._pricing_endprices_graduated_without_confection_lfm_quantityB * oc.pricing_piece_length_prices_length4 / 1000 AS `_pricing_piece_length_prices_length4_quantityB`,
+            oc._pricing_endprices_graduated_without_confection_lfm_quantityC * oc.pricing_piece_length_prices_length4 / 1000 AS `_pricing_piece_length_prices_length4_quantityC`,
+            oc._pricing_endprices_graduated_without_confection_lfm_quantityD * oc.pricing_piece_length_prices_length4 / 1000 AS `_pricing_piece_length_prices_length4_quantityD`,
+            oc._pricing_endprices_graduated_without_confection_lfm_quantityE * oc.pricing_piece_length_prices_length4 / 1000 AS `_pricing_piece_length_prices_length4_quantityE`,
+
+            oc._pricing_endprices_graduated_without_confection_lfm_quantityA * oc.pricing_piece_length_prices_length5 / 1000 AS `_pricing_piece_length_prices_length5_quantityA`,
+            oc._pricing_endprices_graduated_without_confection_lfm_quantityB * oc.pricing_piece_length_prices_length5 / 1000 AS `_pricing_piece_length_prices_length5_quantityB`,
+            oc._pricing_endprices_graduated_without_confection_lfm_quantityC * oc.pricing_piece_length_prices_length5 / 1000 AS `_pricing_piece_length_prices_length5_quantityC`,
+            oc._pricing_endprices_graduated_without_confection_lfm_quantityD * oc.pricing_piece_length_prices_length5 / 1000 AS `_pricing_piece_length_prices_length5_quantityD`,
+            oc._pricing_endprices_graduated_without_confection_lfm_quantityE * oc.pricing_piece_length_prices_length5 / 1000 AS `_pricing_piece_length_prices_length5_quantityE`
   FROM offers_calculated_temp3 oc;
 SQL
     );

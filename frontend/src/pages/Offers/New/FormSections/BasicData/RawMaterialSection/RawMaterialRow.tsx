@@ -76,6 +76,12 @@ const RawMaterialRow = ({
   const [totalDemandInputValue, setTotalDemandInputValue] = useState(
     row.absolut_demand != null ? formatNumberToGerman(row.absolut_demand) : ""
   );
+  const [supplierInputValue, setSupplierInputValue] = useState(
+    row.supplier ?? ""
+  );
+  const [priceDateInputValue, setPriceDateInputValue] = useState(
+    formatPriceDate(row.price_date) ?? ""
+  );
 
   useEffect(() => {
     setPriceInputValue(
@@ -88,6 +94,14 @@ const RawMaterialRow = ({
       row.absolut_demand != null ? formatNumberToGerman(row.absolut_demand) : ""
     );
   }, [row.absolut_demand]);
+
+  useEffect(() => {
+    setSupplierInputValue(row.supplier ?? "");
+  }, [row.supplier]);
+
+  useEffect(() => {
+    setPriceDateInputValue(formatPriceDate(row.price_date) ?? "");
+  }, [row.price_date]);
 
   const handleConfirmDelete = async () => {
     if (!row.raw_material_id || !offerDetails?.id) return;
@@ -160,11 +174,17 @@ const RawMaterialRow = ({
           fullWidth
           disabled={!isFieldEditable("supplier")}
           variant="standard"
-          value={row.supplier ?? ""}
-          onChange={(e) =>
-            updateRowField(setRawMaterialRows, row, "supplier", e.target.value)
-          }
-          onBlur={(e) => onUpdateField(row, "supplier", e.target.value)}
+          value={supplierInputValue}
+          onChange={(e) => setSupplierInputValue(e.target.value)}
+          onBlur={() => {
+            updateRowField(
+              setRawMaterialRows,
+              row,
+              "supplier",
+              supplierInputValue
+            );
+            onUpdateField(row, "supplier", supplierInputValue);
+          }}
         />
       </TableCell>
 
@@ -176,7 +196,7 @@ const RawMaterialRow = ({
           variant="standard"
           value={totalDemandInputValue}
           onChange={(e) => {
-            const val = e.target.value.replace(/[^0-9,.\-]/g, "");
+            const val = e.target.value.replace(/[^0-9,.-]/g, "");
             setTotalDemandInputValue(val);
           }}
           onBlur={async () => {
@@ -215,18 +235,13 @@ const RawMaterialRow = ({
           type="month"
           variant="standard"
           disabled={!isFieldEditable("price_date")}
-          value={formatPriceDate(row.price_date) ?? ""}
-          onChange={(e) =>
-            updateRowField(
-              setRawMaterialRows,
-              row,
-              "price_date",
-              `${e.target.value}-01`
-            )
-          }
-          onBlur={(e) =>
-            onUpdateField(row, "price_date", `${e.target.value}-01`)
-          }
+          value={priceDateInputValue}
+          onChange={(e) => setPriceDateInputValue(e.target.value)}
+          onBlur={() => {
+            const value = `${priceDateInputValue}-01`;
+            updateRowField(setRawMaterialRows, row, "price_date", value);
+            onUpdateField(row, "price_date", value);
+          }}
         />
       </TableCell>
 
@@ -238,7 +253,7 @@ const RawMaterialRow = ({
           variant="standard"
           value={priceInputValue}
           onChange={(e) => {
-            const val = e.target.value.replace(/[^0-9,.\-]/g, "");
+            const val = e.target.value.replace(/[^0-9,.-]/g, "");
             setPriceInputValue(val);
           }}
           onBlur={() => {

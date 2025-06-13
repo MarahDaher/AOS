@@ -89,6 +89,12 @@ export interface OfferCalculated {
 
   pricing_machine_utilization_annual_machine_capacity: number | null;
 
+  pricing_piece_length_prices_length1: number | null;
+  pricing_piece_length_prices_length2: number | null;
+  pricing_piece_length_prices_length3: number | null;
+  pricing_piece_length_prices_length4: number | null;
+  pricing_piece_length_prices_length5: number | null;
+
   [key: string]: any; // 👈 هذا عشان كل الفيلدات اللي تبدأ بـ _calculation أو _pricing
   created_by_user: {
     id: number;

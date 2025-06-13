@@ -50,4 +50,13 @@ export interface BaseMaterial {
   id: number;
   name: string;
   type: string;
+  price_per_kg: number;
+  price_date: string;
+  density: number;
+  additives: string[];
+  additives_price_sum: number;
+  price_minus_discount: number;
+  price_share: number;
+  price_minus_discount_share: number;
+  supplier: string;
 }

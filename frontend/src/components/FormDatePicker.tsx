@@ -3,6 +3,7 @@ import { useField, useFormikContext } from "formik";
 import { FormControl } from "@mui/material";
 import { DatePicker, DatePickerProps } from "@mui/x-date-pickers/DatePicker";
 import { useSaveFieldMutation } from "@hooks/useSaveFieldMutation";
+import { format, parseISO, isValid } from "date-fns";
 
 interface FormDatePickerProps {
   name: string;
@@ -20,7 +21,7 @@ const FormDatePicker: FunctionComponent<FormDatePickerProps> = ({
   required = false,
   disabled = false,
   views = ["year", "month", "day"],
-  format = "dd. MMMM yyyy",
+  format: displayFormat = "dd. MMMM yyyy",
 }) => {
   const [field, meta] = useField(name);
   const { setFieldValue } = useFormikContext();
@@ -28,10 +29,10 @@ const FormDatePicker: FunctionComponent<FormDatePickerProps> = ({
 
   const currentError = meta.touched && meta.error ? meta.error : "";
 
-  const handleSave = (isoString: string | null) => {
-    if (isoString) {
+  const handleSave = (dateString: string | null) => {
+    if (dateString) {
       mutation.mutate(
-        { name, value: isoString },
+        { name, value: dateString },
         {
           onSuccess: () => {},
         }
@@ -40,20 +41,25 @@ const FormDatePicker: FunctionComponent<FormDatePickerProps> = ({
   };
 
   const handleChange = (date: Date | null) => {
-    const isoString = date ? date.toISOString() : null;
-    setFieldValue(name, isoString);
-    handleSave(isoString);
+    // Store only the date part in YYYY-MM-DD format
+    const dateString =
+      date && isValid(date) ? format(date, "yyyy-MM-dd") : null;
+    setFieldValue(name, dateString);
+    handleSave(dateString);
   };
+
+  // Parse the value as a local date
+  const parsedValue = field.value ? parseISO(field.value) : null;
 
   return (
     <FormControl fullWidth>
       <DatePicker
         label={label}
-        value={field.value ? new Date(field.value) : null}
+        value={parsedValue && isValid(parsedValue) ? parsedValue : null}
         onChange={handleChange}
         disabled={disabled}
         views={views}
-        format={format}
+        format={displayFormat}
         slotProps={{
           textField: {
             fullWidth: true,

@@ -282,6 +282,11 @@ class OfferCalculated extends Model
             // Other
             'pricing_machine_utilization_annual_machine_capacity',
 
+            'pricing_piece_length_prices_length1',
+            'pricing_piece_length_prices_length2',
+            'pricing_piece_length_prices_length3',
+            'pricing_piece_length_prices_length4',
+            'pricing_piece_length_prices_length5',
 
             //Stück-Längen-Preise Staffel/m 
             '_pricing_piece_length_prices_graduated_lfm_quantityA',
@@ -290,33 +295,40 @@ class OfferCalculated extends Model
             '_pricing_piece_length_prices_graduated_lfm_quantityD',
             '_pricing_piece_length_prices_graduated_lfm_quantityE',
 
-            //Stück-Längen-Preise Länge 625mm
-            '_pricing_piece_length_prices_length625_quantityA',
-            '_pricing_piece_length_prices_length625_quantityB',
-            '_pricing_piece_length_prices_length625_quantityC',
-            '_pricing_piece_length_prices_length625_quantityD',
-            '_pricing_piece_length_prices_length625_quantityE',
+            //Stück-Längen-Preise Länge 625mm / length 1
+            '_pricing_piece_length_prices_length1_quantityA',
+            '_pricing_piece_length_prices_length1_quantityB',
+            '_pricing_piece_length_prices_length1_quantityC',
+            '_pricing_piece_length_prices_length1_quantityD',
+            '_pricing_piece_length_prices_length1_quantityE',
 
-            //Stück-Längen-Preise Länge 1000mm
-            '_pricing_piece_length_prices_length1000_quantityA',
-            '_pricing_piece_length_prices_length1000_quantityB',
-            '_pricing_piece_length_prices_length1000_quantityC',
-            '_pricing_piece_length_prices_length1000_quantityD',
-            '_pricing_piece_length_prices_length1000_quantityE',
+            //Stück-Längen-Preise Länge 1000mm / length 2
+            '_pricing_piece_length_prices_length2_quantityA',
+            '_pricing_piece_length_prices_length2_quantityB',
+            '_pricing_piece_length_prices_length2_quantityC',
+            '_pricing_piece_length_prices_length2_quantityD',
+            '_pricing_piece_length_prices_length2_quantityE',
 
-            //Stück-Längen-Preise Länge 1250mm
-            '_pricing_piece_length_prices_length1250_quantityA',
-            '_pricing_piece_length_prices_length1250_quantityB',
-            '_pricing_piece_length_prices_length1250_quantityC',
-            '_pricing_piece_length_prices_length1250_quantityD',
-            '_pricing_piece_length_prices_length1250_quantityE',
+            //Stück-Längen-Preise Länge 1250mm / length 3
+            '_pricing_piece_length_prices_length3_quantityA',
+            '_pricing_piece_length_prices_length3_quantityB',
+            '_pricing_piece_length_prices_length3_quantityC',
+            '_pricing_piece_length_prices_length3_quantityD',
+            '_pricing_piece_length_prices_length3_quantityE',
 
-            //Stück-Längen-Preise Länge 1333mm
-            '_pricing_piece_length_prices_length1333_quantityA',
-            '_pricing_piece_length_prices_length1333_quantityB',
-            '_pricing_piece_length_prices_length1333_quantityC',
-            '_pricing_piece_length_prices_length1333_quantityD',
-            '_pricing_piece_length_prices_length1333_quantityE',
+            //Stück-Längen-Preise Länge 1333mm / length 4
+            '_pricing_piece_length_prices_length4_quantityA',
+            '_pricing_piece_length_prices_length4_quantityB',
+            '_pricing_piece_length_prices_length4_quantityC',
+            '_pricing_piece_length_prices_length4_quantityD',
+            '_pricing_piece_length_prices_length4_quantityE',
+
+            //Stück-Längen-Preise Länge 1500mm / length 5
+            '_pricing_piece_length_prices_length5_quantityA',
+            '_pricing_piece_length_prices_length5_quantityB',
+            '_pricing_piece_length_prices_length5_quantityC',
+            '_pricing_piece_length_prices_length5_quantityD',
+            '_pricing_piece_length_prices_length5_quantityE',
 
 
 
@@ -343,6 +355,12 @@ class OfferCalculated extends Model
 
             'runningcard_profile_weight_IST',
             'runningcard_extrusion_speed_IST',
+
+            'pricing_piece_length_prices_length1',
+            'pricing_piece_length_prices_length2',
+            'pricing_piece_length_prices_length3',
+            'pricing_piece_length_prices_length4',
+            'pricing_piece_length_prices_length5',
 
             'runningcard_tool_costs',
             'runningcard_tool_cost_type',
