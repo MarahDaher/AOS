@@ -40,6 +40,9 @@ cp .env.example .env
 ```bash
 php artisan migrate --seed
 php artisan sync:offer-statuses
+php artisan storage:link
+php artisan jwt:secret
+
 ```
 
 6. Start the development server:

@@ -504,7 +504,12 @@ CREATE OR REPLACE VIEW offers_calculated_temp2 AS
     o_c.runningcard_tool_hint,
     o_c._runningcard_hourlyrecording_total,
     o_c.updated_at,
-        
+    o_c.pricing_piece_length_prices_length1,
+    o_c.pricing_piece_length_prices_length2,
+    o_c.pricing_piece_length_prices_length3,
+    o_c.pricing_piece_length_prices_length4,
+    o_c.pricing_piece_length_prices_length5,
+    
     -- calculated field from offers_calculated::    
     o_c._calculation_additional_box_costs_lfm,
     o_c._calculation_additional_setup_costs_lfm,
